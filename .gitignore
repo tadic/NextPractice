@@ -1,2 +1,2 @@
-*.DS_Store
-*.DS_STORE
+# OS X
+.DS_Store
