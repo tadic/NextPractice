@@ -1,4 +1,4 @@
-package com.mycompany.miniprojekti;
+package controllers;
 
 import controllers.Converter;
 import entity.Inproceedings;
