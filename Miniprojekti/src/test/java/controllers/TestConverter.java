@@ -30,8 +30,6 @@ public class TestConverter {
                 "booktitle = {SIGCSE '02: Proceedings of the 33rd SIGCSE technical symposium on Computer science education},\n    " +
                 "year = {2002}\n}";
         
-        System.out.println(expValue);
-        System.out.println(convert.toBibTex(inpro));
         assertEquals(expValue, convert.toBibTex(inpro));
     }
     
