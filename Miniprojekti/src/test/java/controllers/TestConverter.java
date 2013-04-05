@@ -1,6 +1,5 @@
 package controllers;
 
-import controllers.Converter;
 import entity.Inproceedings;
 import org.junit.*;
 import static org.junit.Assert.*;
@@ -10,8 +9,9 @@ import static org.junit.Assert.*;
  * @author ivantadic
  */
 public class TestConverter {
-        Converter convert; 
-        Inproceedings inpro;
+    Converter convert; 
+    Inproceedings inpro;
+        
     @Before
     public void setUp(){
         convert = new Converter();
@@ -32,8 +32,7 @@ public class TestConverter {
         System.out.println(expValue);
         assertEquals(expValue, convert.toBibTex(inpro));
     }
-    
-    
+      
     @Test
     public void testToBibTexTestSpecialCharacters(){
         inpro.setAuthor("Hassinen, Marko and Mäyrä, Hannu"); 
@@ -41,13 +40,10 @@ public class TestConverter {
         inpro.setBooktitle("Baltic Sea '06: Proceedings of the 6th Baltic Sea conference on Computing education research: Koli Calling 2006");
         inpro.setYear(2013);
         
-        String expValue;
-        expValue = "@inproceedings{Ha:2013,\n    author = {Hassinen, Marko and M\\\"{a}yr\\\"{a}, Hannu},\n    " +
+        String expValue = "@inproceedings{Ha:2013,\n    author = {Hassinen, Marko and M\\\"{a}yr\\\"{a}, Hannu},\n    " +
          "title = {Learning programming by programming: a case study},\n    " +
          "booktitle = {Baltic Sea '06: Proceedings of the 6th Baltic Sea conference on Computing education research: Koli Calling 2006},\n    " +
          "year = {2013}\n}";
-        //System.out.println(expValue);
-        //System.out.println(convert.toBibTex(inpro));
         assertEquals(expValue, convert.toBibTex(inpro));
     }
     
@@ -61,12 +57,25 @@ public class TestConverter {
     }
     
     @Test(expected = IllegalArgumentException.class)
-    public void testBibTexForExceptionToShortAuthor(){
+    public void testBibTexForExceptionTooShortAuthor(){
         inpro.setAuthor("H"); 
         inpro.setTitle("Learning programming by programming: a case study");
         inpro.setBooktitle("Baltic Sea '06: Proceedings of the 6th Baltic Sea conference on Computing education research: Koli Calling 2006");
         inpro.setYear(2011);
         String instance = convert.toBibTex(inpro);
+    }
+    
+    @Test(expected = IllegalArgumentException.class)
+    public void testBibTexForExceptionIfAuthorNotExists(){
+        inpro.setTitle("Learning programming by programming: a case study");
+        inpro.setBooktitle("Baltic Sea '06: Proceedings of the 6th Baltic Sea conference on Computing education research: Koli Calling 2006");
+        inpro.setYear(2011);
+        String instance = convert.toBibTex(inpro);
+    }
+    
+    @Test(expected = IllegalArgumentException.class)
+    public void testBibTexForExceptionIfReferenceIsNull(){
+        String instance = convert.toBibTex(null);
     }
     
     

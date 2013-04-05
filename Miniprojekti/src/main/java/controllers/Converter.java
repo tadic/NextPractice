@@ -14,11 +14,10 @@ public class Converter {
      * @return bibTex form of Inproceedings instance.
      */
     public String toBibTex(Inproceedings inpro){ 
-        String apu = inpro.getAuthor();
         if (!isRegular(inpro)){
             throw new IllegalArgumentException("Ilegal value of Reference");
         }
-        apu = apu.substring(0,2);
+        String apu = inpro.getAuthor().substring(0,2);
         StringBuilder text = new StringBuilder("@inproceedings{");
         text.append(repSpecChars(apu)).append(":").append(inpro.getYear()); 
         text.append(",\n    ").append("author = {").append(repSpecChars(inpro.getAuthor()));
