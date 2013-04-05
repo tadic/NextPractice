@@ -25,13 +25,14 @@ public class TUI {
             choise = Integer.parseInt(scanner.nextLine());
 
             if (choise == 1) {
-                //String[][] required = logic.getRequiredFields();
-                //String[][] optional = logic.getOptionalFields();
-                String[][] required = {{"Author", ""}, {"Title", ""}, {"Booktitle", ""}, {"Year", ""}};
-                String[][] optional = {{"Editor", ""}, {"Volume/Number", ""}, {"Series", ""}, {"Pages", ""}, {"Address", ""},
-                    {"Month", ""}, {"Organization", ""}, {"Publisher", ""}, {"Note", ""}, {"Key", ""}};
+                String[][] required = logic.getRequiredFields();
+                String[][] optional = logic.getOptionalFields();
+//                String[][] required = {{"Author", ""}, {"Title", ""}, {"Booktitle", ""}, {"Year", ""}};
+//                String[][] optional = {{"Editor", ""}, {"Volume/Number", ""}, {"Series", ""}, {"Pages", ""}, {"Address", ""},
+//                    {"Month", ""}, {"Organization", ""}, {"Publisher", ""}, {"Note", ""}, {"Key", ""}};
                 
                 System.out.println("Creating inproceedings.");
+                
                 System.out.println("\n Required fields:");
                 
                 for (int i = 0; i < required.length; i++) {
