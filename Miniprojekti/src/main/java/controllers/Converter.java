@@ -2,6 +2,7 @@
 package controllers;
 
 import entity.Inproceedings;
+import java.util.Calendar;
 
 /**
  * Converts a Reference Instance to bibTex form.
@@ -12,13 +13,12 @@ public class Converter {
      * @param inpro an Inproceedings instance.
      * @return bibTex form of Inproceedings instance.
      */
-    public String toBibTex(Inproceedings inpro){
-        
-        
+    public String toBibTex(Inproceedings inpro){ 
         String apu = inpro.getAuthor();
-        if (apu.length()>3){
-            apu = apu.substring(0,3);
+        if (!isRegular(inpro)){
+            throw new IllegalArgumentException("Ilegal value of Reference");
         }
+        apu = apu.substring(0,2);
         StringBuilder text = new StringBuilder("@inproceedings{");
         text.append(repSpecChars(apu)).append(":").append(inpro.getYear()); 
         text.append(",\n    ").append("author = {").append(repSpecChars(inpro.getAuthor()));
@@ -34,6 +34,18 @@ public class Converter {
      * @param word is text which should be modified.
      * @return text with replaced special characters.
      */
+    private boolean isRegular(Inproceedings in){
+        if (in==null || in.getAuthor()==null || in.getBooktitle()==null ||in.getTitle()==null){
+            return false;
+        }
+        if (in.getAuthor().trim().length()<2 || in.getBooktitle().trim().length()==0 ||
+                in.getTitle().trim().length()==0||in.getYear()>Calendar.getInstance().get(Calendar.YEAR)||
+                in.getYear()<0){
+            return false;
+        }
+        return true;
+    }
+    
     private String repSpecChars(String word){
         StringBuilder str = new StringBuilder();
         for (char c: word.toCharArray()){

@@ -19,36 +19,55 @@ public class TestConverter {
     }
     
     @Test
-    public void toBibTexTestNormal(){
+    public void testToBibTexTestNormal(){
         inpro.setAuthor("Roumani, Hamzeh"); 
         inpro.setTitle("Design guidelines for the lab component of objects-first CS1");
         inpro.setBooktitle("SIGCSE '02: Proceedings of the 33rd SIGCSE technical symposium on Computer science education" );
         inpro.setYear(2002);
         
-        String expValue = "@inproceedings{Rou:2002,\n    author = {Roumani, Hamzeh},\n    " +
+        String expValue = "@inproceedings{Ro:2002,\n    author = {Roumani, Hamzeh},\n    " +
                 "title = {Design guidelines for the lab component of objects-first CS1},\n    " +
                 "booktitle = {SIGCSE '02: Proceedings of the 33rd SIGCSE technical symposium on Computer science education},\n    " +
                 "year = {2002}\n}";
-        
+        System.out.println(expValue);
         assertEquals(expValue, convert.toBibTex(inpro));
     }
     
     
     @Test
-    public void toBibTexTestSpecCharacters(){
+    public void testToBibTexTestSpecialCharacters(){
         inpro.setAuthor("Hassinen, Marko and Mäyrä, Hannu"); 
         inpro.setTitle("Learning programming by programming: a case study");
         inpro.setBooktitle("Baltic Sea '06: Proceedings of the 6th Baltic Sea conference on Computing education research: Koli Calling 2006");
-        inpro.setYear(2006);
+        inpro.setYear(2013);
         
         String expValue;
-        expValue = "@inproceedings{Has:2006,\n    author = {Hassinen, Marko and M\\\"{a}yr\\\"{a}, Hannu},\n    " +
+        expValue = "@inproceedings{Ha:2013,\n    author = {Hassinen, Marko and M\\\"{a}yr\\\"{a}, Hannu},\n    " +
          "title = {Learning programming by programming: a case study},\n    " +
          "booktitle = {Baltic Sea '06: Proceedings of the 6th Baltic Sea conference on Computing education research: Koli Calling 2006},\n    " +
-         "year = {2006}\n}";
+         "year = {2013}\n}";
         //System.out.println(expValue);
         //System.out.println(convert.toBibTex(inpro));
         assertEquals(expValue, convert.toBibTex(inpro));
     }
+    
+    @Test(expected = IllegalArgumentException.class)
+    public void testBibTexForExceptionWrongYear(){
+        inpro.setAuthor("Hassinen, Marko and Mäyrä, Hannu"); 
+        inpro.setTitle("Learning programming by programming: a case study");
+        inpro.setBooktitle("Baltic Sea '06: Proceedings of the 6th Baltic Sea conference on Computing education research: Koli Calling 2006");
+        inpro.setYear(2014);
+        String instance = convert.toBibTex(inpro);
+    }
+    
+    @Test(expected = IllegalArgumentException.class)
+    public void testBibTexForExceptionToShortAuthor(){
+        inpro.setAuthor("H"); 
+        inpro.setTitle("Learning programming by programming: a case study");
+        inpro.setBooktitle("Baltic Sea '06: Proceedings of the 6th Baltic Sea conference on Computing education research: Koli Calling 2006");
+        inpro.setYear(2011);
+        String instance = convert.toBibTex(inpro);
+    }
+    
     
 }
