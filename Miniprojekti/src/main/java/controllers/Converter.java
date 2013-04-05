@@ -17,16 +17,25 @@ public class Converter {
         if (!isRegular(inpro)){
             throw new IllegalArgumentException("Ilegal value of Reference");
         }
-        String apu = inpro.getAuthor().substring(0,2);
+        if (inpro.getReferenceId()==null || inpro.getReferenceId().trim().length()==0){
+            inpro.setReferenceId(inpro.getAuthor().substring(0,2) + ":" + inpro.getYear());
+        }
         StringBuilder text = new StringBuilder("@inproceedings{");
-        text.append(repSpecChars(apu)).append(":").append(inpro.getYear()); 
+        text.append(repSpecChars(inpro.getReferenceId())); 
         text.append(",\n    ").append("author = {").append(repSpecChars(inpro.getAuthor()));
         text.append("},\n    ").append("title = {").append(repSpecChars(inpro.getTitle()));
         text.append("},\n    ").append("booktitle = {").append(repSpecChars(inpro.getBooktitle()));
         text.append("},\n    ").append("year = {").append(inpro.getYear());
         text.append("}\n}");
-        
+        // plus optional fields
         return text.toString();
+    }
+    
+    public Inproceedings toInproceedings(String bibTex){
+        Inproceedings inpro = new Inproceedings();
+        
+        
+        return inpro;
     }
     /**
      * Search and replace special characters.
