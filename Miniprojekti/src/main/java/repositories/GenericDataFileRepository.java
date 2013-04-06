@@ -48,6 +48,7 @@ public class GenericDataFileRepository implements GenericRepository {
     }
 
     /**
+     * Load's data objects from file.
      *
      * @param file where data is stored
      * @throws RepositoryException if serializable objects were not found or
@@ -59,6 +60,7 @@ public class GenericDataFileRepository implements GenericRepository {
     }
 
     /**
+     * Populates data objects from file, calculates the last id.
      *
      * @param file where data is stored
      * @return Map of Entities stored as BaseEntities
