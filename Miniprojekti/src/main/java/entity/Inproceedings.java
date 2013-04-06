@@ -5,7 +5,7 @@
 package entity;
 
 
-public class Inproceedings{
+public class Inproceedings extends BaseEntity {
 
     private String author;
     private String title;

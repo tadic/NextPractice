@@ -4,10 +4,8 @@
  */
 package controllers;
 
-import controllers.LogicInterface;
 import entity.Inproceedings;
-
-import repositories.Inproceedingsrepository;
+import repositories.GenericRepository;
 
 /**
  *
@@ -15,12 +13,8 @@ import repositories.Inproceedingsrepository;
  */
 public class Logic implements LogicInterface{
 
-    private Inproceedingsrepository inproceedingsRepository;
+    private GenericRepository repository;    
     
-//    public ReferenceRepository getReference() {
-//        throw new UnsupportedOperationException("Not supported yet.");
-//    }
-
     public Inproceedings getInproceedings() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
