@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package repositories;
 
 import entity.BaseEntity;
@@ -21,6 +17,9 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * Data file implementation of GenericRepository. This class hold's a map of all
+ * entities, provides a common search and CRUD methods for them and serializes
+ * them to and from file.
  *
  * @author jarno
  */
@@ -28,8 +27,13 @@ public class GenericDataFileRepository implements GenericRepository {
 
     private Map<Integer, BaseEntity> objects = new HashMap<Integer, BaseEntity>();
     private static GenericDataFileRepository instance;
-    private static int nextId;
+    private static int lastId;
 
+    /**
+     * This method is used to get an instance of GenenericRepository.
+     *
+     * @return GenericFileRepository singleton
+     */
     public static GenericRepository getInstance() {
         if (instance == null) {
             instance = new GenericDataFileRepository();
@@ -37,21 +41,37 @@ public class GenericDataFileRepository implements GenericRepository {
         return instance;
     }
 
+    /**
+     * Private constructor to make sure that only one instance is used
+     */
     private GenericDataFileRepository() {
     }
 
+    /**
+     *
+     * @param file where data is stored
+     * @throws RepositoryException if serializable objects were not found or
+     * data fiel could not be read
+     */
     @Override
     public void loadDataFromFile(File file) throws RepositoryException {
         this.objects = populateObjectsFromFile(file);
     }
 
+    /**
+     *
+     * @param file where data is stored
+     * @return Map of Entities stored as BaseEntities
+     * @throws RepositoryException if serializable objects were not found or
+     * data fiel could not be read
+     */
     private Map<Integer, BaseEntity> populateObjectsFromFile(File file) throws RepositoryException {
         Map<Integer, BaseEntity> retreivedObjects = null;
         try {
             ObjectInputStream inputStream = new ObjectInputStream(new BufferedInputStream(new FileInputStream(file)));
             retreivedObjects = (Map<Integer, BaseEntity>) inputStream.readObject();
             inputStream.close();
-            nextId = maxId();
+            lastId = maxId();
         } catch (ClassNotFoundException e) {
             throw new RepositoryException("Serializable objets was not found.", e);
         } catch (IOException e) {
@@ -60,6 +80,11 @@ public class GenericDataFileRepository implements GenericRepository {
         return retreivedObjects;
     }
 
+    /**
+     * Finds out the biggest id int data objects
+     *
+     * @return max id as int
+     */
     private int maxId() {
         int max = 0;
         for (Integer i : objects.keySet()) {
@@ -70,6 +95,12 @@ public class GenericDataFileRepository implements GenericRepository {
         return max;
     }
 
+    /**
+     * Writes data objects to file
+     *
+     * @param file where data is stored
+     * @throws RepositoryException if data fiel could not be read
+     */
     @Override
     public void saveDataToFile(File file) throws RepositoryException {
         try {
@@ -82,6 +113,13 @@ public class GenericDataFileRepository implements GenericRepository {
 
     }
 
+    /**
+     * Returns count of specified entities in repository
+     *
+     * @param <T> Type of entity
+     * @param type class repsesenting the entity
+     * @return count of specified entities in repository
+     */
     @Override
     public <T extends BaseEntity> int count(Class<T> type) {
         int count = 0;
@@ -93,6 +131,13 @@ public class GenericDataFileRepository implements GenericRepository {
         return count;
     }
 
+    /**
+     * Finds all specified entities in repository
+     *
+     * @param <T> Type of entity
+     * @param type class repsesenting the entity
+     * @return List of specified entities in repository
+     */
     @Override
     public <T extends BaseEntity> List<T> findAll(Class<T> type) {
         List<T> list = new ArrayList<T>();
@@ -104,6 +149,18 @@ public class GenericDataFileRepository implements GenericRepository {
         return list;
     }
 
+    /**
+     * Finds all specified entities in repository having specified field value
+     *
+     * @param <T> Type of entity
+     * @param type Class repsesenting the entity
+     * @param fieldName The entity's field name as string to be used in search.
+     * @param value The search value as an object
+     * @return List of specified entities in repository that match search
+     * criteria. If there are no results, an empty list is returned.
+     * @throws RepositoryException if field name was not found in specified
+     * entity or if the field is inaccessible.
+     */
     @Override
     public <T extends BaseEntity> List<T> findByField(Class<T> type, String fieldName, Object value) throws RepositoryException {
         List<T> list = new ArrayList<T>();
@@ -126,6 +183,14 @@ public class GenericDataFileRepository implements GenericRepository {
         return list;
     }
 
+    /**
+     * Finds specified entity by it's id
+     *
+     * @param <T> Type of entity
+     * @param type Class repsesenting the entity
+     * @param id Entity's id number
+     * @return Found entity of null if entity was not found
+     */
     @Override
     public <T extends BaseEntity> T findOne(Class<T> type, int id) {
         T found = null;
@@ -136,14 +201,31 @@ public class GenericDataFileRepository implements GenericRepository {
         return found;
     }
 
+    /**
+     * Creates ne entity in the repository by giving it an unique id nubmer and
+     * storing it to objects map.
+     *
+     * @param <T> Type of entity
+     * @param entity New entity to be created
+     * @return Created entity
+     */
     @Override
     public <T extends BaseEntity> T create(T entity) {
-        int id = ++nextId;
+        int id = ++lastId;
         entity.setId(id);
         objects.put(id, entity);
         return entity;
     }
 
+    /**
+     * Updates specified entity and returns an updated entity.
+     *
+     * @param <T> Type of entity
+     * @param id Id of an entity to be updated
+     * @param entity Entity holding the new values
+     * @return Updated entity
+     * @throws RepositoryException if an entity with specified id was not found
+     */
     @Override
     public <T extends BaseEntity> T update(int id, T entity) throws RepositoryException {
         T found = (T) findOne(entity.getClass(), id);
@@ -156,6 +238,13 @@ public class GenericDataFileRepository implements GenericRepository {
         return entity;
     }
 
+    /**
+     * Deletes an entity with specified id from repository
+     *
+     * @param <T> Type of entity
+     * @param id Id nubmer of an etity to be deleted
+     * @throws RepositoryException if an entity with specified id was not found
+     */
     @Override
     public <T extends BaseEntity> void delete(int id) throws RepositoryException {
         if (!objects.containsKey(id)) {
@@ -164,8 +253,12 @@ public class GenericDataFileRepository implements GenericRepository {
         objects.remove(id);
     }
 
+    /**
+     * Clears all entity objects from reposritory and sets lastId to zero. This
+     * method is mostly for testing purposes.
+     */
     public void clearAll() {
         objects.clear();
-        nextId = 0;
+        lastId = 0;
     }
 }
