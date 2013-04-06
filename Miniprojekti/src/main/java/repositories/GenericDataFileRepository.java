@@ -14,7 +14,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -60,11 +59,11 @@ public class GenericDataFileRepository implements GenericRepository {
         }
         return retreivedObjects;
     }
-    
+
     private int maxId() {
         int max = 0;
-        for(Integer i : objects.keySet()) {
-            if(i > max) {
+        for (Integer i : objects.keySet()) {
+            if (i > max) {
                 max = i;
             }
         }
@@ -127,27 +126,6 @@ public class GenericDataFileRepository implements GenericRepository {
         return list;
     }
 
-//    public <T extends BaseEntity> T findOne(Class<T> type, int id) throws RepositoryException {
-//        T found = null;
-//        for (Object o : objects.values()) {
-//            try {
-//                if (o.getClass().isAssignableFrom(type)) {
-//                    Field f = o.getClass().getDeclaredField("id");
-//                    f.setAccessible(true);
-//                    Object fieldValue = f.get(o);
-//                    if (fieldValue.equals(id)) {
-//                        found = type.cast(o);
-//                        break;
-//                    }
-//                }
-//            } catch (NoSuchFieldException e) {
-//                throw new RepositoryException("Field id was not found in entity " + type.getName());
-//            } catch (IllegalAccessException e) {
-//                throw new RepositoryException("Field id in entity " + type.getName() + " is inaccessible");
-//            }
-//        }
-//        return found;
-//    }
     @Override
     public <T extends BaseEntity> T findOne(Class<T> type, int id) {
         T found = null;
