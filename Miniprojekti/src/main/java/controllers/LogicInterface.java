@@ -1,17 +1,13 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package controllers;
 
 import entity.Inproceedings;
 
-/**
- *
- * @author mikahutt
- */
 public interface LogicInterface {
     
     public Inproceedings getInproceedings();
+    public String[][] getRequiredFields();
+    public String[][] getOptionalFields();
+    public void createInproceedings(String[][] required, String[][] optional);
     
 }

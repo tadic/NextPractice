@@ -19,6 +19,19 @@ public class Logic implements LogicInterface{
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    public String[][] getRequiredFields() {
+        return new String[][] {{"Author", ""}, {"Title", ""}, {"Booktitle", ""}, {"Year", ""}};
+    }
+
+    public String[][] getOptionalFields() {
+        return new String [][] {{"Editor", ""}, {"Volume/Number", ""}, {"Series", ""}, {"Pages", ""}, {"Address", ""},
+                    {"Month", ""}, {"Organization", ""}, {"Publisher", ""}, {"Note", ""}, {"Key", ""}};
+    }
+
+    public void createInproceedings(String[][] required, String[][] optional) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
 
     
 }
