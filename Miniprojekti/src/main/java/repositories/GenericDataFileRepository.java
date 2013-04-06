@@ -48,7 +48,7 @@ public class GenericDataFileRepository implements GenericRepository {
     }
 
     /**
-     * Load's data objects from file.
+     * Loads data objects from file.
      *
      * @param file where data is stored
      * @throws RepositoryException if serializable objects were not found or
