@@ -4,10 +4,6 @@ import UI.GUI;
 import controllers.Logic;
 import controllers.LogicInterface;
 
-/**
- * Hello world!
- *
- */
 public class App 
 {
     public static void main( String[] args )
