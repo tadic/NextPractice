@@ -29,7 +29,7 @@ public class Logic implements LogicInterface{
     }
 
     public void createInproceedings(String[][] required, String[][] optional) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
     }
 
 
