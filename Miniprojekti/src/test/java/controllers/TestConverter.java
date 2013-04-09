@@ -16,20 +16,20 @@ public class TestConverter {
     public void setUp(){
         convert = new Converter();
         inpro = new Inproceedings();
-        inpro.setAuthor("Roumani, Hamzeh"); 
-        inpro.setTitle("Design guidelines for the lab component of objects-first CS1");
-        inpro.setBooktitle("SIGCSE '02: Proceedings of the 33rd SIGCSE technical symposium on Computer science education" );
-        inpro.setYear(2002);
-        inpro.setEditor("one");
-        inpro.setVolumeNumber("two");
-        inpro.setSeries("three");
-        inpro.setPages("four");
-        inpro.setAddress("five");
-        inpro.setMonth("six");
-        inpro.setOrganization("seven");
-        inpro.setPublisher("eight");
-        inpro.setNote("nine");
-        inpro.setKey("ten");       
+        inpro.setFieldValue("author", "Roumani, Hamzeh"); 
+        inpro.setFieldValue("title", "Design guidelines for the lab component of objects-first CS1");
+        inpro.setFieldValue("booktitle", "SIGCSE '02: Proceedings of the 33rd SIGCSE technical symposium on Computer science education" );
+        inpro.setFieldValue("year", "2002");
+        inpro.setFieldValue("editor", "one");
+        inpro.setFieldValue("volumenumber", "two");
+        inpro.setFieldValue("series", "three");
+        inpro.setFieldValue("pages", "four");
+        inpro.setFieldValue("address", "five");
+        inpro.setFieldValue("month", "six");
+        inpro.setFieldValue("organization", "seven");
+        inpro.setFieldValue("publisher", "eight");
+        inpro.setFieldValue("note", "nine");
+        inpro.setFieldValue("key", "ten");       
     }
     
     @Test
@@ -46,7 +46,7 @@ public class TestConverter {
       
     @Test
     public void testToBibTexForSpecialCharacters(){
-        inpro.setAuthor("Hassinen, Marko and Mäyrä, Hannu"); 
+        inpro.setFieldValue("author", "Hassinen, Marko and Mäyrä, Hannu"); 
         String expValue = "@inproceedings{Ha:2002,\n    author = {Hassinen, Marko and M\\\"{a}yr\\\"{a}, Hannu},\n    " +
                 "title = {Design guidelines for the lab component of objects-first CS1},\n    " +
                 "booktitle = {SIGCSE '02: Proceedings of the 33rd SIGCSE technical symposium on Computer science education},\n    " +
@@ -69,19 +69,19 @@ public class TestConverter {
     
     @Test(expected = IllegalArgumentException.class)
     public void testBibTexForExceptionWrongYear(){
-        inpro.setYear(2014);
+        inpro.setFieldValue("year", "2014");
         String instance = convert.toBibTex(inpro);
     }
     
     @Test(expected = IllegalArgumentException.class)
     public void testBibTexForExceptionTooShortAuthor(){
-        inpro.setAuthor("H"); 
+        inpro.setFieldValue("author", "H"); 
         String instance = convert.toBibTex(inpro);
     }
     
     @Test(expected = IllegalArgumentException.class)
     public void testBibTexForExceptionIfAuthorNull(){
-        inpro.setAuthor(null);
+        inpro.setFieldValue("author", null);
         String instance = convert.toBibTex(inpro);
     }
     

@@ -11,12 +11,22 @@ public class Field {
         this.required = required;
     }
 
+    public Field(String key, boolean required) {
+        this(key, "", required);
+    }
+    
+
     public String getKey() {
         return key;
     }
 
     public void setKey(String key) {
         this.key = key;
+    }
+    
+    public boolean hasValue() {
+        
+        return value.length() > 0;
     }
 
     public String getValue() {

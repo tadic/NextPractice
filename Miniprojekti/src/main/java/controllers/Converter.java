@@ -18,43 +18,43 @@ public class Converter {
             throw new IllegalArgumentException("Ilegal value of Reference");
         }
         if (inpro.getReferenceId()==null || inpro.getReferenceId().trim().length()==0){
-            inpro.setReferenceId(inpro.getAuthor().substring(0,2) + ":" + inpro.getYear());
+            inpro.setReferenceId(inpro.getFieldValue("author").substring(0,2) + ":" + inpro.getFieldValue("year"));
         }
         StringBuilder text = new StringBuilder("@inproceedings{");
         text.append(repSpecChars(inpro.getReferenceId())); 
-        text.append(",\n    ").append("author = {").append(repSpecChars(inpro.getAuthor()));
-        text.append("},\n    ").append("title = {").append(repSpecChars(inpro.getTitle()));
-        text.append("},\n    ").append("booktitle = {").append(repSpecChars(inpro.getBooktitle()));
-        text.append("},\n    ").append("year = {").append(inpro.getYear());
-        if (inpro.getEditor()!=null && inpro.getEditor().trim().length()>0){
-            text.append("},\n    ").append("editor = {").append(inpro.getEditor());
+        text.append(",\n    ").append("author = {").append(repSpecChars(inpro.getFieldValue("author")));
+        text.append("},\n    ").append("title = {").append(repSpecChars(inpro.getFieldValue("title")));
+        text.append("},\n    ").append("booktitle = {").append(repSpecChars(inpro.getFieldValue("booktitle")));
+        text.append("},\n    ").append("year = {").append(inpro.getFieldValue("year"));
+        if (inpro.getFieldValue("editor")!=null && inpro.getFieldValue("editor").trim().length()>0){
+            text.append("},\n    ").append("editor = {").append(inpro.getFieldValue("editor"));
         }
-        if (inpro.getVolumeNumber()!=null && inpro.getVolumeNumber().trim().length()>0){
-            text.append("},\n    ").append("volume/number = {").append(inpro.getVolumeNumber());
+        if (inpro.getFieldValue("editor")!=null && inpro.getFieldValue("volume/number").trim().length()>0){
+            text.append("},\n    ").append("volume/number = {").append(inpro.getFieldValue("volume/number"));
         }
-        if (inpro.getSeries()!=null && inpro.getSeries().trim().length()>0){
-            text.append("},\n    ").append("series = {").append(inpro.getSeries());
+        if (inpro.getFieldValue("series")!=null && inpro.getFieldValue("series").trim().length()>0){
+            text.append("},\n    ").append("series = {").append(inpro.getFieldValue("series"));
         }
-        if (inpro.getPages()!=null && inpro.getPages().trim().length()>0){
-            text.append("},\n    ").append("pages = {").append(inpro.getPages());
+        if (inpro.getFieldValue("pages")!=null && inpro.getFieldValue("pages").trim().length()>0){
+            text.append("},\n    ").append("pages = {").append(inpro.getFieldValue("pages"));
         }
-        if (inpro.getAddress()!=null && inpro.getAddress().trim().length()>0){
-            text.append("},\n    ").append("address = {").append(inpro.getAddress());
+        if (inpro.getFieldValue("address")!=null && inpro.getFieldValue("address").trim().length()>0){
+            text.append("},\n    ").append("address = {").append(inpro.getFieldValue("address"));
         }
-        if (inpro.getMonth()!=null && inpro.getMonth().trim().length()>0){
-            text.append("},\n    ").append("month = {").append(inpro.getMonth());
+        if (inpro.getFieldValue("month")!=null && inpro.getFieldValue("month").trim().length()>0){
+            text.append("},\n    ").append("month = {").append(inpro.getFieldValue("month"));
         }
-        if (inpro.getOrganization()!=null && inpro.getOrganization().trim().length()>0){
-            text.append("},\n    ").append("organization = {").append(inpro.getOrganization());
+        if (inpro.getFieldValue("organization")!=null && inpro.getFieldValue("organization").trim().length()>0){
+            text.append("},\n    ").append("organization = {").append(inpro.getFieldValue("organization"));
         }
-        if (inpro.getPublisher()!=null && inpro.getPublisher().trim().length()>0){
-            text.append("},\n    ").append("publisher = {").append(inpro.getPublisher());
+        if (inpro.getFieldValue("publisher")!=null && inpro.getFieldValue("publisher").trim().length()>0){
+            text.append("},\n    ").append("publisher = {").append(inpro.getFieldValue("publisher"));
         }
-        if (inpro.getNote()!=null && inpro.getNote().trim().length()>0){
-            text.append("},\n    ").append("note = {").append(inpro.getNote());
+        if (inpro.getFieldValue("note")!=null && inpro.getFieldValue("note").trim().length()>0){
+            text.append("},\n    ").append("note = {").append(inpro.getFieldValue("note"));
         }
-        if (inpro.getKey()!=null && inpro.getKey().trim().length()>0){
-            text.append("},\n    ").append("key = {").append(inpro.getKey());
+        if (inpro.getFieldValue("key")!=null && inpro.getFieldValue("key").trim().length()>0){
+            text.append("},\n    ").append("key = {").append(inpro.getFieldValue("key"));
         }
         // plus optional fields
         //editor, volume/number, series, pages, address, month, organization, publisher, note, key
@@ -74,12 +74,12 @@ public class Converter {
      * @return text with replaced special characters.
      */
     private boolean isRegular(Inproceedings in){
-        if (in==null || in.getAuthor()==null || in.getBooktitle()==null ||in.getTitle()==null){
+        if (in==null || in.getFieldValue("author")==null || in.getFieldValue("booktitle")==null ||in.getFieldValue("title")==null){
             return false;
         }
-        if (in.getAuthor().trim().length()<2 || in.getBooktitle().trim().length()==0 ||
-                in.getTitle().trim().length()==0||in.getYear()>Calendar.getInstance().get(Calendar.YEAR)||
-                in.getYear()<0){
+        if (in.getFieldValue("author").trim().length()<2 || in.getFieldValue("booktitle").trim().length()==0 ||
+                in.getFieldValue("title").trim().length()==0||Integer.parseInt(in.getFieldValue("year"))>Calendar.getInstance().get(Calendar.YEAR)||
+                Integer.parseInt(in.getFieldValue("year"))<0){
             return false;
         }
         return true;

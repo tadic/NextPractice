@@ -4,7 +4,11 @@
  */
 package controllers;
 
+import entity.Field;
 import entity.Inproceedings;
+import entity.ReferenceFactory;
+import java.util.List;
+import java.util.Set;
 import repositories.GenericRepository;
 
 /**
@@ -13,22 +17,22 @@ import repositories.GenericRepository;
  */
 public class Logic implements LogicInterface{
 
-    private GenericRepository repository;    
+    private GenericRepository repository;
+    private ReferenceFactory RFactory;
     
     public Inproceedings getInproceedings() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    public String[][] getRequiredFields() {
-        return new String[][] {{"Author", ""}, {"Title", ""}, {"Booktitle", ""}, {"Year", ""}};
+    public List<Field> getFields(String referenceType) {
+        return RFactory.getFields(referenceType);
+    }
+    
+    public Set<String> getReferenceTypes() {
+        return RFactory.getReferenceTypes();
     }
 
-    public String[][] getOptionalFields() {
-        return new String [][] {{"Editor", ""}, {"Volume/Number", ""}, {"Series", ""}, {"Pages", ""}, {"Address", ""},
-                    {"Month", ""}, {"Organization", ""}, {"Publisher", ""}, {"Note", ""}, {"Key", ""}};
-    }
-
-    public void createInproceedings(String[][] required, String[][] optional) {
+    public void createInproceedings(List<Field> fields) {
         
     }
 
