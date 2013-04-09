@@ -1,6 +1,7 @@
 
 package controllers;
 
+import entity.BaseEntity;
 import entity.Field;
 import entity.Inproceedings;
 import java.util.List;
@@ -11,6 +12,6 @@ public interface LogicInterface {
     public Inproceedings getInproceedings();
     public List<Field> getFields(String referenceType);
     public Set<String> getReferenceTypes();
-    public void createInproceedings(List<Field> fields);
+    public <T extends BaseEntity> T createReference(String referenceType, List<Field> fields);
     
 }

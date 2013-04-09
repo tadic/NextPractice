@@ -4,6 +4,7 @@
  */
 package controllers;
 
+import entity.BaseEntity;
 import entity.Field;
 import entity.Inproceedings;
 import entity.ReferenceFactory;
@@ -19,6 +20,10 @@ public class Logic implements LogicInterface{
 
     private GenericRepository repository;
     private ReferenceFactory RFactory;
+
+    public Logic() {
+        RFactory = new ReferenceFactory();
+    }
     
     public Inproceedings getInproceedings() {
         throw new UnsupportedOperationException("Not supported yet.");
@@ -32,8 +37,10 @@ public class Logic implements LogicInterface{
         return RFactory.getReferenceTypes();
     }
 
-    public void createInproceedings(List<Field> fields) {
-        
+    public <T extends BaseEntity> T createReference(String referenceType, List<Field> fields) {
+//        Tässä oikea käyttö, jolloin metodin tyyppi void.
+//        repository.create(RFactory.createReference(referenceType, fields));
+        return RFactory.createReference(referenceType, fields);
     }
 
 

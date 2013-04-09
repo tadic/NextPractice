@@ -11,11 +11,10 @@ public class ReferenceFactory {
     
     
     public ReferenceFactory() {
+        types = new HashMap<String, List<Field>>();
         types.put("inproceedings", inproceedings());
     }
-    
-    
-    
+       
     public List<Field> getFields(String referenceType) {
         return types.get(referenceType);
     }
@@ -23,6 +22,11 @@ public class ReferenceFactory {
     public Set<String> getReferenceTypes() {
         return types.keySet();
     }
+    
+    public <T extends BaseEntity> T createReference(String referenceType, List<Field> fields) {
+        return (T) new Inproceedings(fields);
+    }
+    
     
     private List<Field> inproceedings() {
         List<Field> fields = new ArrayList<Field>();
