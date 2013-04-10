@@ -89,6 +89,6 @@ public class TestConverter {
     public void testBibTexForExceptionIfReferenceIsNull(){
         String instance = convert.toBibTex(null);
     }
-    
-    
+
+       
 }

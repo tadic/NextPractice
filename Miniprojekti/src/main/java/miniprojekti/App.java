@@ -10,6 +10,6 @@ public class App
     {
         LogicInterface logic = new Logic();
         GUI gui = new GUI(logic);
-        //testi
+        //test new jenkins
     }
 }
