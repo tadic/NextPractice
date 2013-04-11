@@ -14,6 +14,7 @@ public interface LogicInterface {
     public Set<String> getReferenceTypes();
     public Reference createReference(String referenceType, List<Field> fields);
     public void saveToFile(String fileName);
+    public void loadFile(String fileName);
     
     public String[][] getRequiredFields();
     public String[][] getOptionalFields();

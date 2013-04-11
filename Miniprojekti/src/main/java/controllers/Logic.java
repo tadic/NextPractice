@@ -72,6 +72,16 @@ public class Logic implements LogicInterface {
             
         }
     }
+    
+    @Override
+    public void loadFile(String fileName) {
+        try {
+            repository.loadDataFromFile(new File(fileName));
+        }
+        catch (RepositoryException e) {
+            
+        }
+    }
 
     @Override
     public String[][] getRequiredFields() {
@@ -106,4 +116,5 @@ public class Logic implements LogicInterface {
         }
         return (Reference) createReference("inproceedings", fields);
     }
+
 }
