@@ -8,6 +8,7 @@ import entity.ReferenceFactory;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import repositories.GenericDataFileRepository;
 import repositories.GenericRepository;
 
 public class Logic implements LogicInterface {
@@ -17,6 +18,7 @@ public class Logic implements LogicInterface {
 
     public Logic() {
         RFactory = new ReferenceFactory();
+        repository = GenericDataFileRepository.getInstance();
     }
 
     @Override
@@ -78,7 +80,7 @@ public class Logic implements LogicInterface {
     }
 
     @Override
-    public Inproceedings createReference(String[][] required, String[][] optional) {
+    public Reference createReference(String[][] required, String[][] optional) {
         List<Field> fields = new ArrayList<Field>();
         for (String[] row : required) {
             fields.add(new Field(row[0], row[1], true));
@@ -86,6 +88,6 @@ public class Logic implements LogicInterface {
         for (String[] row : optional) {
             fields.add(new Field(row[0], row[1], false));
         }
-        return (Inproceedings) createReference("inproceedings", fields);
+        return (Reference) createReference("inproceedings", fields);
     }
 }

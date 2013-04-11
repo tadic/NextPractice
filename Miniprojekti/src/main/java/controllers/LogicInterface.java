@@ -16,6 +16,6 @@ public interface LogicInterface {
     
     public String[][] getRequiredFields();
     public String[][] getOptionalFields();
-    public Inproceedings createReference(String[][] required, String[][] optional);
+    public Reference createReference(String[][] required, String[][] optional);
     
 }

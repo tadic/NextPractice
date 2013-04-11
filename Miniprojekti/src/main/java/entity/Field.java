@@ -59,6 +59,7 @@ public class Field extends BaseEntity {
     public void setRequired(boolean required) {
         this.required = required;
     }
+ 
 
     @Override
     public boolean equals(Object obj) {
@@ -69,10 +70,10 @@ public class Field extends BaseEntity {
             return false;
         }
         final Field other = (Field) obj;
-        if (this.key.equals(other.getKey())) {
+        if (!this.key.equals(other.getKey())) {
             return false;
         }
-        if (this.value.equals(other.getValue())) {
+        if (!this.value.equals(other.getValue())) {
             return false;
         }
         if (this.required != other.isRequired()) {

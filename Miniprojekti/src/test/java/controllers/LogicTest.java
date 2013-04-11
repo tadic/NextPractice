@@ -5,10 +5,11 @@
 package controllers;
 
 import entity.Field;
+import entity.Inproceedings;
+import entity.Reference;
 import entity.ReferenceFactory;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -51,98 +52,90 @@ public class LogicTest {
      */
     @Test
     public void getFieldsForInproceedings() {
-        List expResult = factory.getFields("inproceedings");
+        List expResult = inproceedingsFields();
         List result = logic.getFields("inproceedings");
         assertEquals("Field list size not as expected", result.size(), expResult.size());
         for (Object object : result) {
-            
         }
-        
-    }
 
-    private List<Field> inproceedingsFields() {
-        List<Field> fields = new ArrayList<Field>();
-        fields.add(new Field("author", true));
-        fields.add(new Field("title", true));
-        fields.add(new Field("booktitle", true));
-        fields.add(new Field("year", true));
-
-        fields.add(new Field("editor", false));
-        fields.add(new Field("volume/number", false));
-        fields.add(new Field("series", false));
-        fields.add(new Field("pages", false));
-        fields.add(new Field("address", false));
-        fields.add(new Field("month", false));
-        fields.add(new Field("organization", false));
-        fields.add(new Field("publisher", false));
-        fields.add(new Field("note", false));
-        fields.add(new Field("key", false));
-
-        return fields;
     }
 
     @Test
     public void testGetReferenceTypes() {
-        Set<String> types = logic.getReferenceTypes();
+        List<String> expTypes = new ArrayList<String>();
+        expTypes.add("inproceedings");
+        List<String> result = new ArrayList<String>(logic.getReferenceTypes());
+        assertEquals(expTypes, result);
     }
-//
-//    /**
-//     * Test of createReference method, of class Logic.
-//     */
-//    @Test
-//    public void testCreateReference_String_List() {
-//        System.out.println("createReference");
-//        String referenceType = "";
-//        List<Field> fields = null;
-//        Logic instance = new Logic();
-//        Reference expResult = null;
-//        Reference result = instance.createReference(referenceType, fields);
-//        assertEquals(expResult, result);
-//        // TODO review the generated test code and remove the default call to fail.
-//        fail("The test case is a prototype.");
-//    }
-//
-//    /**
-//     * Test of getRequiredFields method, of class Logic.
-//     */
-//    @Test
-//    public void testGetRequiredFields() {
-//        System.out.println("getRequiredFields");
-//        Logic instance = new Logic();
-//        String[][] expResult = null;
-//        String[][] result = instance.getRequiredFields();
-//        assertArrayEquals(expResult, result);
-//        // TODO review the generated test code and remove the default call to fail.
-//        fail("The test case is a prototype.");
-//    }
-//
-//    /**
-//     * Test of getOptionalFields method, of class Logic.
-//     */
-//    @Test
-//    public void testGetOptionalFields() {
-//        System.out.println("getOptionalFields");
-//        Logic instance = new Logic();
-//        String[][] expResult = null;
-//        String[][] result = instance.getOptionalFields();
-//        assertArrayEquals(expResult, result);
-//        // TODO review the generated test code and remove the default call to fail.
-//        fail("The test case is a prototype.");
-//    }
-//
-//    /**
-//     * Test of createReference method, of class Logic.
-//     */
-//    @Test
-//    public void testCreateReference_StringArrArr_StringArrArr() {
-//        System.out.println("createReference");
-//        String[][] required = null;
-//        String[][] optional = null;
-//        Logic instance = new Logic();
-//        Inproceedings expResult = null;
-//        Inproceedings result = instance.createReference(required, optional);
-//        assertEquals(expResult, result);
-//        // TODO review the generated test code and remove the default call to fail.
-//        fail("The test case is a prototype.");
-//    }
+
+    @Test
+    public void createInproceedings() {
+        String referenceType = "inproceedings";
+        List<Field> fields = inproceedingsFields();
+        Object expClass = Inproceedings.class;
+
+        Reference result = logic.createReference(referenceType, fields);
+        assertEquals("Returned class not same as expected", result.getClass(), expClass);
+        assertEquals("Fields of created reference are wrong", result.getFields(), fields);
+    }
+
+    @Test
+    public void legacyTestRequiredFields() {
+        String[][] expected = {{"author", ""}, {"title", ""}, {"booktitle", ""}, {"year", ""}};
+        String[][] result = logic.getRequiredFields();
+
+        assertEquals(expected.length, result.length);
+        for (int i = 0; i < expected.length; i++) {
+            assertEquals(expected[i][0], result[i][0]);
+            assertEquals(expected[i][1], result[i][1]);
+        }
+    }
+
+    @Test
+    public void legacyTestOptionalFields() {
+        String[][] expected = {{"editor", ""}, {"volume/number", ""}, {"series", ""}, {"pages", ""}, {"address", ""},
+            {"month", ""}, {"organization", ""}, {"publisher", ""}, {"note", ""}, {"key", ""}};
+        String[][] result = logic.getOptionalFields();
+
+        assertEquals(expected.length, result.length);
+        for (int i = 0; i < expected.length; i++) {
+            assertEquals(expected[i][0], result[i][0]);
+            assertEquals(expected[i][1], result[i][1]);
+        }
+    }
+
+    @Test
+    public void legacyCreateInproceedings() {
+        String[][] req = {{"author", "Author"}, {"title", "Title"}, {"booktitle", "Booktitle"}, {"year", "Year"}};
+        String[][] opt = {{"editor", "Editor"}, {"volume/number", "VolumeNumber"}, {"series", "Series"}, {"pages", "Pages"}, {"address", "Address"},
+            {"month", "Month"}, {"organization", "Organization"}, {"publisher", "Publisher"}, {"note", "Note"}, {"key", "Key"}};
+        Object expClass = Inproceedings.class;
+        List<Field> expFields = inproceedingsFields();
+
+        Reference result = logic.createReference(req, opt);
+
+        assertEquals("Returned class not same as expected", result.getClass(), expClass);
+        assertEquals("Fields of created reference are wrong", result.getFields(), expFields);
+    }
+
+    private List<Field> inproceedingsFields() {
+        List<Field> fields = new ArrayList<Field>();
+        fields.add(new Field("author", "Author", true));
+        fields.add(new Field("title", "Title", true));
+        fields.add(new Field("booktitle", "Booktitle", true));
+        fields.add(new Field("year", "Year", true));
+
+        fields.add(new Field("editor", "Editor", false));
+        fields.add(new Field("volume/number", "VolumeNumber", false));
+        fields.add(new Field("series", "Series", false));
+        fields.add(new Field("pages", "Pages", false));
+        fields.add(new Field("address", "Address", false));
+        fields.add(new Field("month", "Month", false));
+        fields.add(new Field("organization", "Organization", false));
+        fields.add(new Field("publisher", "Publisher", false));
+        fields.add(new Field("note", "Note", false));
+        fields.add(new Field("key", "Key", false));
+
+        return fields;
+    }
 }
