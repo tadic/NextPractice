@@ -21,7 +21,7 @@ public class TestConverter {
         inpro.setFieldValue("booktitle", "SIGCSE '02: Proceedings of the 33rd SIGCSE technical symposium on Computer science education" );
         inpro.setFieldValue("year", "2002");
         inpro.setFieldValue("editor", "one");
-        inpro.setFieldValue("volume/number", "two");
+        inpro.setFieldValue("volumenumber", "two");
         inpro.setFieldValue("series", "three");
         inpro.setFieldValue("pages", "four");
         inpro.setFieldValue("address", "five");

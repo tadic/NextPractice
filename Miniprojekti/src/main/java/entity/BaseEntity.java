@@ -5,15 +5,27 @@
 package entity;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  *
  * @author jarno
  */
-public class BaseEntity implements Serializable {
+public abstract class BaseEntity implements Serializable {
 
-    private int id;
+    protected int id;
+    protected List<Field> fields;
 
+    protected abstract void initMyFields();
+
+    public BaseEntity() {
+        initMyFields();
+    }
+    
+    public BaseEntity(List<Field> fields) {
+        this.fields = fields;
+    }    
+    
     public int getId() {
         return id;
     }
@@ -22,6 +34,31 @@ public class BaseEntity implements Serializable {
         this.id = id;
     }
 
+    public void setFieldValue(String fieldName, String fieldValue) {
+
+        for (Field field : fields) {
+            if (field.getKey().equals(fieldName)) {
+                field.setValue(fieldValue);
+                return;
+            }
+        }
+    }
+
+    public String getFieldValue(String fieldName) {
+        
+        for (Field field : fields) {
+            
+            if (field.getKey().equals(fieldName)) {
+                return field.getValue();
+            }
+        }
+        return null;
+    }
+
+    public List<Field> getFields() {
+        return fields;
+    }
+    
     @Override
     public int hashCode() {
         int hash = 7;
