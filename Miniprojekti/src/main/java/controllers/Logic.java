@@ -7,6 +7,7 @@ import entity.Reference;
 import entity.ReferenceFactory;
 import exception.RepositoryException;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -17,10 +18,12 @@ public class Logic implements LogicInterface {
 
     private GenericRepository repository;
     private ReferenceFactory RFactory;
+    private FileSaver fileSaver;
 
     public Logic() {
         RFactory = new ReferenceFactory();
         repository = GenericDataFileRepository.getInstance();
+        fileSaver = new FileSaver(new Converter());
     }
 
     @Override
@@ -67,19 +70,23 @@ public class Logic implements LogicInterface {
     public void saveToFile(String fileName) {
         try {
             repository.saveDataToFile(new File(fileName));
-        }
-        catch (RepositoryException e) {
-            
+        } catch (RepositoryException e) {
         }
     }
-    
+
     @Override
     public void loadFile(String fileName) {
         try {
             repository.loadDataFromFile(new File(fileName));
+        } catch (RepositoryException e) {
         }
-        catch (RepositoryException e) {
-            
+    }
+
+    @Override
+    public void convertLoadedToBibtex() throws IOException {
+        List<Inproceedings> list = repository.findAll(Inproceedings.class);
+        for (Inproceedings inproceedings : list) {
+            fileSaver.saveToFile("bibtex.txt", inproceedings);
         }
     }
 
@@ -116,5 +123,4 @@ public class Logic implements LogicInterface {
         }
         return (Reference) createReference("inproceedings", fields);
     }
-
 }

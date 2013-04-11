@@ -4,6 +4,7 @@ package controllers;
 import entity.Field;
 import entity.Inproceedings;
 import entity.Reference;
+import java.io.IOException;
 import java.util.List;
 import java.util.Set;
 
@@ -13,6 +14,7 @@ public interface LogicInterface {
     public List<Field> getFields(String referenceType);
     public Set<String> getReferenceTypes();
     public Reference createReference(String referenceType, List<Field> fields);
+    public void convertLoadedToBibtex() throws IOException;
     public void saveToFile(String fileName);
     public void loadFile(String fileName);
     
