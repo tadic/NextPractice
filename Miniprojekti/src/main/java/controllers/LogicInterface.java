@@ -13,6 +13,7 @@ public interface LogicInterface {
     public List<Field> getFields(String referenceType);
     public Set<String> getReferenceTypes();
     public Reference createReference(String referenceType, List<Field> fields);
+    public void saveToFile(String fileName);
     
     public String[][] getRequiredFields();
     public String[][] getOptionalFields();

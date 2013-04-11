@@ -5,6 +5,8 @@ import entity.Field;
 import entity.Inproceedings;
 import entity.Reference;
 import entity.ReferenceFactory;
+import exception.RepositoryException;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -28,7 +30,9 @@ public class Logic implements LogicInterface {
 
     /**
      * Returns a list of all field object of a reference
-     * @param referenceType Nme of the reference type known by the ReferenceFactory
+     *
+     * @param referenceType Nme of the reference type known by the
+     * ReferenceFactory
      * @return List<Field> References' fields
      */
     @Override
@@ -38,15 +42,17 @@ public class Logic implements LogicInterface {
 
     /**
      * List of all reference types known by REferenceFactory
+     *
      * @return Set<String> Reference type names
      */
     @Override
     public Set<String> getReferenceTypes() {
         return RFactory.getReferenceTypes();
     }
-    
+
     /**
      * Creates reference, passes it to repository and returns the reference.
+     *
      * @param referenceType Name of the reference type to be created
      * @param fields List of field objects for the new reference
      * @return Created reference
@@ -55,6 +61,16 @@ public class Logic implements LogicInterface {
     public Reference createReference(String referenceType, List<Field> fields) {
         BaseEntity created = repository.create(RFactory.createReference(referenceType, fields));
         return (Reference) created;
+    }
+
+    @Override
+    public void saveToFile(String fileName) {
+        try {
+            repository.saveDataToFile(new File(fileName));
+        }
+        catch (RepositoryException e) {
+            
+        }
     }
 
     @Override
