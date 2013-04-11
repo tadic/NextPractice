@@ -7,16 +7,26 @@ import java.util.List;
 import java.util.Set;
 
 public class ReferenceFactory {
-    private HashMap<String, List<Field>> types;
+    private HashMap<String, Reference> types;
     
     
     public ReferenceFactory() {
-        types = new HashMap<String, List<Field>>();
-        types.put("inproceedings", inproceedings());
+        types = new HashMap<String, Reference>();
+        types.put("inproceedings", new Inproceedings());
     }
        
     public List<Field> getFields(String referenceType) {
-        return types.get(referenceType);
+        return types.get(referenceType).getFields();
+    }
+    
+    public List<Field> getFields(String referenceType, boolean required) {
+        List<Field> requestedFields = new ArrayList<Field>();
+        for (Field field : getFields(referenceType)) {
+            if (field.isRequired()==required) {
+                requestedFields.add(field);
+            }
+        }
+        return requestedFields;
     }
     
     public Set<String> getReferenceTypes() {
@@ -26,27 +36,5 @@ public class ReferenceFactory {
     public <T extends BaseEntity> T createReference(String referenceType, List<Field> fields) {
         return (T) new Inproceedings(fields);
     }
-    
-    
-    private List<Field> inproceedings() {
-        List<Field> fields = new ArrayList<Field>();
-        fields.add(new Field("author", true));
-        fields.add(new Field("title", true));
-        fields.add(new Field("booktitle", true));
-        fields.add(new Field("year", true));
-
-        fields.add(new Field("editor", false));
-        fields.add(new Field("volume/number", false));
-        fields.add(new Field("series", false));
-        fields.add(new Field("pages", false));
-        fields.add(new Field("address", false));
-        fields.add(new Field("month", false));
-        fields.add(new Field("organization", false));
-        fields.add(new Field("publisher", false));
-        fields.add(new Field("note", false));
-        fields.add(new Field("key", false));
-        
-        return fields;
-    }
-    
+   
 }

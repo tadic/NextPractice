@@ -14,4 +14,8 @@ public interface LogicInterface {
     public Set<String> getReferenceTypes();
     public <T extends BaseEntity> T createReference(String referenceType, List<Field> fields);
     
+    public String[][] getRequiredFields();
+    public String[][] getOptionalFields();
+    public Inproceedings createReference(String[][] required, String[][] optional);
+    
 }
