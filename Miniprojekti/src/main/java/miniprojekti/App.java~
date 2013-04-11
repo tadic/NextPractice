@@ -11,7 +11,7 @@ public class App
     public static void main( String[] args )
     {
         LogicInterface logic = new Logic();
-
+<<<<<<< HEAD
         System.out.println("\n\n\n");
         //Hakee tunnetut viitetyypit
         for (String s : logic.getReferenceTypes()) {
@@ -33,6 +33,9 @@ public class App
         
         System.out.println(inpro.getFieldValue("author"));
         System.out.println(inpro.getFieldValue("title"));
-
+=======
+        GUI gui = new GUI(logic);
+        //test new jenkins
+>>>>>>> master
     }
 }
