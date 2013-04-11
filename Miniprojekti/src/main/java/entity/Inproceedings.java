@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Inproceedings extends BaseEntity implements Reference {
-
+    final private static String refName = "inproceedings";
     private String referenceId;    
     
     public Inproceedings(List<Field> fields) {
@@ -25,7 +25,9 @@ public class Inproceedings extends BaseEntity implements Reference {
         fields = myFields();
     }
 
-    
+    public String getReferenceName(){
+        return refName;
+    }
     public void setReferenceId(String referenceId) {
         this.referenceId = referenceId;
     }

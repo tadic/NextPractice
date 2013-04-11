@@ -8,6 +8,7 @@ import java.util.List;
  * 
  */
 public interface Reference {
+    public String getReferenceName();
     public String getReferenceId();
     public void setReferenceId(String id);
     public void setFieldValue(String fieldName, String fieldValue);

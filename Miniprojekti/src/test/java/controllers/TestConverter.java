@@ -1,6 +1,8 @@
 package controllers;
 
 import entity.Inproceedings;
+import entity.Reference;
+import java.util.Calendar;
 import org.junit.*;
 import static org.junit.Assert.*;
 
@@ -10,26 +12,26 @@ import static org.junit.Assert.*;
  */
 public class TestConverter {
     Converter convert; 
-    Inproceedings inpro;
+    Reference ref;
         
     @Before
     public void setUp(){
         convert = new Converter();
-        inpro = new Inproceedings();
-        inpro.setFieldValue("author", "Roumani, Hamzeh"); 
-        inpro.setFieldValue("title", "Design guidelines for the lab component of objects-first CS1");
-        inpro.setFieldValue("booktitle", "SIGCSE '02: Proceedings of the 33rd SIGCSE technical symposium on Computer science education" );
-        inpro.setFieldValue("year", "2002");
-        inpro.setFieldValue("editor", "one");
-        inpro.setFieldValue("volume/number", "two");
-        inpro.setFieldValue("series", "three");
-        inpro.setFieldValue("pages", "four");
-        inpro.setFieldValue("address", "five");
-        inpro.setFieldValue("month", "six");
-        inpro.setFieldValue("organization", "seven");
-        inpro.setFieldValue("publisher", "eight");
-        inpro.setFieldValue("note", "nine");
-        inpro.setFieldValue("key", "ten");       
+        ref = new Inproceedings();
+        ref.setFieldValue("author", "Roumani, Hamzeh"); 
+        ref.setFieldValue("title", "Design guidelines for the lab component of objects-first CS1");
+        ref.setFieldValue("booktitle", "SIGCSE '02: Proceedings of the 33rd SIGCSE technical symposium on Computer science education" );
+        ref.setFieldValue("year", "2002");
+        ref.setFieldValue("editor", "one");
+        ref.setFieldValue("volume/number", "two");
+        ref.setFieldValue("series", "three");
+        ref.setFieldValue("pages", "four");
+        ref.setFieldValue("address", "five");
+        ref.setFieldValue("month", "six");
+        ref.setFieldValue("organization", "seven");
+        ref.setFieldValue("publisher", "eight");
+        ref.setFieldValue("note", "nine");
+        ref.setFieldValue("key", "ten");       
     }
     
     @Test
@@ -40,55 +42,69 @@ public class TestConverter {
                 "year = {2002},\n    editor = {one},\n    volume/number = {two},\n    series = {three},\n    " +
                 "pages = {four},\n    address = {five},\n    month = {six},\n    organization = {seven},\n    " +
                 "publisher = {eight},\n    note = {nine},\n    key = {ten}\n}";
-        //System.out.println(expValue);
-        assertEquals(expValue, convert.toBibTex(inpro));
+        //        System.out.println(expValue);
+        assertEquals(expValue, convert.toBibTex(ref));
     }
       
     @Test
     public void testToBibTexForSpecialCharacters(){
-        inpro.setFieldValue("author", "Hassinen, Marko and Mäyrä, Hannu"); 
+        ref.setFieldValue("author", "Hassinen, Marko and Mäyrä, Hannu"); 
         String expValue = "@inproceedings{Ha:2002,\n    author = {Hassinen, Marko and M\\\"{a}yr\\\"{a}, Hannu},\n    " +
                 "title = {Design guidelines for the lab component of objects-first CS1},\n    " +
                 "booktitle = {SIGCSE '02: Proceedings of the 33rd SIGCSE technical symposium on Computer science education},\n    " +
                 "year = {2002},\n    editor = {one},\n    volume/number = {two},\n    series = {three},\n    " +
                 "pages = {four},\n    address = {five},\n    month = {six},\n    organization = {seven},\n    " +
                 "publisher = {eight},\n    note = {nine},\n    key = {ten}\n}";
-        assertEquals(expValue, convert.toBibTex(inpro));
+        assertEquals(expValue, convert.toBibTex(ref));
     }
     @Test
     public void testToBibTexForGivenReferenceId(){
-        inpro.setReferenceId("reference"); 
+        ref.setReferenceId("reference"); 
         String expValue = "@inproceedings{reference,\n    author = {Roumani, Hamzeh},\n    " +
                 "title = {Design guidelines for the lab component of objects-first CS1},\n    " +
                 "booktitle = {SIGCSE '02: Proceedings of the 33rd SIGCSE technical symposium on Computer science education},\n    " +
                 "year = {2002},\n    editor = {one},\n    volume/number = {two},\n    series = {three},\n    " +
                 "pages = {four},\n    address = {five},\n    month = {six},\n    organization = {seven},\n    " +
                 "publisher = {eight},\n    note = {nine},\n    key = {ten}\n}";
-        assertEquals(expValue, convert.toBibTex(inpro));
+        assertEquals(expValue, convert.toBibTex(ref));
     }
     
     @Test(expected = IllegalArgumentException.class)
     public void testBibTexForExceptionWrongYear(){
-        inpro.setFieldValue("year", "2014");
-        String instance = convert.toBibTex(inpro);
+        int y = Calendar.getInstance().get(Calendar.YEAR);
+        y++;
+        String year = Integer.toString(y);
+        ref.setFieldValue("year", year);
+        String instance = convert.toBibTex(ref);
     }
     
     @Test(expected = IllegalArgumentException.class)
     public void testBibTexForExceptionTooShortAuthor(){
-        inpro.setFieldValue("author", "H"); 
-        String instance = convert.toBibTex(inpro);
+        ref.setFieldValue("author", "H"); 
+        String instance = convert.toBibTex(ref);
     }
     
     @Test(expected = IllegalArgumentException.class)
     public void testBibTexForExceptionIfAuthorNull(){
-        inpro.setFieldValue("author", null);
-        String instance = convert.toBibTex(inpro);
+        ref.setFieldValue("author", null);
+        String instance = convert.toBibTex(ref);
     }
     
     @Test(expected = IllegalArgumentException.class)
     public void testBibTexForExceptionIfReferenceIsNull(){
         String instance = convert.toBibTex(null);
     }
-
+    @Test
+    public void testCheckYearNormal(){
+        assertTrue(convert.checkYear("2009"));
+    }
+    @Test
+    public void testCheckYearToLarge(){
+        assertFalse(convert.checkYear("2320"));
+    }
+    @Test
+    public void testCheckYearWrongCharacter(){
+        assertFalse(convert.checkYear("2o09"));
+    }
        
 }
