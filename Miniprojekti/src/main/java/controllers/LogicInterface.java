@@ -9,7 +9,7 @@ import java.util.Set;
 
 public interface LogicInterface {
     
-    public Inproceedings getInproceedings();
+    public List<Inproceedings> getInproceedings();
     public List<Field> getFields(String referenceType);
     public Set<String> getReferenceTypes();
     public Reference createReference(String referenceType, List<Field> fields);

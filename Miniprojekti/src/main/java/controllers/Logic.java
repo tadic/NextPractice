@@ -24,14 +24,14 @@ public class Logic implements LogicInterface {
     }
 
     @Override
-    public Inproceedings getInproceedings() {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public List<Inproceedings> getInproceedings() {
+        return repository.findAll(Inproceedings.class);
     }
 
     /**
      * Returns a list of all field object of a reference
      *
-     * @param referenceType Nme of the reference type known by the
+     * @param referenceType Name of the reference type known by the
      * ReferenceFactory
      * @return List<Field> References' fields
      */
