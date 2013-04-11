@@ -5,6 +5,8 @@
 package controllers;
 
 import entity.Inproceedings;
+import java.util.List;
+import repositories.GenericDataFileRepository;
 import repositories.GenericRepository;
 
 /**
@@ -14,9 +16,14 @@ import repositories.GenericRepository;
 public class Logic implements LogicInterface{
 
     private GenericRepository repository;    
+
+    public Logic() {
+        repository = GenericDataFileRepository.getInstance();
+    }
     
-    public Inproceedings getInproceedings() {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public List<Inproceedings> getInproceedings() {
+        List<Inproceedings> findAll = repository.findAll(Inproceedings.class);
+        return findAll;
     }
 
     public String[][] getRequiredFields() {
@@ -29,7 +36,8 @@ public class Logic implements LogicInterface{
     }
 
     public void createInproceedings(String[][] required, String[][] optional) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Inproceedings inpro = new Inproceedings(required, optional);
+        repository.create(inpro);
     }
 
 

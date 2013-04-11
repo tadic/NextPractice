@@ -23,6 +23,27 @@ public class Inproceedings extends BaseEntity {
     private String note;
     private String key;
 
+    public Inproceedings() {
+    }
+
+    public Inproceedings(String[][] required, String[][] optional) {
+        author = required[0][1];
+        title = required[1][1];
+        booktitle = required[2][1];
+        year = Integer.parseInt(required[3][1]);
+        
+        editor = optional[0][1];
+        volumeNumber = optional[1][1];
+        series = optional[2][1];
+        pages = optional[3][1];
+        address = optional[4][1];
+        month = optional[5][1];
+        organization = optional[6][1];
+        publisher = optional[7][1];
+        note = optional[8][1];
+        key = optional[9][1];
+    }
+
     public void setReferenceId(String referenceId) {
         this.referenceId = referenceId;
     }
