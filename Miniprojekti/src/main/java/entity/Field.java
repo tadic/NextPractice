@@ -1,16 +1,31 @@
 package entity;
 
+/**
+ * Stores a field of an reference.
+ */
+
 public class Field {
     private String key;
     private String value;
     private boolean required;
 
+    /**
+     * Constructor with all arguments.
+     * @param key Name of the field
+     * @param value Value for the field
+     * @param required Is the field required for the reference
+     */
     public Field(String key, String value, boolean required) {
         this.key = key;
         this.value = value;
         this.required = required;
     }
-
+    
+    /**
+     * Constructor for a field with empty (not null) value.
+     * @param key Name of the field
+     * @param required Is the field required for the reference
+     */
     public Field(String key, boolean required) {
         this(key, "", required);
     }
@@ -24,8 +39,7 @@ public class Field {
         this.key = key;
     }
     
-    public boolean hasValue() {
-        
+    public boolean hasValue() {       
         return value.length() > 0;
     }
 

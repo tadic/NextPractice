@@ -3,6 +3,7 @@ package controllers;
 import entity.BaseEntity;
 import entity.Field;
 import entity.Inproceedings;
+import entity.Reference;
 import entity.ReferenceFactory;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,21 +19,40 @@ public class Logic implements LogicInterface {
         RFactory = new ReferenceFactory();
     }
 
+    @Override
     public Inproceedings getInproceedings() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    /**
+     * Returns a list of all field object of a reference
+     * @param referenceType Nme of the reference type known by the ReferenceFactory
+     * @return List<Field> References' fields
+     */
+    @Override
     public List<Field> getFields(String referenceType) {
         return RFactory.getFields(referenceType);
     }
 
+    /**
+     * List of all reference types known by REferenceFactory
+     * @return Set<String> Reference type names
+     */
+    @Override
     public Set<String> getReferenceTypes() {
         return RFactory.getReferenceTypes();
     }
-
-    public <T extends BaseEntity> T createReference(String referenceType, List<Field> fields) {
+    
+    /**
+     * Creates reference, passes it to repository and returns the reference.
+     * @param referenceType Name of the reference type to be created
+     * @param fields List of field objects for the new reference
+     * @return Created reference
+     */
+    @Override
+    public Reference createReference(String referenceType, List<Field> fields) {
         BaseEntity created = repository.create(RFactory.createReference(referenceType, fields));
-        return (T) created;
+        return (Reference) created;
     }
 
     @Override
@@ -66,6 +86,6 @@ public class Logic implements LogicInterface {
         for (String[] row : optional) {
             fields.add(new Field(row[0], row[1], false));
         }
-        return createReference("inproceedings", fields);
+        return (Inproceedings) createReference("inproceedings", fields);
     }
 }
