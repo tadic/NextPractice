@@ -1,9 +1,11 @@
 package entity;
 
+import java.io.Serializable;
+
 /**
  * Stores a field of an reference.
  */
-public class Field extends BaseEntity {
+public class Field implements Serializable {
 
     private String key;
     private String value;

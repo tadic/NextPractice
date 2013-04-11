@@ -1,6 +1,7 @@
 package repositories;
 
 import entity.BaseEntity;
+import entity.Field;
 import exception.RepositoryException;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -10,7 +11,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -167,19 +167,11 @@ public class GenericDataFileRepository implements GenericRepository {
     public <T extends BaseEntity> List<T> findByField(Class<T> type, String fieldName, Object value) throws RepositoryException {
         List<T> list = new ArrayList<T>();
         for (Object o : objects.values()) {
-            try {
-                if (o.getClass().isAssignableFrom(type)) {
-                    Field f = o.getClass().getDeclaredField(fieldName);
-                    f.setAccessible(true);
-                    Object fieldValue = f.get(o);
-                    if (fieldValue.equals(value)) {
-                        list.add(type.cast(o));
-                    }
+            if (o.getClass().isAssignableFrom(type)) {
+                BaseEntity be = type.cast(o);
+                if (be.getFieldValue(fieldName).equals(value)) {
+                    list.add((T) be);
                 }
-            } catch (NoSuchFieldException e) {
-                throw new RepositoryException("Field " + fieldName + " was not found in entity " + type.getName(), e);
-            } catch (IllegalAccessException e) {
-                throw new RepositoryException("Field " + fieldName + " in entity " + type.getName() + " is inaccessible", e);
             }
         }
         return list;

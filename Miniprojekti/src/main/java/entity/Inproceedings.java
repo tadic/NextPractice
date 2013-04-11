@@ -10,18 +10,22 @@ import java.util.List;
 
 public class Inproceedings extends BaseEntity implements Reference {
 
-    private String referenceId;
-    private List<Field> fields;
+    private String referenceId;    
     
     public Inproceedings(List<Field> fields) {
-        this.fields = fields;
+        super(fields);
     }
 
     public Inproceedings() {
-        fields = myFields();
-
+        super();
     }
 
+    @Override
+    protected void initMyFields() {
+        fields = myFields();
+    }
+
+    
     public void setReferenceId(String referenceId) {
         this.referenceId = referenceId;
     }
@@ -30,33 +34,7 @@ public class Inproceedings extends BaseEntity implements Reference {
         return referenceId;
     }
 
-    @Override
-    public void setFieldValue(String fieldName, String fieldValue) {
-
-        for (Field field : fields) {
-            if (field.getKey().equals(fieldName)) {
-                field.setValue(fieldValue);
-                return;
-            }
-        }
-    }
-
-    @Override
-    public String getFieldValue(String fieldName) {
-        
-        for (Field field : fields) {
-            
-            if (field.getKey().equals(fieldName)) {
-                return field.getValue();
-            }
-        }
-        return null;
-    }
-
-    @Override
-    public List<Field> getFields() {
-        return fields;
-    }
+    
 
     private List<Field> myFields() {
         List<Field> myFields = new ArrayList<Field>();
