@@ -2,6 +2,7 @@
 package controllers;
 
 import entity.Inproceedings;
+import entity.Reference;
 import java.util.Calendar;
 
 /**
@@ -13,7 +14,7 @@ public class Converter {
      * @param inpro an Inproceedings instance.
      * @return bibTex form of Inproceedings instance.
      */
-    public String toBibTex(Inproceedings inpro){ 
+    public String toBibTex(Reference inpro){ 
         if (!isRegular(inpro)){
             throw new IllegalArgumentException("Ilegal value of Reference");
         }
@@ -73,7 +74,7 @@ public class Converter {
      * @param word is text which should be modified.
      * @return text with replaced special characters.
      */
-    private boolean isRegular(Inproceedings in){
+    private boolean isRegular(Reference in){
         if (in==null || in.getFieldValue("author")==null || in.getFieldValue("booktitle")==null ||in.getFieldValue("title")==null){
             return false;
         }
