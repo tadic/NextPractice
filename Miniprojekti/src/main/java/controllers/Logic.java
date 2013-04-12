@@ -1,5 +1,6 @@
 package controllers;
 
+import entity.FType;
 import entity.Reference;
 import entity.Field;
 import entity.Inproceedings;
@@ -95,7 +96,7 @@ public class Logic implements LogicInterface {
         List<Field> fields = RFactory.getFields("inproceedings", true);
         String[][] requiredFields = new String[fields.size()][2];
         for (int i = 0; i < fields.size(); i++) {
-            requiredFields[i][0] = fields.get(i).getKey();
+            requiredFields[i][0] = fields.get(i).getKey().name();
             requiredFields[i][1] = "";
         }
         return requiredFields;
@@ -106,7 +107,7 @@ public class Logic implements LogicInterface {
         List<Field> fields = RFactory.getFields("inproceedings", false);
         String[][] optionalFields = new String[fields.size()][2];
         for (int i = 0; i < fields.size(); i++) {
-            optionalFields[i][0] = fields.get(i).getKey();
+            optionalFields[i][0] = fields.get(i).getKey().toString();
             optionalFields[i][1] = "";
         }
         return optionalFields;
@@ -116,10 +117,10 @@ public class Logic implements LogicInterface {
     public Reference createReference(String[][] required, String[][] optional) {
         List<Field> fields = new ArrayList<Field>();
         for (String[] row : required) {
-            fields.add(new Field(row[0], row[1], true));
+            fields.add(new Field(FType.valueOf(row[0]), row[1], true));
         }
         for (String[] row : optional) {
-            fields.add(new Field(row[0], row[1], false));
+            fields.add(new Field(FType.valueOf(row[0]), row[1], false));
         }
         return (Reference) createReference("inproceedings", fields);
     }

@@ -22,7 +22,7 @@ public class Book extends Reference{
 
     @Override
     protected void initMyFields() {
-        refType = "inproceedings";
+        refType = "book";
         fields = myFields();
         tags = new ArrayList<String>();
     }
@@ -31,22 +31,21 @@ public class Book extends Reference{
 
     private List<Field> myFields() {
         List<Field> myFields = new ArrayList<Field>();
-        myFields.add(new Field("referenceId", true));
-        myFields.add(new Field("author", true));
-        myFields.add(new Field("title", true));
-        myFields.add(new Field("booktitle", true));
-        myFields.add(new Field("year", true));
+        myFields.add(new Field(FType.referenceId, true));
+        myFields.add(new Field(FType.author, true));
+        myFields.add(new Field(FType.title, true));
+        myFields.add(new Field(FType.publisher, true));
+        myFields.add(new Field(FType.year, true));
 
-        myFields.add(new Field("editor", false));
-        myFields.add(new Field("volume/number", false));
-        myFields.add(new Field("series", false));
-        myFields.add(new Field("pages", false));
-        myFields.add(new Field("address", false));
-        myFields.add(new Field("month", false));
-        myFields.add(new Field("organization", false));
-        myFields.add(new Field("publisher", false));
-        myFields.add(new Field("note", false));
-        myFields.add(new Field("key", false));
+        myFields.add(new Field(FType.volume, false));
+        myFields.add(new Field(FType.series, false));
+        myFields.add(new Field(FType.address, false));
+        myFields.add(new Field(FType.edition, false));
+        myFields.add(new Field(FType.month, false));
+        myFields.add(new Field(FType.note, false));
+        myFields.add(new Field(FType.key, false));
+        
+        
 
         return myFields;
     }

@@ -1,5 +1,6 @@
 package repositories;
 
+import entity.FType;
 import entity.Reference;
 import entity.Field;
 import exception.RepositoryException;
@@ -164,7 +165,7 @@ public class GenericDataFileRepository implements GenericRepository {
      * entity or if the field is inaccessible.
      */
     @Override
-    public <T extends Reference> List<T> findByField(Class<T> type, String fieldName, Object value) throws RepositoryException {
+    public <T extends Reference> List<T> findByField(Class<T> type, FType fieldName, Object value) throws RepositoryException {
         List<T> list = new ArrayList<T>();
         for (Object o : objects.values()) {
             if (o.getClass().isAssignableFrom(type)) {

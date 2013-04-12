@@ -4,6 +4,7 @@
  */
 package controllers;
 
+import entity.FType;
 import entity.Field;
 import entity.Inproceedings;
 import entity.Reference;
@@ -81,7 +82,7 @@ public class LogicTest {
 
     @Test
     public void legacyTestRequiredFields() {
-        String[][] expected = {{"author", ""}, {"title", ""}, {"booktitle", ""}, {"year", ""}};
+        String[][] expected = {{"referenceId", ""},{"author", ""}, {"title", ""}, {"booktitle", ""}, {"year", ""}};
         String[][] result = logic.getRequiredFields();
 
         assertEquals(expected.length, result.length);
@@ -106,8 +107,8 @@ public class LogicTest {
 
     @Test
     public void legacyCreateInproceedings() {
-        String[][] req = {{"author", "Author"}, {"title", "Title"}, {"booktitle", "Booktitle"}, {"year", "Year"}};
-        String[][] opt = {{"editor", "Editor"}, {"volume/number", "VolumeNumber"}, {"series", "Series"}, {"pages", "Pages"}, {"address", "Address"},
+        String[][] req = {{"referenceId", "ReferenceId"},{"author", "Author"}, {"title", "Title"}, {"booktitle", "Booktitle"}, {"year", "Year"}};
+        String[][] opt = {{"editor", "Editor"}, {"volume", "VolumeNumber"}, {"series", "Series"}, {"pages", "Pages"}, {"address", "Address"},
             {"month", "Month"}, {"organization", "Organization"}, {"publisher", "Publisher"}, {"note", "Note"}, {"key", "Key"}};
         Object expClass = Inproceedings.class;
         List<Field> expFields = inproceedingsFields();
@@ -120,21 +121,22 @@ public class LogicTest {
 
     private List<Field> inproceedingsFields() {
         List<Field> fields = new ArrayList<Field>();
-        fields.add(new Field("author", "Author", true));
-        fields.add(new Field("title", "Title", true));
-        fields.add(new Field("booktitle", "Booktitle", true));
-        fields.add(new Field("year", "Year", true));
+        fields.add(new Field(FType.referenceId, "ReferenceId", true));
+        fields.add(new Field(FType.author, "Author", true));
+        fields.add(new Field(FType.title, "Title", true));
+        fields.add(new Field(FType.booktitle, "Booktitle", true));
+        fields.add(new Field(FType.year, "Year", true));
 
-        fields.add(new Field("editor", "Editor", false));
-        fields.add(new Field("volume/number", "VolumeNumber", false));
-        fields.add(new Field("series", "Series", false));
-        fields.add(new Field("pages", "Pages", false));
-        fields.add(new Field("address", "Address", false));
-        fields.add(new Field("month", "Month", false));
-        fields.add(new Field("organization", "Organization", false));
-        fields.add(new Field("publisher", "Publisher", false));
-        fields.add(new Field("note", "Note", false));
-        fields.add(new Field("key", "Key", false));
+        fields.add(new Field(FType.editor, "Editor", false));
+        fields.add(new Field(FType.volume, "VolumeNumber", false));
+        fields.add(new Field(FType.series, "Series", false));
+        fields.add(new Field(FType.pages, "Pages", false));
+        fields.add(new Field(FType.address, "Address", false));
+        fields.add(new Field(FType.month, "Month", false));
+        fields.add(new Field(FType.organization, "Organization", false));
+        fields.add(new Field(FType.publisher, "Publisher", false));
+        fields.add(new Field(FType.note, "Note", false));
+        fields.add(new Field(FType.key, "Key", false));
 
         return fields;
     }

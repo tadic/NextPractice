@@ -38,12 +38,12 @@ public class FieldTest {
     
     @Before
     public void setUp() {
-        fullField = new Field("author", "Author", true);
-        copy = new Field("author", "Author", true);
+        fullField = new Field(FType.author, "Author", true);
+        copy = new Field(FType.author, "Author", true);
         nullField = null;
-        noValueField = new Field("booktitle", true);
-        reqField = new Field("year", "1988", true);
-        optField = new Field("editor", "Editor", false);
+        noValueField = new Field(FType.booktitle, true);
+        reqField = new Field(FType.year, "1988", true);
+        optField = new Field(FType.editor, "Editor", false);
     }
     
     @After
@@ -53,7 +53,7 @@ public class FieldTest {
 
     @Test
     public void changeKey() {
-        String exp = "tatti";
+        FType exp = FType.howpublished;
         
         fullField.setKey(exp);
         
@@ -97,7 +97,7 @@ public class FieldTest {
     
     @Test
     public void differentKeyEqual() {
-        String testKey = "vahvero";
+        FType testKey = FType.crossref;
         copy.setKey(testKey);
         assertFalse(fullField.equals(copy));
     }

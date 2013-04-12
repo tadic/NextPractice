@@ -1,8 +1,8 @@
 package controllers;
 
+import entity.FType;
 import entity.Inproceedings;
 import entity.Reference;
-import java.util.Calendar;
 import org.junit.*;
 import static org.junit.Assert.*;
 
@@ -18,21 +18,21 @@ public class TestConverter {
     public void setUp(){
         convert = new Converter();
         ref = new Inproceedings();
-        ref.setFieldValue("referenceId", "Ro:2002"); 
-        ref.setFieldValue("author", "Roumani, Hamzeh"); 
-        ref.setFieldValue("title", "Design guidelines for the lab component of objects-first CS1");
-        ref.setFieldValue("booktitle", "SIGCSE '02: Proceedings of the 33rd SIGCSE technical symposium on Computer science education" );
-        ref.setFieldValue("year", "2002");
-        ref.setFieldValue("editor", "one");
-        ref.setFieldValue("volume/number", "two");
-        ref.setFieldValue("series", "three");
-        ref.setFieldValue("pages", "four");
-        ref.setFieldValue("address", "five");
-        ref.setFieldValue("month", "six");
-        ref.setFieldValue("organization", "seven");
-        ref.setFieldValue("publisher", "eight");
-        ref.setFieldValue("note", "nine");
-        ref.setFieldValue("key", "ten");       
+        ref.setFieldValue(FType.referenceId, "Ro:2002"); 
+        ref.setFieldValue(FType.author, "Roumani, Hamzeh"); 
+        ref.setFieldValue(FType.title, "Design guidelines for the lab component of objects-first CS1");
+        ref.setFieldValue(FType.booktitle, "SIGCSE '02: Proceedings of the 33rd SIGCSE technical symposium on Computer science education" );
+        ref.setFieldValue(FType.year, "2002");
+        ref.setFieldValue(FType.editor, "one");
+        ref.setFieldValue(FType.volume, "two");
+        ref.setFieldValue(FType.series, "three");
+        ref.setFieldValue(FType.pages, "four");
+        ref.setFieldValue(FType.address, "five");
+        ref.setFieldValue(FType.month, "six");
+        ref.setFieldValue(FType.organization, "seven");
+        ref.setFieldValue(FType.publisher, "eight");
+        ref.setFieldValue(FType.note, "nine");
+        ref.setFieldValue(FType.key, "ten");       
     }
     
     @Test
@@ -51,7 +51,7 @@ public class TestConverter {
       
     @Test
     public void testToBibTexForSpecialCharacters(){
-        ref.setFieldValue("author", "Hassinen, Marko and Mäyrä, Hannu"); 
+        ref.setFieldValue(FType.author, "Hassinen, Marko and Mäyrä, Hannu"); 
         String expValue = "@inproceedings{Ro:2002,\n    author = {Hassinen, Marko and M\\\"{a}yr\\\"{a}, Hannu},\n    " +
                 "title = {Design guidelines for the lab component of objects-first CS1},\n    " +
                 "booktitle = {SIGCSE '02: Proceedings of the 33rd SIGCSE technical symposium on Computer science education},\n    " +

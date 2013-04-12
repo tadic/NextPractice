@@ -7,7 +7,7 @@ import java.io.Serializable;
  */
 public class Field implements Serializable {
 
-    private String key;
+    private FType key;
     private String value;
     private boolean required;
 
@@ -18,7 +18,7 @@ public class Field implements Serializable {
      * @param value Value for the field
      * @param required Is the field required for the reference
      */
-    public Field(String key, String value, boolean required) {
+    public Field(FType key, String value, boolean required) {
         this.key = key;
         this.value = value;
         this.required = required;
@@ -30,15 +30,15 @@ public class Field implements Serializable {
      * @param key Name of the field
      * @param required Is the field required for the reference
      */
-    public Field(String key, boolean required) {
+    public Field(FType key, boolean required) {
         this(key, "", required);
     }
 
-    public String getKey() {
+    public FType getKey() {
         return key;
     }
 
-    public void setKey(String key) {
+    public void setKey(FType key) {
         this.key = key;
     }
 

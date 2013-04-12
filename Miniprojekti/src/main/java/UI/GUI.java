@@ -7,6 +7,7 @@ package UI;
 import controllers.Converter;
 import controllers.FileSaver;
 import controllers.LogicInterface;
+import entity.FType;
 import entity.Inproceedings;
 import javax.swing.JPanel;
 import javax.swing.JLabel;
@@ -213,10 +214,10 @@ public class GUI implements ActionListener {
         Inproceedings inproceeding = new Inproceedings(logic.getFields("inproceedings"));
 
 
-        inproceeding.setFieldValue("author", textFields.get(0).getText());
-        inproceeding.setFieldValue("booktitle", textFields.get(1).getText());
-        inproceeding.setFieldValue("title", textFields.get(2).getText());
-        inproceeding.setFieldValue("year", textFields.get(3).getText());
+        inproceeding.setFieldValue(FType.author, textFields.get(0).getText());
+        inproceeding.setFieldValue(FType.booktitle, textFields.get(1).getText());
+        inproceeding.setFieldValue(FType.title, textFields.get(2).getText());
+        inproceeding.setFieldValue(FType.year, textFields.get(3).getText());
         if (!inproceeding.isRegular(null)) {
             JOptionPane.showMessageDialog(referenceframe, "Fill the first 4 fields. Check that year and texts are correct");
             return;

@@ -4,6 +4,7 @@
  */
 package repositories;
 
+import entity.FType;
 import entity.Reference;
 import entity.Inproceedings;
 import java.io.File;
@@ -28,10 +29,10 @@ public class GenericDataFileRepositoryTest {
     private void populateTestData(GenericRepository repository) {
         for (int i = 1; i <= 50; i++) {
             Inproceedings inproceedings = new Inproceedings();
-            inproceedings.setFieldValue("author", "Author" + i);
-            inproceedings.setFieldValue("booktitle", "Booktitle" + i);
-            inproceedings.setFieldValue("title", "Title" + i);
-            inproceedings.setFieldValue("year", "" + (2000 + i));
+            inproceedings.setFieldValue(FType.author, "Author" + i);
+            inproceedings.setFieldValue(FType.booktitle, "Booktitle" + i);
+            inproceedings.setFieldValue(FType.title, "Title" + i);
+            inproceedings.setFieldValue(FType.author.year, "" + (2000 + i));
             repository.create(inproceedings);
 
             TestDummy t = new TestDummy("TestDummy" + i);
@@ -53,13 +54,13 @@ public class GenericDataFileRepositoryTest {
         assertTrue(dataFile.exists());
 
         Inproceedings inproceedings1 = new Inproceedings();
-        inproceedings1.setFieldValue("author", "Stephen King");
-        inproceedings1.setFieldValue("title", "Danse Macabre");
+        inproceedings1.setFieldValue(FType.author, "Stephen King");
+        inproceedings1.setFieldValue(FType.title, "Danse Macabre");
         inproceedings1 = instance.create(inproceedings1);
 
         Inproceedings inproceedings2 = new Inproceedings();
-        inproceedings2.setFieldValue("author", "Stephen King");
-        inproceedings2.setFieldValue("title", "Riding the Bullet");
+        inproceedings2.setFieldValue(FType.author, "Stephen King");
+        inproceedings2.setFieldValue(FType.title, "Riding the Bullet");
         instance.create(inproceedings2);
 
         instance.saveDataToFile(dataFile);
@@ -72,14 +73,14 @@ public class GenericDataFileRepositoryTest {
         dataFile = temporaryFolder.newFile("Miniprojekti.dat");
 
         Inproceedings inproceedings1 = new Inproceedings();
-        inproceedings1.setFieldValue("author", "Stephen King");
-        inproceedings1.setFieldValue("title", "Danse Macabre");
+        inproceedings1.setFieldValue(FType.author, "Stephen King");
+        inproceedings1.setFieldValue(FType.title, "Danse Macabre");
         inproceedings1 = instance.create(inproceedings1);
         int id = inproceedings1.getId();
 
         Inproceedings inproceedings2 = new Inproceedings();
-        inproceedings2.setFieldValue("author", "Stephen King");
-        inproceedings2.setFieldValue("title", "Riding the Bullet");
+        inproceedings2.setFieldValue(FType.author, "Stephen King");
+        inproceedings2.setFieldValue(FType.title, "Riding the Bullet");
         instance.create(inproceedings2);
 
         instance.saveDataToFile(dataFile);
@@ -93,8 +94,8 @@ public class GenericDataFileRepositoryTest {
         inproceedings1 = instance.findOne(Inproceedings.class, id);
 
         assertEquals(id, inproceedings1.getId());
-        assertEquals("Stephen King", inproceedings1.getFieldValue("author"));
-        assertEquals("Danse Macabre", inproceedings1.getFieldValue("title"));
+        assertEquals("Stephen King", inproceedings1.getFieldValue(FType.author));
+        assertEquals("Danse Macabre", inproceedings1.getFieldValue(FType.title));
 
     }
 
@@ -119,20 +120,20 @@ public class GenericDataFileRepositoryTest {
 
         for (int i = 1; i <= 5; i++) {
             Inproceedings inproceedings = new Inproceedings();
-            inproceedings.setFieldValue("author", "Author" + i);
-            inproceedings.setFieldValue("booktitle", "Booktitle" + i);
-            inproceedings.setFieldValue("title", "Title" + i);
-            inproceedings.setFieldValue("year", "" + (2000 + i));
+            inproceedings.setFieldValue(FType.author, "Author" + i);
+            inproceedings.setFieldValue(FType.booktitle, "Booktitle" + i);
+            inproceedings.setFieldValue(FType.title, "Title" + i);
+            inproceedings.setFieldValue(FType.year, "" + (2000 + i));
             instance.create(inproceedings);
             expResult.add(inproceedings);
         }
 
         List<Inproceedings> result = instance.findAll(Inproceedings.class);
-        assertEquals("Author1", result.get(0).getFieldValue("author"));
-        assertEquals("Author2", result.get(1).getFieldValue("author"));
-        assertEquals("Author3", result.get(2).getFieldValue("author"));
-        assertEquals("Author4", result.get(3).getFieldValue("author"));
-        assertEquals("Author5", result.get(4).getFieldValue("author"));
+        assertEquals("Author1", result.get(0).getFieldValue(FType.author));
+        assertEquals("Author2", result.get(1).getFieldValue(FType.author));
+        assertEquals("Author3", result.get(2).getFieldValue(FType.author));
+        assertEquals("Author4", result.get(3).getFieldValue(FType.author));
+        assertEquals("Author5", result.get(4).getFieldValue(FType.author));
 
     }
 
@@ -155,18 +156,18 @@ public class GenericDataFileRepositoryTest {
         List<Inproceedings> expResult = new ArrayList<Inproceedings>();
 
         Inproceedings inproceedings1 = new Inproceedings();
-        inproceedings1.setFieldValue("author", "Stephen King");
-        inproceedings1.setFieldValue("title", "Danse Macabre");
+        inproceedings1.setFieldValue(FType.author, "Stephen King");
+        inproceedings1.setFieldValue(FType.title, "Danse Macabre");
         instance.create(inproceedings1);
         expResult.add(inproceedings1);
 
         Inproceedings inproceedings2 = new Inproceedings();
-        inproceedings2.setFieldValue("author", "Stephen King");
-        inproceedings2.setFieldValue("title", "Riding the Bullet");
+        inproceedings2.setFieldValue(FType.author, "Stephen King");
+        inproceedings2.setFieldValue(FType.title, "Riding the Bullet");
         instance.create(inproceedings2);
         expResult.add(inproceedings2);
 
-        List result = instance.findByField(Inproceedings.class, "author", "Stephen King");
+        List result = instance.findByField(Inproceedings.class, FType.author, "Stephen King");
 
         assertTrue(result.size() == 2);
         assertTrue(result.contains(inproceedings1));
@@ -178,7 +179,7 @@ public class GenericDataFileRepositoryTest {
         GenericRepository instance = GenericDataFileRepository.getInstance();
         instance.clearAll();
         populateTestData(instance);
-        List result = instance.findByField(Inproceedings.class, "author", "Stephen King");
+        List result = instance.findByField(Inproceedings.class, FType.author, "Stephen King");
         assertEquals(0, result.size());
     }
 
@@ -188,15 +189,15 @@ public class GenericDataFileRepositoryTest {
         instance.clearAll();
 
         Inproceedings inproceedings1 = new Inproceedings();
-        inproceedings1.setFieldValue("author", "Stephen King");
-        inproceedings1.setFieldValue("title", "Danse Macabre");
+        inproceedings1.setFieldValue(FType.author, "Stephen King");
+        inproceedings1.setFieldValue(FType.title, "Danse Macabre");
         inproceedings1 = instance.create(inproceedings1);
         int id = inproceedings1.getId();
 
         Inproceedings found = instance.findOne(Inproceedings.class, id);
         assertEquals(id, found.getId());
-        assertEquals("Stephen King", found.getFieldValue("author"));
-        assertEquals("Danse Macabre", found.getFieldValue("title"));
+        assertEquals("Stephen King", found.getFieldValue(FType.author));
+        assertEquals("Danse Macabre", found.getFieldValue(FType.title));
     }
 
     @Test
@@ -213,8 +214,8 @@ public class GenericDataFileRepositoryTest {
         instance.clearAll();
 
         Inproceedings inproceedings1 = new Inproceedings();
-        inproceedings1.setFieldValue("author", "Stephen King");
-        inproceedings1.setFieldValue("title", "Danse Macabre");
+        inproceedings1.setFieldValue(FType.author, "Stephen King");
+        inproceedings1.setFieldValue(FType.title, "Danse Macabre");
         inproceedings1 = instance.create(inproceedings1);
         int id = inproceedings1.getId();
 
@@ -222,8 +223,8 @@ public class GenericDataFileRepositoryTest {
         assertEquals(1, instance.count(Inproceedings.class));
 
         Inproceedings inproceedings2 = new Inproceedings();
-        inproceedings2.setFieldValue("author", "Stephen King");
-        inproceedings2.setFieldValue("title", "Riding the Bullet");
+        inproceedings2.setFieldValue(FType.author, "Stephen King");
+        inproceedings2.setFieldValue(FType.title, "Riding the Bullet");
         instance.create(inproceedings2);
 
         assertEquals(2, inproceedings2.getId());
@@ -231,8 +232,8 @@ public class GenericDataFileRepositoryTest {
 
         Inproceedings found = instance.findOne(Inproceedings.class, id);
         assertEquals(id, found.getId());
-        assertEquals("Stephen King", found.getFieldValue("author"));
-        assertEquals("Danse Macabre", found.getFieldValue("title"));
+        assertEquals("Stephen King", found.getFieldValue(FType.author));
+        assertEquals("Danse Macabre", found.getFieldValue(FType.title));
     }
 
     @Test
@@ -241,22 +242,22 @@ public class GenericDataFileRepositoryTest {
         instance.clearAll();
 
         Inproceedings inproceedings1 = new Inproceedings();
-        inproceedings1.setFieldValue("author", "Stephen King");
-        inproceedings1.setFieldValue("title", "Danse Macabre");
+        inproceedings1.setFieldValue(FType.author, "Stephen King");
+        inproceedings1.setFieldValue(FType.title, "Danse Macabre");
         inproceedings1 = instance.create(inproceedings1);
         int id = inproceedings1.getId();
 
         Inproceedings inproceedings2 = new Inproceedings();
-        inproceedings2.setFieldValue("author", "Stephen King");
-        inproceedings2.setFieldValue("title", "Riding the Bullet");
+        inproceedings2.setFieldValue(FType.author, "Stephen King");
+        inproceedings2.setFieldValue(FType.title, "Riding the Bullet");
         instance.create(inproceedings2);
 
-        inproceedings1.setFieldValue("author", "Jari Tervo");
+        inproceedings1.setFieldValue(FType.author, "Jari Tervo");
         instance.update(id, inproceedings1);
         inproceedings1 = instance.findOne(Inproceedings.class, id);
 
-        assertEquals("Jari Tervo", inproceedings1.getFieldValue("author"));
-        assertEquals("Danse Macabre", inproceedings1.getFieldValue("title"));
+        assertEquals("Jari Tervo", inproceedings1.getFieldValue(FType.author));
+        assertEquals("Danse Macabre", inproceedings1.getFieldValue(FType.title));
         assertTrue(instance.count(Inproceedings.class) == 2);
     }
 
@@ -266,14 +267,14 @@ public class GenericDataFileRepositoryTest {
         instance.clearAll();
 
         Inproceedings inproceedings1 = new Inproceedings();
-        inproceedings1.setFieldValue("author", "Stephen King");
-        inproceedings1.setFieldValue("title", "Danse Macabre");
+        inproceedings1.setFieldValue(FType.author, "Stephen King");
+        inproceedings1.setFieldValue(FType.title, "Danse Macabre");
         inproceedings1 = instance.create(inproceedings1);
         int id = inproceedings1.getId();
 
         Inproceedings inproceedings2 = new Inproceedings();
-        inproceedings2.setFieldValue("author", "Stephen King");
-        inproceedings2.setFieldValue("title", "Riding the Bullet");
+        inproceedings2.setFieldValue(FType.author, "Stephen King");
+        inproceedings2.setFieldValue(FType.title, "Riding the Bullet");
         instance.create(inproceedings2);
 
         int countStart = instance.count(Inproceedings.class);

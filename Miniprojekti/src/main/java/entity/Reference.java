@@ -37,7 +37,7 @@ public abstract class Reference implements Serializable {
         this.id = id;
     }
 
-    public void setFieldValue(String fieldName, String fieldValue) {
+    public void setFieldValue(FType fieldName, String fieldValue) {
 
         for (Field field : fields) {
             if (field.getKey().equals(fieldName)) {
@@ -47,7 +47,7 @@ public abstract class Reference implements Serializable {
         }
     }
 
-    public String getFieldValue(String fieldName) {
+    public String getFieldValue(FType fieldName) {
         for (Field field : fields) {
             if (field.getKey().equals(fieldName)) {
                 return field.getValue();
@@ -85,7 +85,7 @@ public abstract class Reference implements Serializable {
             return false;
         }
         for (Reference r: list){    
-            if (this.getFieldValue("referenceId").trim().equals(r.getFieldValue("referenceId").trim())){
+            if (this.getFieldValue(FType.referenceId).trim().equals(r.getFieldValue(FType.referenceId).trim())){
                  return true;
             }
         }
@@ -100,10 +100,10 @@ public abstract class Reference implements Serializable {
      * @return boolean True, if doesn't repeat in the list. False if it is already in the list.
      */
     private boolean checkReferenceId(List<Reference> list){
-        if (this.getFieldValue("referenceId").trim().length()==0){
-            this.setFieldValue("referenceId",this.getFieldValue("author").substring(0,2) + ":" + this.getFieldValue("year"));
+        if (this.getFieldValue(FType.referenceId).trim().length()==0){
+            this.setFieldValue(FType.referenceId,this.getFieldValue(FType.author).substring(0,2) + ":" + this.getFieldValue(FType.year));
             while (isInTheList(list)){
-                this.setFieldValue("referenceId", generateNextValueForRefId(this.getFieldValue("referenceId")));           
+                this.setFieldValue(FType.referenceId, generateNextValueForRefId(this.getFieldValue(FType.referenceId)));           
             }
             return true;
         } else {
@@ -140,7 +140,7 @@ public abstract class Reference implements Serializable {
      * @return boolean parameter true if year is correct, else false.
      */
     private boolean checkYear(){ 
-        String year = this.getFieldValue("year");
+        String year = this.getFieldValue(FType.year);
         if (year.trim().length()==0){
             return false;
         }

@@ -4,6 +4,7 @@
  */
 package repositories;
 
+import entity.FType;
 import entity.Reference;
 import exception.RepositoryException;
 import java.io.File;
@@ -23,7 +24,7 @@ public interface GenericRepository {
 
     <T extends Reference> List<T> findAll(Class<T> type);
 
-    <T extends Reference> List<T> findByField(Class<T> type, String fieldName, Object value) throws RepositoryException;
+    <T extends Reference> List<T> findByField(Class<T> type, FType fieldName, Object value) throws RepositoryException;
 
     <T extends Reference> T findOne(Class<T> type, int id);
 

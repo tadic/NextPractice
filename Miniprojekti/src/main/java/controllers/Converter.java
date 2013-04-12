@@ -1,6 +1,7 @@
 
 package controllers;
 
+import entity.FType;
 import entity.Field;
 import entity.Inproceedings;
 import entity.Reference;
@@ -18,10 +19,10 @@ public class Converter {
      */
     public String toBibTex(Reference ref){ 
         StringBuilder text = new StringBuilder("@" + ref.getReferenceType() + "{");
-        text.append(repSpecChars(ref.getFieldValue("referenceId"))); 
+        text.append(repSpecChars(ref.getFieldValue(FType.referenceId))); 
         for (int i=1; i<ref.getFields().size(); i++){
             if (ref.getFields().get(i).getValue().trim().length()>0){
-                text.append(",\n    ").append(ref.getFields().get(i).getKey()).append(" = {").
+                text.append(",\n    ").append(ref.getFields().get(i).getKey().toString()).append(" = {").
                         append(repSpecChars(ref.getFields().get(i).getValue())).append("}");
             }
         }
