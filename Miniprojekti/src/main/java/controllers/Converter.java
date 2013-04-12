@@ -44,7 +44,7 @@ public class Converter {
      * @param word is text which should be modified.
      * @return text with replaced special characters.
      */
-    private boolean isRegular(Reference ref){
+    public boolean isRegular(Reference ref){
         if (ref==null){
             return false;                   // if ref parameter is null
         }

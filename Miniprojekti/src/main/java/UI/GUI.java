@@ -19,11 +19,15 @@ import javax.swing.JFrame;
 import java.awt.Container;
 import java.awt.Desktop;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
 
 /**
@@ -40,15 +44,20 @@ public class GUI implements ActionListener {
     private ArrayList<JTextField> textFields;
     private String[][] requiredLabels;
     private String[][] optionalLabels;
+    private String[][] allLabels;
     private FileSaver fileSaver;
+    private Converter converter;
+    private JFrame referenceframe;
 
-    public GUI(LogicInterface l) {
+    public GUI(LogicInterface l, Converter c) {
         logic = l;
+        converter = c;
         initGUI();
     }
 
-    /*
-     * Opens a window where user can choose to create new reference or load an existing one.
+    /**
+     * Opens a window where user can choose to create new reference or load an
+     * existing one.
      */
     public void initGUI() {
         JFrame frame = new JFrame();
@@ -56,6 +65,7 @@ public class GUI implements ActionListener {
         SpringLayout layout = new SpringLayout();
         final JFileChooser fileOpener = new JFileChooser();
         panel.setLayout(layout);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         newReference = new JButton("New");
         newReference.addActionListener(new ActionListener() {
@@ -97,15 +107,15 @@ public class GUI implements ActionListener {
 
     }
 
-    /*
+    /**
      * Opens an form for creating an inprociidings reference.
      */
     public void openReferenceForm() {
 
-        JFrame frame = new JFrame();
+        referenceframe = new JFrame();
         SpringLayout layout = new SpringLayout();
         JPanel panel = new JPanel();
-        frame.add(panel);
+        referenceframe.add(panel);
         panel.setLayout(layout);
         textFields = new ArrayList<JTextField>();
 
@@ -115,9 +125,10 @@ public class GUI implements ActionListener {
         requiredLabels = logic.getRequiredFields();
         optionalLabels = logic.getOptionalFields();
 
+
         int length = requiredLabels.length + optionalLabels.length;
 
-        for (int i = 0; i < length + 1; i++) {
+        for (int i = 0; i < length + 2; i++) {
             if (i < requiredLabels.length) {
                 JLabel label = new JLabel(requiredLabels[i][0], JLabel.TRAILING);
                 JTextField textfield = new JTextField(15);
@@ -127,6 +138,14 @@ public class GUI implements ActionListener {
                 panel.add(label);
                 panel.add(textfield);
             } else if (i == length) {
+                JLabel label = new JLabel("Name of file to save", JLabel.TRAILING);
+                JTextField textfield = new JTextField(15);
+                textfield.addActionListener(this);
+                textFields.add(textfield);
+                label.setLabelFor(textfield);
+                panel.add(label);
+                panel.add(textfield);
+            } else if (i == length + 1) {
                 saveReference = new JButton("Save");
                 saveReference.addActionListener(this);
                 panel.add(saveReference);
@@ -143,20 +162,22 @@ public class GUI implements ActionListener {
 
         }
 
-        SpringUtilities.makeCompactGrid(panel, length, 2, 6, 6, 6, 6);
+        SpringUtilities.makeCompactGrid(panel, length + 1, 2, 6, 6, 6, 6);
 
-        frame.pack();
-        frame.setLocationRelativeTo(null);
-        frame.setVisible(true);
+        referenceframe.pack();
+        referenceframe.setLocationRelativeTo(null);
+        referenceframe.setVisible(true);
+
     }
 
-    /*
-     * Handles saving the text from textfields and saving given information into a file
-     * via save button.
+    /**
+     * Handles saving the text from textfields and saving given information into
+     * a file via save button.
      */
     @Override
     public void actionPerformed(ActionEvent ae) {
-        for (int i = 0; i < textFields.size(); i++) {
+        String fileNameToSave = "inpro";
+        for (int i = 0; i < textFields.size() - 1; i++) {
             if (ae.getSource() == textFields.get(i) && i < requiredLabels.length) {
                 requiredLabels[i][1] = textFields.get(i).getText();
                 System.out.println(textFields.get(i).getText());
@@ -167,9 +188,44 @@ public class GUI implements ActionListener {
                 System.out.println(optionalLabels[i - requiredLabels.length][1]);
             } else if (ae.getSource() == saveReference) {
                 logic.createReference(requiredLabels, optionalLabels);
+                fileNameToSave = textFields.get(textFields.size() - 1).getText();
+                if (fileNameToSave.length() < 2) {
+                    fileNameToSave = "inpro"; // default filename
+                }
                 logic.saveToFile("inproceedings.txt");
 
             }
         }
+        try {
+            this.saveAsBibtex(fileNameToSave + ".txt");
+        } catch (IOException ex) {
+            Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
+
+    /**
+     * Reads the fields and saves inproceeding as bibtex.
+     *
+     * @param nameOfFile
+     * @throws IOException
+     */
+    public void saveAsBibtex(String nameOfFile) throws IOException {
+        Inproceedings inproceeding = new Inproceedings(logic.getFields("inproceedings"));
+
+
+        inproceeding.setFieldValue("author", textFields.get(0).getText());
+        inproceeding.setFieldValue("booktitle", textFields.get(1).getText());
+        inproceeding.setFieldValue("title", textFields.get(2).getText());
+        inproceeding.setFieldValue("year", textFields.get(3).getText());
+        if (!converter.isRegular(inproceeding)) {
+            JOptionPane.showMessageDialog(referenceframe, "Fill the first 4 fields. Check that year and texts are correct");
+            return;
+        }
+
+        fileSaver.saveToFile(nameOfFile, inproceeding);
+
+    }
+//    public void openFile(String nameOfFile) {
+//        
+//    }
 }
