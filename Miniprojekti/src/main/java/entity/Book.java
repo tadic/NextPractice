@@ -3,18 +3,20 @@
  * and open the template in the editor.
  */
 package entity;
-//editor, volume/number, series, pages, address, month, organization, publisher, note, key
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Inproceedings extends Reference{
-    
-    public Inproceedings(List<Field> fields) {
+/**
+ *
+ * @author ivantadic
+ */
+public class Book extends Reference{
+     public Book(List<Field> fields) {
         super(fields);
     }
 
-    public Inproceedings() {
+    public Book() {
         super();
     }
 
@@ -48,4 +50,6 @@ public class Inproceedings extends Reference{
 
         return myFields;
     }
+
+    
 }

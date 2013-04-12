@@ -4,7 +4,7 @@
  */
 package repositories;
 
-import entity.BaseEntity;
+import entity.Reference;
 import entity.Inproceedings;
 import java.io.File;
 import java.io.Serializable;
@@ -285,7 +285,7 @@ public class GenericDataFileRepositoryTest {
         assertTrue(countEnd == countStart - 1);
     }
 
-    class TestDummy extends BaseEntity implements Serializable {
+    class TestDummy extends Reference implements Serializable {
 
         private String text;
 

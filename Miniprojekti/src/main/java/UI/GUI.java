@@ -217,7 +217,7 @@ public class GUI implements ActionListener {
         inproceeding.setFieldValue("booktitle", textFields.get(1).getText());
         inproceeding.setFieldValue("title", textFields.get(2).getText());
         inproceeding.setFieldValue("year", textFields.get(3).getText());
-        if (!converter.isRegular(inproceeding)) {
+        if (!inproceeding.isRegular(null)) {
             JOptionPane.showMessageDialog(referenceframe, "Fill the first 4 fields. Check that year and texts are correct");
             return;
         }

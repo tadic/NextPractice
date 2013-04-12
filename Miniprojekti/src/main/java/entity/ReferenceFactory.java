@@ -33,7 +33,11 @@ public class ReferenceFactory {
         return types.keySet();
     }
     
-    public <T extends BaseEntity> T createReference(String referenceType, List<Field> fields) {
+    public Reference createReference(String referenceType){
+        return types.get(referenceType);
+    }
+    
+    public <T extends Reference> T createReference(String referenceType, List<Field> fields) {
         return (T) new Inproceedings(fields);
     }
    

@@ -1,6 +1,6 @@
 package controllers;
 
-import entity.BaseEntity;
+import entity.Reference;
 import entity.Field;
 import entity.Inproceedings;
 import entity.Reference;
@@ -62,7 +62,7 @@ public class Logic implements LogicInterface {
      */
     @Override
     public Reference createReference(String referenceType, List<Field> fields) {
-        BaseEntity created = repository.create(RFactory.createReference(referenceType, fields));
+        Reference created = repository.create(RFactory.createReference(referenceType, fields));
         return (Reference) created;
     }
 

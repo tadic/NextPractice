@@ -18,6 +18,7 @@ public class TestConverter {
     public void setUp(){
         convert = new Converter();
         ref = new Inproceedings();
+        ref.setFieldValue("referenceId", "Ro:2002"); 
         ref.setFieldValue("author", "Roumani, Hamzeh"); 
         ref.setFieldValue("title", "Design guidelines for the lab component of objects-first CS1");
         ref.setFieldValue("booktitle", "SIGCSE '02: Proceedings of the 33rd SIGCSE technical symposium on Computer science education" );
@@ -42,14 +43,16 @@ public class TestConverter {
                 "year = {2002},\n    editor = {one},\n    volume/number = {two},\n    series = {three},\n    " +
                 "pages = {four},\n    address = {five},\n    month = {six},\n    organization = {seven},\n    " +
                 "publisher = {eight},\n    note = {nine},\n    key = {ten}\n}";
-        //        System.out.println(expValue);
+                System.out.println(expValue);
+                System.out.println(convert.toBibTex(ref));
+               
         assertEquals(expValue, convert.toBibTex(ref));
     }
       
     @Test
     public void testToBibTexForSpecialCharacters(){
         ref.setFieldValue("author", "Hassinen, Marko and Mäyrä, Hannu"); 
-        String expValue = "@inproceedings{Ha:2002,\n    author = {Hassinen, Marko and M\\\"{a}yr\\\"{a}, Hannu},\n    " +
+        String expValue = "@inproceedings{Ro:2002,\n    author = {Hassinen, Marko and M\\\"{a}yr\\\"{a}, Hannu},\n    " +
                 "title = {Design guidelines for the lab component of objects-first CS1},\n    " +
                 "booktitle = {SIGCSE '02: Proceedings of the 33rd SIGCSE technical symposium on Computer science education},\n    " +
                 "year = {2002},\n    editor = {one},\n    volume/number = {two},\n    series = {three},\n    " +
@@ -57,54 +60,5 @@ public class TestConverter {
                 "publisher = {eight},\n    note = {nine},\n    key = {ten}\n}";
         assertEquals(expValue, convert.toBibTex(ref));
     }
-    @Test
-    public void testToBibTexForGivenReferenceId(){
-        ref.setReferenceId("reference"); 
-        String expValue = "@inproceedings{reference,\n    author = {Roumani, Hamzeh},\n    " +
-                "title = {Design guidelines for the lab component of objects-first CS1},\n    " +
-                "booktitle = {SIGCSE '02: Proceedings of the 33rd SIGCSE technical symposium on Computer science education},\n    " +
-                "year = {2002},\n    editor = {one},\n    volume/number = {two},\n    series = {three},\n    " +
-                "pages = {four},\n    address = {five},\n    month = {six},\n    organization = {seven},\n    " +
-                "publisher = {eight},\n    note = {nine},\n    key = {ten}\n}";
-        assertEquals(expValue, convert.toBibTex(ref));
-    }
-    
-    @Test(expected = IllegalArgumentException.class)
-    public void testBibTexForExceptionWrongYear(){
-        int y = Calendar.getInstance().get(Calendar.YEAR);
-        y++;
-        String year = Integer.toString(y);
-        ref.setFieldValue("year", year);
-        String instance = convert.toBibTex(ref);
-    }
-    
-    @Test(expected = IllegalArgumentException.class)
-    public void testBibTexForExceptionTooShortAuthor(){
-        ref.setFieldValue("author", "H"); 
-        String instance = convert.toBibTex(ref);
-    }
-    
-    @Test(expected = IllegalArgumentException.class)
-    public void testBibTexForExceptionIfAuthorNull(){
-        ref.setFieldValue("author", null);
-        String instance = convert.toBibTex(ref);
-    }
-    
-    @Test(expected = IllegalArgumentException.class)
-    public void testBibTexForExceptionIfReferenceIsNull(){
-        String instance = convert.toBibTex(null);
-    }
-    @Test
-    public void testCheckYearNormal(){
-        assertTrue(convert.checkYear("2009"));
-    }
-    @Test
-    public void testCheckYearToLarge(){
-        assertFalse(convert.checkYear("2320"));
-    }
-    @Test
-    public void testCheckYearWrongCharacter(){
-        assertFalse(convert.checkYear("2o09"));
-    }
-       
+
 }
