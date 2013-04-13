@@ -1,6 +1,8 @@
 
 package controllers;
 
+import entity.Article;
+import entity.Book;
 import entity.FType;
 import entity.Inproceedings;
 import entity.Reference;
@@ -13,7 +15,7 @@ import static org.junit.Assert.*;
 
 /**
  *
- * @author ivantadic
+ * @article ivantadic
  */
 public class ReferenceTest {
     Reference ref;
@@ -62,9 +64,9 @@ public class ReferenceTest {
     }
     
     @Test
-    public void testIsRegularNormalReferenceAlreadyGivenDefaultID() {
+    public void testIsRegularListContainsSameDefaultID() {
         Reference r = new Inproceedings();
-        r.setFieldValue(FType.referenceId, "Ro:2002"); 
+        r.setFieldValue(FType.referenceId, "inpr_10"); 
         r.setFieldValue(FType.author, "Roumani, Hamzeh"); 
         r.setFieldValue(FType.title, "Design guidelines for the lab component of objects-first CS1");
         r.setFieldValue(FType.booktitle, "SIGCSE '02: Proceedings of the 33rd SIGCSE technical symposium on Computer science education" );
@@ -76,18 +78,18 @@ public class ReferenceTest {
         ref.isRegular(list);
         
         assertTrue(ref.isRegular(list));
-        assertEquals("Ro:2002_10", ref.getFieldValue(FType.referenceId));
+        assertEquals("inpr_11", ref.getFieldValue(FType.referenceId));
     }
         @Test
     public void testIsRegularNormalReferenceAlreadyGivenDefaultIDTwoTimes() {
         Reference r1 = new Inproceedings();
-        r1.setFieldValue(FType.referenceId, "Ro:2002"); 
+        r1.setFieldValue(FType.referenceId, "inpr_10"); 
         r1.setFieldValue(FType.author, "Roumani, Hamzeh"); 
         r1.setFieldValue(FType.title, "ects-first CS1");
         r1.setFieldValue(FType.booktitle, "SIGcience education" );
         r1.setFieldValue(FType.year, "2002");
         Reference r2 = new Inproceedings();
-        r2.setFieldValue(FType.referenceId, "Ro:2002_10"); 
+        r2.setFieldValue(FType.referenceId, "inpr_11"); 
         r2.setFieldValue(FType.author, "Roumani, Hamzeh"); 
         r2.setFieldValue(FType.title, "ects-first CS1");
         r2.setFieldValue(FType.booktitle, "SIGcience education" );
@@ -99,13 +101,46 @@ public class ReferenceTest {
         ref.setFieldValue(FType.referenceId, "");
         
         assertTrue(ref.isRegular(list));
-        assertEquals("Ro:2002_11", ref.getFieldValue(FType.referenceId));
+        assertEquals("inpr_12", ref.getFieldValue(FType.referenceId));
     }
     @Test
     public void testIsRegularNormalReferenceWithoutID(){
         ref.setFieldValue(FType.referenceId, "");
         assertTrue(ref.isRegular(null));
+        assertEquals("inpr_10", ref.getFieldValue(FType.referenceId));
     }
+    
+    @Test
+    public void testIsRegularBookWithoutID(){
+        Reference book = new Book();
+        book.setFieldValue(FType.author, "Author");
+        book.setFieldValue(FType.title, "Title");
+        book.setFieldValue(FType.publisher, "Publisher");
+        book.setFieldValue(FType.year, "2013");
+        
+        assertTrue(book.isRegular(null));
+        assertEquals("book_10", book.getFieldValue(FType.referenceId));
+    }
+    
+    @Test(expected = IllegalArgumentException.class)
+    public void testIsRegularForExceptionArticleWithoutYear(){
+        Reference article = new Article();
+        article.setFieldValue(FType.author, "Author");
+        article.setFieldValue(FType.title, "Title");
+        article.setFieldValue(FType.journal, "Journal");
+        assertTrue(article.isRegular(null));
+    }
+    @Test
+    public void testIsRegularForArticleReferenceNormal(){
+        Reference article = new Article();
+        article.setFieldValue(FType.author, "Author");
+        article.setFieldValue(FType.title, "Title");
+        article.setFieldValue(FType.journal, "Journal");
+        article.setFieldValue(FType.year, "1898");
+        
+        assertTrue(article.isRegular(null));
+    }
+    
     
     @Test(expected = IllegalArgumentException.class)
     public void testIsRegularForExceptionReferenceHaveSameIdAsInList() {

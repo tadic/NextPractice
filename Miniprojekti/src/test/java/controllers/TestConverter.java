@@ -1,5 +1,7 @@
 package controllers;
 
+import entity.Article;
+import entity.Book;
 import entity.FType;
 import entity.Inproceedings;
 import entity.Reference;
@@ -59,6 +61,38 @@ public class TestConverter {
                 "pages = {four},\n    address = {five},\n    month = {six},\n    organization = {seven},\n    " +
                 "publisher = {eight},\n    note = {nine},\n    key = {ten}\n}";
         assertEquals(expValue, convert.toBibTex(ref));
+    }
+    @Test
+    public void testToBibTexForNormalBook(){
+        Reference book = new Book();
+        book.setFieldValue(FType.referenceId, "book_11");
+        book.setFieldValue(FType.author, "Author");
+        book.setFieldValue(FType.title, "Title");
+        book.setFieldValue(FType.publisher, "Publisher: Publisher...");
+        book.setFieldValue(FType.year, "2013");
+        String expValue = "@book{book_11,\n    author = {Author},\n    " +
+                "title = {Title},\n    " +
+                "publisher = {Publisher: Publisher...},\n    " +
+                "year = {2013}\n}";
+        // System.out.println(expValue);
+        //System.out.println(convert.toBibTex(article));
+        assertEquals(expValue, convert.toBibTex(book));
+    }
+    @Test
+    public void testToBibTexForSpecSharsArticle(){
+        Reference article = new Article();
+        article.setFieldValue(FType.referenceId, "arti_11");
+        article.setFieldValue(FType.author, "Author");
+        article.setFieldValue(FType.title, "TiÅåtÖleÄ");
+        article.setFieldValue(FType.journal, "Journal...pöpää");
+        article.setFieldValue(FType.year, "2013");
+        String expValue = "@article{arti_11,\n    author = {Author},\n    " +
+                "title = {Ti\\\"AA\\\"aat\\\"{O}le\\\"{A}},\n    " +
+                "journal = {Journal...p\\\"{o}p\\\"{a}\\\"{a}},\n    " +
+                "year = {2013}\n}";
+        System.out.println(expValue);
+        System.out.println(convert.toBibTex(article));
+        assertEquals(expValue, convert.toBibTex(article));
     }
 
 }

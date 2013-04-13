@@ -30,9 +30,9 @@ public class Converter {
         return text.toString();
     }
     
-    public Reference toreference(String bibTex){
+    /*public Reference toReference(String bibTex){
         return null;
-    }
+    }*/
     
     /**
      * This method replace special characters ä, ö ja ö with appropriate text.

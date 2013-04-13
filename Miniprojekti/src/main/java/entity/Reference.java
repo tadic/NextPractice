@@ -38,13 +38,13 @@ public abstract class Reference implements Serializable {
     }
 
     public void setFieldValue(FType fieldName, String fieldValue) {
-
         for (Field field : fields) {
             if (field.getKey().equals(fieldName)) {
                 field.setValue(fieldValue);
                 return;
             }
         }
+        return;
     }
 
     public String getFieldValue(FType fieldName) {
@@ -67,19 +67,22 @@ public abstract class Reference implements Serializable {
     public String getReferenceType(){
         return refType;
     }
-    
+    /**
+     * Generate next default value for referenceId.
+     * @param refId Current value of referenceId.
+     * @return Next default value.
+     */
      private String generateNextValueForRefId(String refId){
-        if (refId.length()==7){
-            return refId + "_10";
-        }
-        //  if not length()= 7, means that it was already generated 
-        //  which means that length() is 10
-        String apu = refId.substring(0, 8);
-        int n = Integer.parseInt(refId.substring(8, 10));
+        String apu = refId.substring(0, 5);
+        int n = Integer.parseInt(refId.substring(5, 7));
         n++;
         return apu + n;
     }
-    
+    /**
+     * Checks if the list already contains reference with same Id.
+     * @param list
+     * @return True if list contains, false if doesn't.
+     */
     private boolean isInTheList(List<Reference> list){
         if (list==null){
             return false;
@@ -92,7 +95,7 @@ public abstract class Reference implements Serializable {
         return false;
     }
     /**
-     * Check if referenceIf is correct. 
+     * Check if referenceId is correct. 
      * ReferenceId is correct if it is not given by user (then method gives default name), or
      * if value doesn't exist already in the list.
      * @param ref Reference object which referenceId value is to be checked.
@@ -101,7 +104,7 @@ public abstract class Reference implements Serializable {
      */
     private boolean checkReferenceId(List<Reference> list){
         if (this.getFieldValue(FType.referenceId).trim().length()==0){
-            this.setFieldValue(FType.referenceId,this.getFieldValue(FType.author).substring(0,2) + ":" + this.getFieldValue(FType.year));
+            this.setFieldValue(FType.referenceId,this.getReferenceType().substring(0,4) + "_" + "10");
             while (isInTheList(list)){
                 this.setFieldValue(FType.referenceId, generateNextValueForRefId(this.getFieldValue(FType.referenceId)));           
             }
