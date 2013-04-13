@@ -64,6 +64,8 @@ public class LogicTest {
     @Test
     public void testGetReferenceTypes() {
         List<String> expTypes = new ArrayList<String>();
+        expTypes.add("article");
+        expTypes.add("book");
         expTypes.add("inproceedings");
         List<String> result = new ArrayList<String>(logic.getReferenceTypes());
         assertEquals(expTypes, result);
