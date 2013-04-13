@@ -13,6 +13,8 @@ public class ReferenceFactory {
     public ReferenceFactory() {
         types = new HashMap<String, Reference>();
         types.put("inproceedings", new Inproceedings());
+        types.put("book", new Book());
+        types.put("article", new Article());
     }
        
     public List<Field> getFields(String referenceType) {

@@ -102,26 +102,44 @@ public abstract class Reference implements Serializable {
      * @param list List of references in which all object must have different referenceId.
      * @return boolean True, if doesn't repeat in the list. False if it is already in the list.
      */
-    private boolean checkReferenceId(List<Reference> list){
+    private boolean checkIfExsistsReferenceWithSameId(List<Reference> list){
         if (this.getFieldValue(FType.referenceId).trim().length()==0){
             this.setFieldValue(FType.referenceId,this.getReferenceType().substring(0,4) + "_" + "10");
             while (isInTheList(list)){
                 this.setFieldValue(FType.referenceId, generateNextValueForRefId(this.getFieldValue(FType.referenceId)));           
             }
             return true;
+        } else if (!isInTheList(list)){
+            return true;
         } else {
-            return (!isInTheList(list));
+            throw new IllegalArgumentException("Reference with the same referenceId already exists!");
         }
     }
-    /**
-     * Search and replace special characters.
-     * @param word is text which should be modified.
-     * @return text with replaced special characters.
-     */
-    public boolean isRegular(List<Reference> list){
-        if (!checkReferenceId(list)){
-            throw new IllegalArgumentException("ReferenceId already exists!");
+    
+    private boolean checkRefType(){
+        if (this.refType==null){
+            throw new IllegalArgumentException("Reference type must be NON-NULL!");
+        } else if (!(new ReferenceFactory().getReferenceTypes().contains(this.refType))){
+            throw new IllegalArgumentException("Reference type value is illegal!");
+        } 
+        return true;
+    }
+    private boolean checkIfContainsAllRightFields(){
+        List<Field> list = new ReferenceFactory().getFields(refType);
+        if (this.getFields()==null){
+            throw new IllegalArgumentException("Reference doesn't contain list of files!?");
         }
+        if (this.getFields().size()!=list.size()){
+            throw new IllegalArgumentException("Reference doesn't have right number of fiels!");
+        }
+        for (int i=0; i<list.size(); i++){
+            if (list.get(i).getKey() != this.getFields().get(i).getKey()){
+                throw new IllegalArgumentException("Reference doesn't contain right fields!");
+            }
+        }
+        return true;
+    }
+    private boolean checkFields(){
         for (Field field: this.getFields()){
             if (field.isRequired() && field.getValue().trim().length()==0){
                 throw new IllegalArgumentException("Must fill all required fields!");
@@ -130,9 +148,20 @@ public abstract class Reference implements Serializable {
                 throw new IllegalArgumentException("Fields lenght must be greather then 1");
             }
         }
-        if (!checkYear()){
-            throw new IllegalArgumentException("Check format of year field");
-        }
+        return true;
+    }
+
+    /**
+     * Search and replace special characters.
+     * @param word is text which should be modified.
+     * @return text with replaced special characters.
+     */
+    public boolean isRegular(List<Reference> list){
+        checkRefType();
+        checkIfContainsAllRightFields();
+        checkIfExsistsReferenceWithSameId(list);
+        checkFields();
+        checkYear();
         return true;
     }
     
@@ -143,19 +172,30 @@ public abstract class Reference implements Serializable {
      * @return boolean parameter true if year is correct, else false.
      */
     private boolean checkYear(){ 
-        String year = this.getFieldValue(FType.year);
-        if (year.trim().length()==0){
-            return false;
+        if (this.getFieldValue(FType.year)==null){
+            return true;
+        }
+        String year="";
+        for (Field f: this.getFields()){
+            if (f.getKey()==FType.year){
+                year = f.getValue();
+                if (year.trim().length()==0){
+                    if (!f.isRequired()){
+                        return true;
+                    }
+                    throw new IllegalArgumentException("Year field is empty");
+                }
+            }
         }
         for (int i=0; i<year.trim().length(); i++){
             if (year.charAt(i)>'9' || year.charAt(i)<'0'){ 
-                return false;       // if year is not a number
+                throw new IllegalArgumentException("Year value must be a number");
             }
         }
         int currentYear = Calendar.getInstance().get(Calendar.YEAR);
         if ((Integer.parseInt(year) > currentYear)|| 
             (Integer.parseInt(year) < 0)){
-            return false;       // if (year < 0) or (year > currentYear)
+            throw new IllegalArgumentException("Year value must not be less then 0 or grether then current year!");
         }
         return true;
     }
