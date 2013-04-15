@@ -22,9 +22,12 @@ public class Book extends Reference{
 
     @Override
     protected void initMyFields() {
-        refType = "book";
         fields = myFields();
+    }
+    @Override
+    protected void initTypeAndTags() {
         tags = new ArrayList<String>();
+        refType = "book";
     }
 
 
@@ -49,6 +52,7 @@ public class Book extends Reference{
 
         return myFields;
     }
+
 
     
 }

@@ -306,5 +306,9 @@ public class GenericDataFileRepositoryTest {
         protected void initMyFields() {
             
         }
+
+        @Override
+        protected void initTypeAndTags() {
+        }
     }
 }

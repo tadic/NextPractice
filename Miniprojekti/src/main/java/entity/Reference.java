@@ -20,13 +20,16 @@ public abstract class Reference implements Serializable {
     protected String refType;
 
     protected abstract void initMyFields();
+    protected abstract void initTypeAndTags();
 
     public Reference() {
         initMyFields();
+        initTypeAndTags();
     }
     
     public Reference(List<Field> fields) {
         this.fields = fields;
+        initTypeAndTags();
     }    
     
     public int getId() {
@@ -44,7 +47,6 @@ public abstract class Reference implements Serializable {
                 return;
             }
         }
-        return;
     }
 
     public String getFieldValue(FType fieldName) {
@@ -66,6 +68,9 @@ public abstract class Reference implements Serializable {
     
     public String getReferenceType(){
         return refType;
+    }
+    public void setReferenceType(String type){
+        refType=type;
     }
     /**
      * Generate next default value for referenceId.
@@ -102,7 +107,7 @@ public abstract class Reference implements Serializable {
      * @param list List of references in which all object must have different referenceId.
      * @return boolean True, if doesn't repeat in the list. False if it is already in the list.
      */
-    private boolean checkIfExsistsReferenceWithSameId(List<Reference> list){
+    public boolean isUnique(List<Reference> list){
         if (this.getFieldValue(FType.referenceId).trim().length()==0){
             this.setFieldValue(FType.referenceId,this.getReferenceType().substring(0,4) + "_" + "10");
             while (isInTheList(list)){
@@ -118,9 +123,9 @@ public abstract class Reference implements Serializable {
     
     private boolean checkRefType(){
         if (this.refType==null){
-            throw new IllegalArgumentException("Reference type must be NON-NULL!");
+            throw new IllegalArgumentException("Reference_type must be NON-NULL!");
         } else if (!(new ReferenceFactory().getReferenceTypes().contains(this.refType))){
-            throw new IllegalArgumentException("Reference type value is illegal!");
+            throw new IllegalArgumentException("Reference_type value is illegal!");
         } 
         return true;
     }
@@ -159,7 +164,7 @@ public abstract class Reference implements Serializable {
     public boolean isRegular(List<Reference> list){
         checkRefType();
         checkIfContainsAllRightFields();
-        checkIfExsistsReferenceWithSameId(list);
+        isUnique(list);
         checkFields();
         checkYear();
         return true;
@@ -172,7 +177,7 @@ public abstract class Reference implements Serializable {
      * @return boolean parameter true if year is correct, else false.
      */
     private boolean checkYear(){ 
-        if (this.getFieldValue(FType.year)==null){
+        if (this.getFieldValue(FType.year)==null){  // if reference doesn't contain year field at all.
             return true;
         }
         String year="";
@@ -180,13 +185,14 @@ public abstract class Reference implements Serializable {
             if (f.getKey()==FType.year){
                 year = f.getValue();
                 if (year.trim().length()==0){
-                    if (!f.isRequired()){
+                    if (!f.isRequired()){   // if year is not required and empty returns true.
                         return true;
                     }
-                    throw new IllegalArgumentException("Year field is empty");
+                    break;
                 }
             }
         }
+        // if year is not null and not empty
         for (int i=0; i<year.trim().length(); i++){
             if (year.charAt(i)>'9' || year.charAt(i)<'0'){ 
                 throw new IllegalArgumentException("Year value must be a number");
@@ -195,7 +201,7 @@ public abstract class Reference implements Serializable {
         int currentYear = Calendar.getInstance().get(Calendar.YEAR);
         if ((Integer.parseInt(year) > currentYear)|| 
             (Integer.parseInt(year) < 0)){
-            throw new IllegalArgumentException("Year value must not be less then 0 or grether then current year!");
+            throw new IllegalArgumentException("Year value must not be negative or grether then current year!");
         }
         return true;
     }

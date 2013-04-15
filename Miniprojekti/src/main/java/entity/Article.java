@@ -22,9 +22,12 @@ public class Article extends Reference{
 
     @Override
     protected void initMyFields() {
-        refType = "article";
         fields = myFields();
+    }
+    @Override
+    protected void initTypeAndTags() {
         tags = new ArrayList<String>();
+        refType = "article";
     }
 
 

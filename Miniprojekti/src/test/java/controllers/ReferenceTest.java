@@ -4,8 +4,10 @@ package controllers;
 import entity.Article;
 import entity.Book;
 import entity.FType;
+import entity.Field;
 import entity.Inproceedings;
 import entity.Reference;
+import entity.ReferenceFactory;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -62,7 +64,27 @@ public class ReferenceTest {
         ref.setFieldValue(FType.key, "");  
         assertTrue(ref.isRegular(null));
     }
+    @Test
+    public void testBookConstructor(){
+        ReferenceFactory rf = new ReferenceFactory();
+        List<Field> list = rf.getFields("book");
+        Reference book = new Book(list);
+        assertNotNull(book);
+        assertNotNull(book.getTags());
+        assertEquals("book", book.getReferenceType());
+        assertEquals(rf.getFields("book").size(), book.getFields().size());
+    }
     
+    @Test
+    public void testArticleConstructor(){
+        ReferenceFactory rf = new ReferenceFactory();
+        List<Field> list = rf.getFields("article");
+        Reference article = new Article(list);
+        assertNotNull(article);
+        assertNotNull(article.getTags());
+        assertEquals("article", article.getReferenceType());
+        assertEquals(rf.getFields("article").size(), article.getFields().size());
+    }
     @Test
     public void testIsRegularListContainsSameDefaultID() {
         Reference r = new Inproceedings();
@@ -104,6 +126,35 @@ public class ReferenceTest {
         assertEquals("inpr_12", ref.getFieldValue(FType.referenceId));
     }
     @Test
+    public void testisRequiredIfRefNotContainsFieldList(){
+        Reference book = new Book(null);
+        try {
+            book.isRegular(null);      
+        } catch (IllegalArgumentException e){
+            assertEquals("Reference doesn't contain list of files!?", e.getMessage());
+        }
+    }
+    @Test
+    public void testisRequiredIfRefNotHaveFieldListOfRightSize(){
+        Reference book = new Book(new ArrayList<Field>());
+        try {
+            book.isRegular(null);      
+        } catch (IllegalArgumentException e){
+            assertEquals("Reference doesn't have right number of fiels!", e.getMessage());
+        }
+    }
+    @Test
+    public void testisRequiredIfRefNotHaveRightFields(){
+        Reference book = new Book(new ReferenceFactory().getFields("article"));
+        book.getFields().add(new Field(FType.address, true));
+        try {
+            book.isRegular(null);      
+        } catch (IllegalArgumentException e){
+            assertEquals("Reference doesn't contain right fields!", e.getMessage());
+        }
+    }
+    
+    @Test
     public void testIsRegularNormalReferenceWithoutID(){
         ref.setFieldValue(FType.referenceId, "");
         assertTrue(ref.isRegular(null));
@@ -111,24 +162,41 @@ public class ReferenceTest {
     }
     
     @Test
-    public void testIsRegularBookWithoutID(){
+    public void testIsUniqueBookWithoutID(){
         Reference book = new Book();
         book.setFieldValue(FType.author, "Author");
         book.setFieldValue(FType.title, "Title");
         book.setFieldValue(FType.publisher, "Publisher");
         book.setFieldValue(FType.year, "2013");
         
-        assertTrue(book.isRegular(null));
+        assertTrue(book.isUnique(null));
         assertEquals("book_10", book.getFieldValue(FType.referenceId));
     }
     
-    @Test(expected = IllegalArgumentException.class)
-    public void testIsRegularForExceptionArticleWithoutYear(){
+    @Test
+    public void testIsRegularForExceptionArticleWithEmptyYear(){
         Reference article = new Article();
         article.setFieldValue(FType.author, "Author");
         article.setFieldValue(FType.title, "Title");
         article.setFieldValue(FType.journal, "Journal");
-        assertTrue(article.isRegular(null));
+        try {
+            article.isRegular(null);      
+        } catch (IllegalArgumentException e){
+            assertEquals("Must fill all required fields!", e.getMessage());
+        }
+    }
+        @Test
+    public void testIsRegularForExceptionArticleWithTooShortAuthor(){
+        Reference article = new Article();
+        article.setFieldValue(FType.author, "A");
+        article.setFieldValue(FType.title, "Title");
+        article.setFieldValue(FType.journal, "Journal");
+        article.setFieldValue(FType.year, "1999");
+        try {
+            article.isRegular(null);      
+        } catch (IllegalArgumentException e){
+            assertEquals("Fields lenght must be greather then 1", e.getMessage());
+        }
     }
     @Test
     public void testIsRegularForArticleReferenceNormal(){
@@ -142,47 +210,72 @@ public class ReferenceTest {
     }
     
     
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testIsRegularForExceptionReferenceHaveSameIdAsInList() {
-        Reference r1 = new Inproceedings();
+        Reference r1 = new ReferenceFactory().createReference("inproceedings");
         r1.setFieldValue(FType.referenceId, "reference"); 
         r1.setFieldValue(FType.author, "Roumani, Hamzeh"); 
         r1.setFieldValue(FType.title, "ects-first CS1");
         r1.setFieldValue(FType.booktitle, "SIGcience education" );
         r1.setFieldValue(FType.year, "2002");
-
         List<Reference> list = new ArrayList<Reference>();
         list.add(r1);
-        
         ref.setFieldValue(FType.referenceId, "reference");
-        
-        assertTrue(ref.isRegular(list));
-        assertEquals("Ro:2002_11", ref.getFieldValue(FType.referenceId));
+        try {
+            ref.isRegular(list);      
+        } catch (IllegalArgumentException e){
+            assertEquals("Reference with the same referenceId already exists!", e.getMessage());
+        }
     }
-    @Test(expected = IllegalArgumentException.class)
+    
+    @Test
     public void testIsRegularForExceptionEmptyTitle(){
         ref.setFieldValue(FType.title, ""); 
-        ref.isRegular(null);
+        try {
+            ref.isRegular(null);      
+        } catch (IllegalArgumentException e){
+            assertEquals("Must fill all required fields!", e.getMessage());
+        }
     }
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testIsRegularForExceptionWrongYearIfGreatherThenCurrent(){
         int y = Calendar.getInstance().get(Calendar.YEAR);
         y++;
         String year = Integer.toString(y);
         ref.setFieldValue(FType.year, year);
-        ref.isRegular(null);
-    }
-    
-    @Test(expected = IllegalArgumentException.class)
-    public void testIsRegularForExceptionTooShortAuthor(){
-        ref.setFieldValue(FType.author, "H"); 
-        ref.isRegular(null);
+        try {
+            ref.isRegular(null);      
+        } catch (IllegalArgumentException e){
+            assertEquals("Year value must not be negative or grether then current year!", e.getMessage());
+        }
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testIsRegularForExceptionWrongYearCharacter(){
         ref.setFieldValue(FType.year, "20o9");
-        assertTrue(ref.isRegular(null));
+        try {
+            ref.isRegular(null);      
+        } catch (IllegalArgumentException e){
+            assertEquals("Year value must be a number", e.getMessage());
+        }
+    }
+    @Test
+    public void testIsRegularForExceptionRefTypeIsNull(){
+        ref.setReferenceType(null);
+        try {
+            ref.isRegular(null);      
+        } catch (IllegalArgumentException e){
+            assertEquals("Reference_type must be NON-NULL!", e.getMessage());
+        }
+    }
+    @Test
+    public void testIsRegularForExceptionWrongRefType(){
+        ref.setReferenceType("rrr");
+        try {
+            ref.isRegular(null);      
+        } catch (IllegalArgumentException e){
+            assertEquals("Reference_type value is illegal!", e.getMessage());
+        }
     }
     
     

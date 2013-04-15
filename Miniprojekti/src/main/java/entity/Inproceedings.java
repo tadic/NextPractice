@@ -18,13 +18,16 @@ public class Inproceedings extends Reference{
         super();
     }
 
+
     @Override
     protected void initMyFields() {
-        refType = "inproceedings";
         fields = myFields();
-        tags = new ArrayList<String>();
     }
-
+    @Override
+    protected void initTypeAndTags() {
+        tags = new ArrayList<String>();
+        refType = "inproceedings";
+    }
 
 
     private List<Field> myFields() {
