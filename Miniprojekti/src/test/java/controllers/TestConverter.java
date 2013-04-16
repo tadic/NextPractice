@@ -1,6 +1,10 @@
 package controllers;
 
+import entity.Article;
+import entity.Book;
+import entity.FType;
 import entity.Inproceedings;
+import entity.Reference;
 import org.junit.*;
 import static org.junit.Assert.*;
 
@@ -10,26 +14,27 @@ import static org.junit.Assert.*;
  */
 public class TestConverter {
     Converter convert; 
-    Inproceedings inpro;
+    Reference ref;
         
     @Before
     public void setUp(){
         convert = new Converter();
-        inpro = new Inproceedings();
-        inpro.setAuthor("Roumani, Hamzeh"); 
-        inpro.setTitle("Design guidelines for the lab component of objects-first CS1");
-        inpro.setBooktitle("SIGCSE '02: Proceedings of the 33rd SIGCSE technical symposium on Computer science education" );
-        inpro.setYear(2002);
-        inpro.setEditor("one");
-        inpro.setVolumeNumber("two");
-        inpro.setSeries("three");
-        inpro.setPages("four");
-        inpro.setAddress("five");
-        inpro.setMonth("six");
-        inpro.setOrganization("seven");
-        inpro.setPublisher("eight");
-        inpro.setNote("nine");
-        inpro.setKey("ten");       
+        ref = new Inproceedings();
+        ref.setFieldValue(FType.referenceId, "Ro:2002"); 
+        ref.setFieldValue(FType.author, "Roumani, Hamzeh"); 
+        ref.setFieldValue(FType.title, "Design guidelines for the lab component of objects-first CS1");
+        ref.setFieldValue(FType.booktitle, "SIGCSE '02: Proceedings of the 33rd SIGCSE technical symposium on Computer science education" );
+        ref.setFieldValue(FType.year, "2002");
+        ref.setFieldValue(FType.editor, "one");
+        ref.setFieldValue(FType.volume, "two");
+        ref.setFieldValue(FType.series, "three");
+        ref.setFieldValue(FType.pages, "four");
+        ref.setFieldValue(FType.address, "five");
+        ref.setFieldValue(FType.month, "six");
+        ref.setFieldValue(FType.organization, "seven");
+        ref.setFieldValue(FType.publisher, "eight");
+        ref.setFieldValue(FType.note, "nine");
+        ref.setFieldValue(FType.key, "ten");       
     }
     
     @Test
@@ -40,55 +45,54 @@ public class TestConverter {
                 "year = {2002},\n    editor = {one},\n    volume/number = {two},\n    series = {three},\n    " +
                 "pages = {four},\n    address = {five},\n    month = {six},\n    organization = {seven},\n    " +
                 "publisher = {eight},\n    note = {nine},\n    key = {ten}\n}";
-        //System.out.println(expValue);
-        assertEquals(expValue, convert.toBibTex(inpro));
+                System.out.println(expValue);
+                System.out.println(convert.toBibTex(ref));
+               
+        assertEquals(expValue, convert.toBibTex(ref));
     }
       
     @Test
     public void testToBibTexForSpecialCharacters(){
-        inpro.setAuthor("Hassinen, Marko and Mäyrä, Hannu"); 
-        String expValue = "@inproceedings{Ha:2002,\n    author = {Hassinen, Marko and M\\\"{a}yr\\\"{a}, Hannu},\n    " +
+        ref.setFieldValue(FType.author, "Hassinen, Marko and Mäyrä, Hannu"); 
+        String expValue = "@inproceedings{Ro:2002,\n    author = {Hassinen, Marko and M\\\"{a}yr\\\"{a}, Hannu},\n    " +
                 "title = {Design guidelines for the lab component of objects-first CS1},\n    " +
                 "booktitle = {SIGCSE '02: Proceedings of the 33rd SIGCSE technical symposium on Computer science education},\n    " +
                 "year = {2002},\n    editor = {one},\n    volume/number = {two},\n    series = {three},\n    " +
                 "pages = {four},\n    address = {five},\n    month = {six},\n    organization = {seven},\n    " +
                 "publisher = {eight},\n    note = {nine},\n    key = {ten}\n}";
-        assertEquals(expValue, convert.toBibTex(inpro));
+        assertEquals(expValue, convert.toBibTex(ref));
     }
     @Test
-    public void testToBibTexForGivenReferenceId(){
-        inpro.setReferenceId("reference"); 
-        String expValue = "@inproceedings{reference,\n    author = {Roumani, Hamzeh},\n    " +
-                "title = {Design guidelines for the lab component of objects-first CS1},\n    " +
-                "booktitle = {SIGCSE '02: Proceedings of the 33rd SIGCSE technical symposium on Computer science education},\n    " +
-                "year = {2002},\n    editor = {one},\n    volume/number = {two},\n    series = {three},\n    " +
-                "pages = {four},\n    address = {five},\n    month = {six},\n    organization = {seven},\n    " +
-                "publisher = {eight},\n    note = {nine},\n    key = {ten}\n}";
-        assertEquals(expValue, convert.toBibTex(inpro));
+    public void testToBibTexForNormalBook(){
+        Reference book = new Book();
+        book.setFieldValue(FType.referenceId, "book_11");
+        book.setFieldValue(FType.author, "Author");
+        book.setFieldValue(FType.title, "Title");
+        book.setFieldValue(FType.publisher, "Publisher: Publisher...");
+        book.setFieldValue(FType.year, "2013");
+        String expValue = "@book{book_11,\n    author = {Author},\n    " +
+                "title = {Title},\n    " +
+                "publisher = {Publisher: Publisher...},\n    " +
+                "year = {2013}\n}";
+        // System.out.println(expValue);
+        //System.out.println(convert.toBibTex(article));
+        assertEquals(expValue, convert.toBibTex(book));
     }
-    
-    @Test(expected = IllegalArgumentException.class)
-    public void testBibTexForExceptionWrongYear(){
-        inpro.setYear(2014);
-        String instance = convert.toBibTex(inpro);
-    }
-    
-    @Test(expected = IllegalArgumentException.class)
-    public void testBibTexForExceptionTooShortAuthor(){
-        inpro.setAuthor("H"); 
-        String instance = convert.toBibTex(inpro);
-    }
-    
-    @Test(expected = IllegalArgumentException.class)
-    public void testBibTexForExceptionIfAuthorNull(){
-        inpro.setAuthor(null);
-        String instance = convert.toBibTex(inpro);
-    }
-    
-    @Test(expected = IllegalArgumentException.class)
-    public void testBibTexForExceptionIfReferenceIsNull(){
-        String instance = convert.toBibTex(null);
+    @Test
+    public void testToBibTexForSpecSharsArticle(){
+        Reference article = new Article();
+        article.setFieldValue(FType.referenceId, "arti_11");
+        article.setFieldValue(FType.author, "Author");
+        article.setFieldValue(FType.title, "TiÅåtÖleÄ");
+        article.setFieldValue(FType.journal, "Journal...pöpää");
+        article.setFieldValue(FType.year, "2013");
+        String expValue = "@article{arti_11,\n    author = {Author},\n    " +
+                "title = {Ti\\\"AA\\\"aat\\\"{O}le\\\"{A}},\n    " +
+                "journal = {Journal...p\\\"{o}p\\\"{a}\\\"{a}},\n    " +
+                "year = {2013}\n}";
+        System.out.println(expValue);
+        System.out.println(convert.toBibTex(article));
+        assertEquals(expValue, convert.toBibTex(article));
     }
 
-       
 }

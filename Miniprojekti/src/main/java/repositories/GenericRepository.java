@@ -4,7 +4,8 @@
  */
 package repositories;
 
-import entity.BaseEntity;
+import entity.FType;
+import entity.Reference;
 import exception.RepositoryException;
 import java.io.File;
 import java.util.List;
@@ -15,23 +16,23 @@ import java.util.List;
  */
 public interface GenericRepository {
 
-    <T extends BaseEntity> int count(Class<T> type);
+    <T extends Reference> int count(Class<T> type);
 
-    <T extends BaseEntity> T create(T entity);
+    <T extends Reference> T create(T entity);
 
-    <T extends BaseEntity> void delete(int id) throws RepositoryException;
+    <T extends Reference> void delete(int id) throws RepositoryException;
 
-    <T extends BaseEntity> List<T> findAll(Class<T> type);
+    <T extends Reference> List<T> findAll(Class<T> type);
 
-    <T extends BaseEntity> List<T> findByField(Class<T> type, String fieldName, Object value) throws RepositoryException;
+    <T extends Reference> List<T> findByField(Class<T> type, FType fieldName, Object value) throws RepositoryException;
 
-    <T extends BaseEntity> T findOne(Class<T> type, int id);
+    <T extends Reference> T findOne(Class<T> type, int id);
 
     void loadDataFromFile(File file) throws RepositoryException;
 
     void saveDataToFile(File file) throws RepositoryException;
 
-    <T extends BaseEntity> T update(int id, T entity) throws RepositoryException;
+    <T extends Reference> T update(int id, T entity) throws RepositoryException;
     
     void clearAll();
 }

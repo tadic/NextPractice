@@ -1,6 +1,8 @@
 package repositories;
 
-import entity.BaseEntity;
+import entity.FType;
+import entity.Reference;
+import entity.Field;
 import exception.RepositoryException;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -10,7 +12,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -25,7 +26,7 @@ import java.util.Map;
  */
 public class GenericDataFileRepository implements GenericRepository {
 
-    private Map<Integer, BaseEntity> objects = new HashMap<Integer, BaseEntity>();
+    private Map<Integer, Reference> objects = new HashMap<Integer, Reference>();
     private static GenericDataFileRepository instance;
     private static int lastId;
 
@@ -67,11 +68,11 @@ public class GenericDataFileRepository implements GenericRepository {
      * @throws RepositoryException if serializable objects were not found or
      * data fiel could not be read
      */
-    private Map<Integer, BaseEntity> populateObjectsFromFile(File file) throws RepositoryException {
-        Map<Integer, BaseEntity> retreivedObjects = null;
+    private Map<Integer, Reference> populateObjectsFromFile(File file) throws RepositoryException {
+        Map<Integer, Reference> retreivedObjects = null;
         try {
             ObjectInputStream inputStream = new ObjectInputStream(new BufferedInputStream(new FileInputStream(file)));
-            retreivedObjects = (Map<Integer, BaseEntity>) inputStream.readObject();
+            retreivedObjects = (Map<Integer, Reference>) inputStream.readObject();
             inputStream.close();
             lastId = maxId();
         } catch (ClassNotFoundException e) {
@@ -123,7 +124,7 @@ public class GenericDataFileRepository implements GenericRepository {
      * @return count of specified entities in repository
      */
     @Override
-    public <T extends BaseEntity> int count(Class<T> type) {
+    public <T extends Reference> int count(Class<T> type) {
         int count = 0;
         for (Object o : objects.values()) {
             if (o.getClass().isAssignableFrom(type)) {
@@ -141,7 +142,7 @@ public class GenericDataFileRepository implements GenericRepository {
      * @return List of specified entities in repository
      */
     @Override
-    public <T extends BaseEntity> List<T> findAll(Class<T> type) {
+    public <T extends Reference> List<T> findAll(Class<T> type) {
         List<T> list = new ArrayList<T>();
         for (Object o : objects.values()) {
             if (o.getClass().isAssignableFrom(type)) {
@@ -164,22 +165,14 @@ public class GenericDataFileRepository implements GenericRepository {
      * entity or if the field is inaccessible.
      */
     @Override
-    public <T extends BaseEntity> List<T> findByField(Class<T> type, String fieldName, Object value) throws RepositoryException {
+    public <T extends Reference> List<T> findByField(Class<T> type, FType fieldName, Object value) throws RepositoryException {
         List<T> list = new ArrayList<T>();
         for (Object o : objects.values()) {
-            try {
-                if (o.getClass().isAssignableFrom(type)) {
-                    Field f = o.getClass().getDeclaredField(fieldName);
-                    f.setAccessible(true);
-                    Object fieldValue = f.get(o);
-                    if (fieldValue.equals(value)) {
-                        list.add(type.cast(o));
-                    }
+            if (o.getClass().isAssignableFrom(type)) {
+                Reference be = type.cast(o);
+                if (be.getFieldValue(fieldName).equals(value)) {
+                    list.add((T) be);
                 }
-            } catch (NoSuchFieldException e) {
-                throw new RepositoryException("Field " + fieldName + " was not found in entity " + type.getName(), e);
-            } catch (IllegalAccessException e) {
-                throw new RepositoryException("Field " + fieldName + " in entity " + type.getName() + " is inaccessible", e);
             }
         }
         return list;
@@ -194,9 +187,9 @@ public class GenericDataFileRepository implements GenericRepository {
      * @return Found entity of null if entity was not found
      */
     @Override
-    public <T extends BaseEntity> T findOne(Class<T> type, int id) {
+    public <T extends Reference> T findOne(Class<T> type, int id) {
         T found = null;
-        BaseEntity b = objects.get(id);
+        Reference b = objects.get(id);
         if (b != null && b.getClass().isAssignableFrom(type)) {
             found = type.cast(b);
         }
@@ -212,7 +205,7 @@ public class GenericDataFileRepository implements GenericRepository {
      * @return Created entity
      */
     @Override
-    public <T extends BaseEntity> T create(T entity) {
+    public <T extends Reference> T create(T entity) {
         int id = ++lastId;
         entity.setId(id);
         objects.put(id, entity);
@@ -229,7 +222,7 @@ public class GenericDataFileRepository implements GenericRepository {
      * @throws RepositoryException if an entity with specified id was not found
      */
     @Override
-    public <T extends BaseEntity> T update(int id, T entity) throws RepositoryException {
+    public <T extends Reference> T update(int id, T entity) throws RepositoryException {
         T found = (T) findOne(entity.getClass(), id);
         if (found != null) {
             entity.setId(id);
@@ -248,7 +241,7 @@ public class GenericDataFileRepository implements GenericRepository {
      * @throws RepositoryException if an entity with specified id was not found
      */
     @Override
-    public <T extends BaseEntity> void delete(int id) throws RepositoryException {
+    public <T extends Reference> void delete(int id) throws RepositoryException {
         if (!objects.containsKey(id)) {
             throw new RepositoryException("Entity with id " + id + " not found");
         }

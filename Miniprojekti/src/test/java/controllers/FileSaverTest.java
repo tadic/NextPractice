@@ -4,6 +4,7 @@
  */
 package controllers;
 
+import entity.FType;
 import entity.Inproceedings;
 import java.io.File;
 import java.io.IOException;
@@ -66,11 +67,7 @@ public class FileSaverTest {
         testFile1.delete();
         testFile2.delete();
     }
-    // TODO add test methods here.
-    // The methods must be annotated with annotation @Test. For example:
-    //
-    // @Test
-    // public void hello() {}
+
 
     @Test
     public void fileGetsSaved() throws IOException {
@@ -105,16 +102,16 @@ public class FileSaverTest {
     }
 
     private void setInproceeding1(Inproceedings test1) {
-        test1.setAuthor("Matti Luukkainen");
-        test1.setBooktitle("Why other boys won't play with me");
-        test1.setTitle("What does this mean");
-        test1.setYear(1993);
+        test1.setFieldValue(FType.author, "Matti Luukkainen");
+        test1.setFieldValue(FType.booktitle,"Why other boys won't play with me");
+        test1.setFieldValue(FType.title, "What does this mean");
+        test1.setFieldValue(FType.year, "1993");
     }
 
     private void setInproceeding2(Inproceedings test2) {
-        test2.setAuthor("Arto Vihavainen");
-        test2.setBooktitle("Adding sugar to my friends coffee and 100 other idiotic habbits of mine");
-        test2.setTitle("I don't understand this either");
-        test2.setYear(2013);
+        test2.setFieldValue(FType.author, "Arto Vihavainen");
+        test2.setFieldValue(FType.booktitle,"Adding sugar to my friends coffee and 100 other idiotic habbits of mine");
+        test2.setFieldValue(FType.title, "I don't understand this either");
+        test2.setFieldValue(FType.year, "2013");
     }
 }
