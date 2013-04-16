@@ -35,7 +35,7 @@ import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
  *
  * @author mikahutt
  */
-public class GUI implements GuiInterface {
+public class StubGUI implements GuiInterface {
 
     private LogicInterface logic;
     private JButton newReference;
@@ -50,11 +50,108 @@ public class GUI implements GuiInterface {
     private Converter converter;
     private JFrame referenceframe;
 
-    public GUI(LogicInterface l, Converter c) {
+    public StubGUI(LogicInterface l, Converter c) {
         logic = l;
         converter = c;
-        initGUI();
     }
+
+    public LogicInterface getLogic() {
+        return logic;
+    }
+
+    public void setLogic(LogicInterface logic) {
+        this.logic = logic;
+    }
+
+    public JButton getNewReference() {
+        return newReference;
+    }
+
+    public void setNewReference(JButton newReference) {
+        this.newReference = newReference;
+    }
+
+    public JButton getLoadReference() {
+        return loadReference;
+    }
+
+    public void setLoadReference(JButton loadReference) {
+        this.loadReference = loadReference;
+    }
+
+    public JButton getSaveReference() {
+        return saveReference;
+    }
+
+    public void setSaveReference(JButton saveReference) {
+        this.saveReference = saveReference;
+    }
+
+    public JFileChooser getFileOpener() {
+        return fileOpener;
+    }
+
+    public void setFileOpener(JFileChooser fileOpener) {
+        this.fileOpener = fileOpener;
+    }
+
+    public ArrayList<JTextField> getTextFields() {
+        return textFields;
+    }
+
+    public void setTextFields(ArrayList<JTextField> textFields) {
+        this.textFields = textFields;
+    }
+
+    public String[][] getRequiredLabels() {
+        return requiredLabels;
+    }
+
+    public void setRequiredLabels(String[][] requiredLabels) {
+        this.requiredLabels = requiredLabels;
+    }
+
+    public String[][] getOptionalLabels() {
+        return optionalLabels;
+    }
+
+    public void setOptionalLabels(String[][] optionalLabels) {
+        this.optionalLabels = optionalLabels;
+    }
+
+    public String[][] getAllLabels() {
+        return allLabels;
+    }
+
+    public void setAllLabels(String[][] allLabels) {
+        this.allLabels = allLabels;
+    }
+
+    public FileSaver getFileSaver() {
+        return fileSaver;
+    }
+
+    public void setFileSaver(FileSaver fileSaver) {
+        this.fileSaver = fileSaver;
+    }
+
+    public Converter getConverter() {
+        return converter;
+    }
+
+    public void setConverter(Converter converter) {
+        this.converter = converter;
+    }
+
+    public JFrame getReferenceframe() {
+        return referenceframe;
+    }
+
+    public void setReferenceframe(JFrame referenceframe) {
+        this.referenceframe = referenceframe;
+    }
+    
+    
 
     /**
      * Opens a window where user can choose to create new reference or load an

@@ -1,0 +1,6 @@
+@inproceedings{\"{a}i:2000,
+    author = {\"{a}iti},
+    title = {\"{o}\"{o}\"{o}\"{o}},
+    booktitle = {\"{a}\"{a}\"{a}\"{a}},
+    year = {2000}
+}
