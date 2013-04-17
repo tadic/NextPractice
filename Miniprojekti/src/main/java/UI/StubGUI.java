@@ -292,7 +292,7 @@ public class StubGUI implements GuiInterface {
                 if (fileNameToSave.length() < 2) {
                     fileNameToSave = "inpro"; // default filename
                 }
-                logic.saveToFile("inproceedings.txt");
+                logic.saveAllToFile("inproceedings.txt");
 
             }
         }

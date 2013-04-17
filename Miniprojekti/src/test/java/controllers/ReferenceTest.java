@@ -131,7 +131,7 @@ public class ReferenceTest {
         try {
             book.isRegular(null);      
         } catch (IllegalArgumentException e){
-            assertEquals("Reference doesn't contain list of files!?", e.getMessage());
+            assertEquals("Reference doesn't contain list of fields!?", e.getMessage());
         }
     }
     @Test

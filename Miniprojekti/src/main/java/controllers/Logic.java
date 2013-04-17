@@ -27,11 +27,6 @@ public class Logic implements LogicInterface {
         fileSaver = new FileSaver(new Converter());
     }
 
-    @Override
-    public List<Inproceedings> getInproceedings() {
-        return repository.findAll(Inproceedings.class);
-    }
-
     /**
      * Returns a list of all field object of a reference
      *
@@ -50,7 +45,7 @@ public class Logic implements LogicInterface {
      * @return Set<String> Reference type names
      */
     @Override
-    public Set<String> getReferenceTypes() {
+    public List<String> getReferenceTypes() {
         return RFactory.getReferenceTypes();
     }
 
@@ -67,27 +62,16 @@ public class Logic implements LogicInterface {
         return (Reference) created;
     }
 
-    @Override
-    public void saveToFile(String fileName) {
-        try {
-            repository.saveDataToFile(new File(fileName));
-        } catch (RepositoryException e) {
-        }
-    }
 
+    /**
+     * Loads References in specified file to memory.
+     * @param fileName Name of the file containing the References.
+     */
     @Override
     public void loadFile(String fileName) {
         try {
             repository.loadDataFromFile(new File(fileName));
         } catch (RepositoryException e) {
-        }
-    }
-
-    @Override
-    public void convertLoadedToBibtex() throws IOException {
-        List<Inproceedings> list = repository.findAll(Inproceedings.class);
-        for (Inproceedings inproceedings : list) {
-            fileSaver.saveToFile("bibtex.txt", inproceedings);
         }
     }
 
@@ -123,5 +107,35 @@ public class Logic implements LogicInterface {
             fields.add(new Field(FType.valueOf(row[0]), row[1], false));
         }
         return (Reference) createReference("inproceedings", fields);
+    }
+
+    @Override
+    public void convertAllToBibtex() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public void convertSelectedToBibtex(List<Reference> references) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public List<Reference> getAllReferences() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public List<Reference> getReferencesByField(String field, Object value) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public List<Reference> getReferenceByType(String type) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public void saveAllToFile(String fileName) {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 }
