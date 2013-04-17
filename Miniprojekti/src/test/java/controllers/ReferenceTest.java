@@ -11,6 +11,8 @@ import entity.ReferenceFactory;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -44,10 +46,18 @@ public class ReferenceTest {
         ref.setFieldValue(FType.note, "nine");
         ref.setFieldValue(FType.key, "ten");  
     }
-    
+    @Test
+    public void testSetGetFieldValueIfNotExists(){
+        ref.setFieldValue(FType.howpublished, "value");
+        assertNull(ref.getFieldValue(FType.howpublished));
+    }
     @Test
     public void testIsRegularNormal(){
-        assertTrue(ref.isRegular(null));
+        try {
+            assertTrue(ref.isRegular(null));
+        } catch (Exception ex) {
+            Logger.getLogger(ReferenceTest.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     @Test
@@ -62,7 +72,11 @@ public class ReferenceTest {
         ref.setFieldValue(FType.publisher, "");
         ref.setFieldValue(FType.note, "");
         ref.setFieldValue(FType.key, "");  
-        assertTrue(ref.isRegular(null));
+        try {
+            assertTrue(ref.isRegular(null));
+        } catch (Exception ex) {
+            Logger.getLogger(ReferenceTest.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     @Test
     public void testBookConstructor(){
@@ -86,7 +100,7 @@ public class ReferenceTest {
         assertEquals(rf.getFields("article").size(), article.getFields().size());
     }
     @Test
-    public void testIsRegularListContainsSameDefaultID() {
+    public void testIsRegularListContainsSameDefaultID() throws Exception {
         Reference r = new Inproceedings();
         r.setFieldValue(FType.referenceId, "inpr_10"); 
         r.setFieldValue(FType.author, "Roumani, Hamzeh"); 
@@ -98,12 +112,12 @@ public class ReferenceTest {
         
         ref.setFieldValue(FType.referenceId, "");
         ref.isRegular(list);
-        
         assertTrue(ref.isRegular(list));
+ 
         assertEquals("inpr_11", ref.getFieldValue(FType.referenceId));
     }
         @Test
-    public void testIsRegularNormalReferenceAlreadyGivenDefaultIDTwoTimes() {
+    public void testIsRegularNormalReferenceAlreadyGivenDefaultIDTwoTimes() throws Exception {
         Reference r1 = new Inproceedings();
         r1.setFieldValue(FType.referenceId, "inpr_10"); 
         r1.setFieldValue(FType.author, "Roumani, Hamzeh"); 
@@ -126,7 +140,7 @@ public class ReferenceTest {
         assertEquals("inpr_12", ref.getFieldValue(FType.referenceId));
     }
     @Test
-    public void testisRequiredIfRefNotContainsFieldList(){
+    public void testisRequiredIfRefNotContainsFieldList() throws Exception{
         Reference book = new Book(null);
         try {
             book.isRegular(null);      
@@ -135,7 +149,7 @@ public class ReferenceTest {
         }
     }
     @Test
-    public void testisRequiredIfRefNotHaveFieldListOfRightSize(){
+    public void testisRequiredIfRefNotHaveFieldListOfRightSize() throws Exception{
         Reference book = new Book(new ArrayList<Field>());
         try {
             book.isRegular(null);      
@@ -144,7 +158,7 @@ public class ReferenceTest {
         }
     }
     @Test
-    public void testisRequiredIfRefNotHaveRightFields(){
+    public void testisRequiredIfRefNotHaveRightFields() throws Exception{
         Reference book = new Book(new ReferenceFactory().getFields("article"));
         book.getFields().add(new Field(FType.address, true));
         try {
@@ -155,7 +169,7 @@ public class ReferenceTest {
     }
     
     @Test
-    public void testIsRegularNormalReferenceWithoutID(){
+    public void testIsRegularNormalReferenceWithoutID() throws Exception{
         ref.setFieldValue(FType.referenceId, "");
         assertTrue(ref.isRegular(null));
         assertEquals("inpr_10", ref.getFieldValue(FType.referenceId));
@@ -174,7 +188,7 @@ public class ReferenceTest {
     }
     
     @Test
-    public void testIsRegularForExceptionArticleWithEmptyYear(){
+    public void testIsRegularForExceptionArticleWithEmptyYear() throws Exception{
         Reference article = new Article();
         article.setFieldValue(FType.author, "Author");
         article.setFieldValue(FType.title, "Title");
@@ -185,8 +199,8 @@ public class ReferenceTest {
             assertEquals("Must fill all required fields!", e.getMessage());
         }
     }
-        @Test
-    public void testIsRegularForExceptionArticleWithTooShortAuthor(){
+    @Test
+    public void testIsRegularForExceptionArticleWithTooShortAuthor() throws Exception{
         Reference article = new Article();
         article.setFieldValue(FType.author, "A");
         article.setFieldValue(FType.title, "Title");
@@ -199,7 +213,7 @@ public class ReferenceTest {
         }
     }
     @Test
-    public void testIsRegularForArticleReferenceNormal(){
+    public void testIsRegularForArticleReferenceNormal() throws Exception{
         Reference article = new Article();
         article.setFieldValue(FType.author, "Author");
         article.setFieldValue(FType.title, "Title");
@@ -211,7 +225,7 @@ public class ReferenceTest {
     
     
     @Test
-    public void testIsRegularForExceptionReferenceHaveSameIdAsInList() {
+    public void testIsRegularForExceptionReferenceHaveSameIdAsInList() throws Exception {
         Reference r1 = new ReferenceFactory().createReference("inproceedings");
         r1.setFieldValue(FType.referenceId, "reference"); 
         r1.setFieldValue(FType.author, "Roumani, Hamzeh"); 
@@ -229,7 +243,7 @@ public class ReferenceTest {
     }
     
     @Test
-    public void testIsRegularForExceptionEmptyTitle(){
+    public void testIsRegularForExceptionEmptyTitle() throws Exception{
         ref.setFieldValue(FType.title, ""); 
         try {
             ref.isRegular(null);      
@@ -238,7 +252,7 @@ public class ReferenceTest {
         }
     }
     @Test
-    public void testIsRegularForExceptionWrongYearIfGreatherThenCurrent(){
+    public void testIsRegularForExceptionWrongYearIfGreatherThenCurrent() throws Exception{
         int y = Calendar.getInstance().get(Calendar.YEAR);
         y++;
         String year = Integer.toString(y);
@@ -251,7 +265,7 @@ public class ReferenceTest {
     }
 
     @Test
-    public void testIsRegularForExceptionWrongYearCharacter(){
+    public void testIsRegularForExceptionWrongYearCharacter() throws Exception{
         ref.setFieldValue(FType.year, "20o9");
         try {
             ref.isRegular(null);      
@@ -260,7 +274,7 @@ public class ReferenceTest {
         }
     }
     @Test
-    public void testIsRegularForExceptionRefTypeIsNull(){
+    public void testIsRegularForExceptionRefTypeIsNull() throws Exception{
         ref.setReferenceType(null);
         try {
             ref.isRegular(null);      
@@ -269,7 +283,7 @@ public class ReferenceTest {
         }
     }
     @Test
-    public void testIsRegularForExceptionWrongRefType(){
+    public void testIsRegularForExceptionWrongRefType() throws Exception{
         ref.setReferenceType("rrr");
         try {
             ref.isRegular(null);      

@@ -221,12 +221,18 @@ public class GUI implements GuiInterface {
         inproceeding.setFieldValue(FType.booktitle, textFields.get(1).getText());
         inproceeding.setFieldValue(FType.title, textFields.get(2).getText());
         inproceeding.setFieldValue(FType.year, textFields.get(3).getText());
-        if (!inproceeding.isRegular(null)) {
-            JOptionPane.showMessageDialog(referenceframe, "Fill the first 4 fields. Check that year and texts are correct");
-            return;
+        try {
+            inproceeding.isRegular(null);                   // if not regular, it goes throw IllegalArgumentException with propriate meassage.
+            fileSaver.saveToFile(nameOfFile, inproceeding);
+        } catch (IllegalArgumentException ex) {
+             JOptionPane.showMessageDialog(referenceframe, ex.getMessage());
+        } catch (Exception e){
+            Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, e);
         }
 
-        fileSaver.saveToFile(nameOfFile, inproceeding);
+
+                        
+        
 
     }
 //    public void openFile(String nameOfFile) {
