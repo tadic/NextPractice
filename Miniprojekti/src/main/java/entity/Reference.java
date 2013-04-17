@@ -161,10 +161,10 @@ public abstract class Reference implements Serializable {
      * @param word is text which should be modified.
      * @return text with replaced special characters.
      */
-    public boolean isRegular(List<Reference> list){
+    public boolean isRegular(List<Reference> list) throws Exception{
         checkRefType();
         checkIfContainsAllRightFields();
-        isUnique(list);
+        isUnique(list);                     // if list is empty or null, it returns true.
         checkFields();
         checkYear();
         return true;
