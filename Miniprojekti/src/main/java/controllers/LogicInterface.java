@@ -1,5 +1,6 @@
 package controllers;
 
+import entity.FType;
 import entity.Field;
 import entity.Inproceedings;
 import entity.Reference;
@@ -22,7 +23,7 @@ public interface LogicInterface {
     public void convertSelectedToBibtex(List<Reference> references, String fileName);
     //Repositoriolla muistissa olevien Reference-olioiden hakeminen
     public List<Reference> getAllReferences();
-    public List<Reference> getReferencesByField(String field, Object value);
+    public List<Reference> getReferencesByField(String type, FType ftype, Object value) throws RepositoryException;
     public List<Reference> getReferenceByType(String type);
     //Repositoriolla muistissa olevien Reference-olioiden tallettaminen tiedostoon
     public void saveAllToFile(String fileName) throws Exception;
