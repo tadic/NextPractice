@@ -15,16 +15,17 @@ public interface LogicInterface {
     public List<Field> getFields(String referenceType);
     //RcreateReference luo referenssin, antaa sen repositoriolle muistiin ja palauttaa sen guille
     public Reference createReference(String referenceType, List<Field> fields);
+    public void updateReference(Reference ref);
     
     //Repositoriolla muistissa olevien Reference-olioiden tallettaminen
-    public void convertAllToBibtex();
-    public void convertSelectedToBibtex(List<Reference> references);
+    public void convertAllToBibtex(String fileName);
+    public void convertSelectedToBibtex(List<Reference> references, String fileName);
     //Repositoriolla muistissa olevien Reference-olioiden hakeminen
     public List<Reference> getAllReferences();
     public List<Reference> getReferencesByField(String field, Object value);
     public List<Reference> getReferenceByType(String type);
     //Repositoriolla muistissa olevien Reference-olioiden tallettaminen tiedostoon
-    public void saveAllToFile(String fileName);
+    public void saveAllToFile(String fileName) throws Exception;
     //Tiedostossa olevien Reference-olioiden tuominen tiedostosta repositoriolle muistiin
     public void loadFile(String fileName);
     
