@@ -150,8 +150,6 @@ public class StubGUI implements GuiInterface {
     public void setReferenceframe(JFrame referenceframe) {
         this.referenceframe = referenceframe;
     }
-    
-    
 
     /**
      * Opens a window where user can choose to create new reference or load an
@@ -274,6 +272,18 @@ public class StubGUI implements GuiInterface {
      * Handles saving the text from textfields and saving given information into
      * a file via save button.
      */
+    public void saveButton() throws IOException {
+        String fileNameToSave = textFields.get(textFields.size() - 1).getText();
+        if (fileNameToSave.length() < 2) {
+            fileNameToSave = "inpro"; // default filename
+
+
+
+        }
+        this.saveAsBibtex(fileNameToSave + ".txt");
+
+    }
+
     @Override
     public void actionPerformed(ActionEvent ae) {
         String fileNameToSave = "inpro";
@@ -318,17 +328,22 @@ public class StubGUI implements GuiInterface {
         Inproceedings inproceeding = new Inproceedings(logic.getFields("inproceedings"));
 
 
-        inproceeding.setFieldValue(FType.author, textFields.get(0).getText());
-        inproceeding.setFieldValue(FType.booktitle, textFields.get(1).getText());
-        inproceeding.setFieldValue(FType.title, textFields.get(2).getText());
-        inproceeding.setFieldValue(FType.year, textFields.get(3).getText());
+        inproceeding.setFieldValue(FType.author, textFields.get(1).getText());
+        inproceeding.setFieldValue(FType.booktitle, textFields.get(2).getText());
+        inproceeding.setFieldValue(FType.title, textFields.get(3).getText());
+        inproceeding.setFieldValue(FType.year, textFields.get(4).getText());
         try {
-            inproceeding.isRegular(null);                   // if not regular, it goes throw IllegalArgumentException with propriate meassage.
-            fileSaver.saveToFile(nameOfFile, inproceeding);
-        } catch (IllegalArgumentException ex) {
-             JOptionPane.showMessageDialog(referenceframe, ex.getMessage());
-        } catch (Exception e){
-            Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, e);
+            //        try {
+            if (inproceeding.isRegular(logic.getAllReferences())) {                // if not regular, it goes throw IllegalArgumentException with propriate meassage.
+                fileSaver.saveToFile(nameOfFile, inproceeding);
+            }
+            //        } catch (IllegalArgumentException ex) {
+            //             JOptionPane.showMessageDialog(referenceframe, ex.getMessage());
+            //        } catch (Exception e){
+            //        }
+            //        }
+        } catch (Exception ex) {
+            Logger.getLogger(StubGUI.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }
