@@ -8,6 +8,7 @@ import controllers.Converter;
 import controllers.FileSaver;
 import controllers.LogicInterface;
 import entity.FType;
+import entity.Field;
 import entity.Inproceedings;
 import javax.swing.JPanel;
 import javax.swing.JLabel;
@@ -22,6 +23,7 @@ import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
@@ -43,9 +45,9 @@ public class GUI implements GuiInterface {
     private JButton saveReference;
     private JFileChooser fileOpener;
     private ArrayList<JTextField> textFields;
+    private List<Field> fields;
     private String[][] requiredLabels;
     private String[][] optionalLabels;
-    private String[][] allLabels;
     private FileSaver fileSaver;
     private Converter converter;
     private JFrame referenceframe;
@@ -72,7 +74,8 @@ public class GUI implements GuiInterface {
         newReference = new JButton("New");
         newReference.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent ae) {
-                openReferenceForm();
+                //openReferenceForm();
+                openReferenceChooser();
             }
         });
 
@@ -113,7 +116,7 @@ public class GUI implements GuiInterface {
      * Opens an form for creating an inprociidings reference.
      */
     @Override
-    public void openReferenceForm() {
+    public void openReferenceForm(String referenceType) {
 
         referenceframe = new JFrame();
         SpringLayout layout = new SpringLayout();
@@ -121,19 +124,16 @@ public class GUI implements GuiInterface {
         referenceframe.add(panel);
         panel.setLayout(layout);
         textFields = new ArrayList<JTextField>();
+        fields = logic.getFields(referenceType);
 
         fileSaver = new FileSaver(new Converter());
 
-
-        requiredLabels = logic.getRequiredFields();
-        optionalLabels = logic.getOptionalFields();
-
-
-        int length = requiredLabels.length + optionalLabels.length;
+        
+        int length = fields.size();
 
         for (int i = 0; i < length + 2; i++) {
-            if (i < requiredLabels.length) {
-                JLabel label = new JLabel(requiredLabels[i][0], JLabel.TRAILING);
+            if (i < length) {
+                JLabel label = new JLabel(fields.get(i).getKey().toString(), JLabel.TRAILING);
                 JTextField textfield = new JTextField(15);
                 textfield.addActionListener(this);
                 textFields.add(textfield);
@@ -152,15 +152,6 @@ public class GUI implements GuiInterface {
                 saveReference = new JButton("Save");
                 saveReference.addActionListener(this);
                 panel.add(saveReference);
-            } else {
-                int index = i - requiredLabels.length;
-                JLabel label = new JLabel(optionalLabels[index][0], JLabel.TRAILING);
-                JTextField textfield = new JTextField(15);
-                textfield.addActionListener(this);
-                textFields.add(textfield);
-                label.setLabelFor(textfield);
-                panel.add(label);
-                panel.add(textfield);
             }
 
         }
@@ -181,33 +172,62 @@ public class GUI implements GuiInterface {
     public void actionPerformed(ActionEvent ae) {
         String fileNameToSave = "inpro";
         for (int i = 0; i < textFields.size() - 1; i++) {
-            if (ae.getSource() == textFields.get(i) && i < requiredLabels.length) {
-                requiredLabels[i][1] = textFields.get(i).getText();
+            if (ae.getSource() == textFields.get(i)) {
+                fields.get(i).setValue(textFields.get(i).getText());
                 System.out.println(textFields.get(i).getText());
-                System.out.println(requiredLabels[i][1]);
-            } else if (ae.getSource() == textFields.get(i) && i >= requiredLabels.length) {
-                optionalLabels[i - requiredLabels.length][1] = textFields.get(i).getText();
-                System.out.println(textFields.get(i).getText());
-                System.out.println(optionalLabels[i - requiredLabels.length][1]);
+                System.out.println(fields.get(i).getValue());
             } else if (ae.getSource() == saveReference) {
-                logic.createReference(requiredLabels, optionalLabels);
+                //logic.createReference(requiredLabels, optionalLabels);
+                logic.createReference(fileNameToSave, fields);
                 fileNameToSave = textFields.get(textFields.size() - 1).getText();
                 if (fileNameToSave.length() < 2) {
                     fileNameToSave = "inpro"; // default filename
                 }
-                try {
-                    logic.saveAllToFile("inproceedings.txt");
-                } catch (Exception ex) {
-                    Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
-                }
+                logic.saveAllToFile("inproceedings.txt");
 
             }
+            
         }
         try {
             this.saveAsBibtex(fileNameToSave + ".txt");
         } catch (IOException ex) {
             Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    /*
+     * Opens a window for choosing a reference type for a new reference
+     */    
+    public void openReferenceChooser() {
+        JFrame chooserFrame = new JFrame();
+        SpringLayout layout = new SpringLayout();
+        JPanel panel = new JPanel();
+        chooserFrame.add(panel);
+        panel.setLayout(layout);
+        
+        final JTextField textField = new JTextField(15);
+        JLabel label = new JLabel("Give reference type:");
+        JButton button = new JButton("Open");
+        
+        button.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                if(logic.getReferenceTypes().contains(textField.getText())) {
+                    openReferenceForm(textField.getText());
+                }
+            }
+        });
+        
+        panel.add(label);
+        panel.add(textField);
+        panel.add(button);
+       
+        SpringUtilities.makeCompactGrid(panel, 1, 3, 6, 6, 6, 6);
+        
+        chooserFrame.pack();
+        chooserFrame.setLocationRelativeTo(null);
+        chooserFrame.setVisible(true);
+        
     }
 
     /**
@@ -239,7 +259,5 @@ public class GUI implements GuiInterface {
         
 
     }
-//    public void openFile(String nameOfFile) {
-//        
-//    }
+
 }
