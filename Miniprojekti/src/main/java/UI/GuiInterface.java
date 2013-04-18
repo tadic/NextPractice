@@ -28,8 +28,9 @@ public interface GuiInterface extends ActionListener {
 
     /**
      * Opens an form for creating an inprociidings reference.
+     * @param referenceType Type of reference user wants to create
      */
-    void openReferenceForm();
+    void openReferenceForm(String referenceType);
 
     /**
      * Reads the fields and saves inproceeding as bibtex.

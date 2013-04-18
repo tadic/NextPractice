@@ -23,6 +23,8 @@ public interface GenericRepository {
     <T extends Reference> void delete(int id) throws RepositoryException;
 
     <T extends Reference> List<T> findAll(Class<T> type);
+    
+    List<Reference> findAll();
 
     <T extends Reference> List<T> findByField(Class<T> type, FType fieldName, Object value) throws RepositoryException;
 
