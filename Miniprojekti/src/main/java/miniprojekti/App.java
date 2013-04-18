@@ -30,12 +30,18 @@ public class App {
         Reference in = logic.createReference("inproceedings", fields);
         
         Converter converter = new Converter();
-        try {
-            logic.convertLoadedToBibtex();
-                            GUI gui = new GUI(logic,converter);
-                            gui.initGUI();
-        } catch (IOException ex) {
-            Logger.getLogger(App.class.getName()).log(Level.SEVERE, null, ex);
+//        try {
+//            logic.convertLoadedToBibtex();
+//                            GUI gui = new GUI(logic,converter);
+//                            gui.initGUI();
+//        } catch (IOException ex) {
+//            Logger.getLogger(App.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+        
+        List<Reference> l = logic.getAllReferences();
+        for (Reference reference : l) {
+            System.out.println("jea");
+            System.out.println(reference.getFieldValue(FType.title));
         }
     }
 }

@@ -9,6 +9,7 @@ import entity.Field;
 import entity.Inproceedings;
 import entity.Reference;
 import entity.ReferenceFactory;
+import exception.RepositoryException;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.After;
@@ -42,6 +43,7 @@ public class LogicTest {
     public void setUp() {
         logic = new Logic();
         factory = new ReferenceFactory();
+        logic.clearAll();
     }
 
     @After
@@ -56,9 +58,6 @@ public class LogicTest {
         List expResult = inproceedingsFields();
         List result = logic.getFields("inproceedings");
         assertEquals("Field list size not as expected", result.size(), expResult.size());
-        for (Object object : result) {
-        }
-
     }
 
     @Test
@@ -84,7 +83,7 @@ public class LogicTest {
 
     @Test
     public void legacyTestRequiredFields() {
-        String[][] expected = {{"referenceId", ""},{"author", ""}, {"title", ""}, {"booktitle", ""}, {"year", ""}};
+        String[][] expected = {{"referenceId", ""}, {"author", ""}, {"title", ""}, {"booktitle", ""}, {"year", ""}};
         String[][] result = logic.getRequiredFields();
 
         assertEquals(expected.length, result.length);
@@ -109,7 +108,7 @@ public class LogicTest {
 
     @Test
     public void legacyCreateInproceedings() {
-        String[][] req = {{"referenceId", "ReferenceId"},{"author", "Author"}, {"title", "Title"}, {"booktitle", "Booktitle"}, {"year", "Year"}};
+        String[][] req = {{"referenceId", "ReferenceId"}, {"author", "Author"}, {"title", "Title"}, {"booktitle", "Booktitle"}, {"year", "Year"}};
         String[][] opt = {{"editor", "Editor"}, {"volume", "VolumeNumber"}, {"series", "Series"}, {"pages", "Pages"}, {"address", "Address"},
             {"month", "Month"}, {"organization", "Organization"}, {"publisher", "Publisher"}, {"note", "Note"}, {"key", "Key"}};
         Object expClass = Inproceedings.class;
@@ -119,6 +118,28 @@ public class LogicTest {
 
         assertEquals("Returned class not same as expected", result.getClass(), expClass);
         assertEquals("Fields of created reference are wrong", result.getFields(), expFields);
+    }
+
+    @Test
+    public void getAllTest() {
+        List<Reference> exp = new ArrayList<Reference>();
+        for (int i = 0; i < 2; i++) {
+            exp.add(logic.createReference("inproceedings", populate(inproceedingsFields(), i)));
+        }        
+        
+        List<Reference> result = logic.getAllReferences();
+        assertEquals(exp, result);
+    }
+
+    @Test
+    public void getByField() throws RepositoryException {
+        List<Reference> ref = new ArrayList<Reference>();
+        for (int i = 0; i < 5; i++) {
+            ref.add(logic.createReference("inproceedings", populate(inproceedingsFields(), i)));
+        }
+        List<Reference> result = logic.getReferencesByField("inproceedings", FType.title, "Title 3");
+        assertEquals(1, result.size());
+        assertEquals(result.get(0).getFieldValue(FType.title), "Title 3");
     }
 
     private List<Field> inproceedingsFields() {
@@ -140,6 +161,13 @@ public class LogicTest {
         fields.add(new Field(FType.note, "Note", false));
         fields.add(new Field(FType.key, "Key", false));
 
+        return fields;
+    }
+
+    private List<Field> populate(List<Field> fields, int number) {
+        for (Field field : fields) {
+            field.setValue(field.getValue() + " " + number);
+        }
         return fields;
     }
 }

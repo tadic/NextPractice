@@ -132,7 +132,7 @@ public abstract class Reference implements Serializable {
     private boolean checkIfContainsAllRightFields(){
         List<Field> list = new ReferenceFactory().getFields(refType);
         if (this.getFields()==null){
-            throw new IllegalArgumentException("Reference doesn't contain list of files!?");
+            throw new IllegalArgumentException("Reference doesn't contain list of fields!?");
         }
         if (this.getFields().size()!=list.size()){
             throw new IllegalArgumentException("Reference doesn't have right number of fiels!");
@@ -161,10 +161,10 @@ public abstract class Reference implements Serializable {
      * @param word is text which should be modified.
      * @return text with replaced special characters.
      */
-    public boolean isRegular(List<Reference> list){
+    public boolean isRegular(List<Reference> list) throws Exception{
         checkRefType();
         checkIfContainsAllRightFields();
-        isUnique(list);
+        isUnique(list);                     // if list is empty or null, it returns true.
         checkFields();
         checkYear();
         return true;

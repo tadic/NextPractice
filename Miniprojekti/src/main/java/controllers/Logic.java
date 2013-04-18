@@ -1,7 +1,8 @@
 package controllers;
 
+import entity.Article;
+import entity.Book;
 import entity.FType;
-import entity.Reference;
 import entity.Field;
 import entity.Inproceedings;
 import entity.Reference;
@@ -11,7 +12,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 import repositories.GenericDataFileRepository;
 import repositories.GenericRepository;
 
@@ -20,16 +20,13 @@ public class Logic implements LogicInterface {
     private GenericRepository repository;
     private ReferenceFactory RFactory;
     private FileSaver fileSaver;
+    private Converter converter;
 
     public Logic() {
         RFactory = new ReferenceFactory();
         repository = GenericDataFileRepository.getInstance();
-        fileSaver = new FileSaver(new Converter());
-    }
-
-    @Override
-    public List<Inproceedings> getInproceedings() {
-        return repository.findAll(Inproceedings.class);
+        converter = new Converter();
+        fileSaver = new FileSaver(converter);
     }
 
     /**
@@ -50,7 +47,7 @@ public class Logic implements LogicInterface {
      * @return Set<String> Reference type names
      */
     @Override
-    public Set<String> getReferenceTypes() {
+    public List<String> getReferenceTypes() {
         return RFactory.getReferenceTypes();
     }
 
@@ -64,17 +61,14 @@ public class Logic implements LogicInterface {
     @Override
     public Reference createReference(String referenceType, List<Field> fields) {
         Reference created = repository.create(RFactory.createReference(referenceType, fields));
-        return (Reference) created;
+        return created;
     }
 
-    @Override
-    public void saveToFile(String fileName) {
-        try {
-            repository.saveDataToFile(new File(fileName));
-        } catch (RepositoryException e) {
-        }
-    }
-
+    /**
+     * Loads References in specified file to memory.
+     *
+     * @param fileName Name of the file containing the References.
+     */
     @Override
     public void loadFile(String fileName) {
         try {
@@ -83,12 +77,97 @@ public class Logic implements LogicInterface {
         }
     }
 
+    /**
+     * Converts all references currently in repository to bibtex and saves them
+     * in a file.
+     *
+     * @param fileName name of the file to be saved
+     */
     @Override
-    public void convertLoadedToBibtex() throws IOException {
-        List<Inproceedings> list = repository.findAll(Inproceedings.class);
-        for (Inproceedings inproceedings : list) {
-            fileSaver.saveToFile("bibtex.txt", inproceedings);
-        }
+    public void convertAllToBibtex(String fileName) {
+        List<Reference> references = getAll();
+        convertSelectedToBibtex(references, fileName);
+    }
+
+    /**
+     * Converts selected references to bibtex and saves them in a file.
+     *
+     * @param references list of references to convert
+     * @param fileName name of the file to be saved
+     */
+    @Override
+    public void convertSelectedToBibtex(List<Reference> references, String fileName) {
+//        fileSaver.saveToFile(fileName, references);
+    }
+
+    /**
+     * Gives a list of all references currently loaded in repository. Note:
+     * includes only references created in this session and loaded using
+     * loadFile-method.
+     *
+     * @return list of all references
+     */
+    @Override
+    public List<Reference> getAllReferences() {
+        return getAll();
+    }
+
+    /**
+     * Gives list of references searched by field. Note: includes only
+     * references created in this session and loaded using loadFile-method.
+     *
+     * @param type name of the reference type to search
+     * @param ftype field type to use in search
+     * @param value searched field value
+     * @return list of found references
+     * @throws RepositoryException
+     */
+    @Override
+    public List<Reference> getReferencesByField(String type, FType ftype, Object value) throws RepositoryException {
+        return repository.findByField(RFactory.getClassOfype(type), ftype, value);
+    }
+
+    /**
+     * Gives a list of all references of a given type. Note: includes only
+     * references created in this session and loaded using loadFile-method.
+     *
+     * @param type type of reference as string
+     * @return list of references
+     */
+    @Override
+    public List<Reference> getReferenceByType(String type) {
+        return repository.findAll(RFactory.getClassOfype(type));
+    }
+
+    /**
+     * Saves all references to file using repository. Note: NOT in
+     * bibtex-format. For that you must use convertAllToBibtex- or
+     * convertSelectedToBibtex-method.
+     *
+     * @param fileName name of the file as string
+     * @throws Exception IOException or RepositoryException
+     */
+    @Override
+    public void saveAllToFile(String fileName) throws Exception {
+        repository.saveDataToFile(new File(fileName));
+
+    }
+
+    @Override
+    public void updateReference(Reference ref) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+    
+    public void clearAll() {
+        repository.clearAll();
+    }
+
+    private List<Reference> getAll() {
+        List<Reference> l = new ArrayList<Reference>();
+        l.addAll(repository.findAll(Inproceedings.class));
+        l.addAll(repository.findAll(Book.class));
+        l.addAll(repository.findAll(Article.class));
+        return l;
     }
 
     @Override
