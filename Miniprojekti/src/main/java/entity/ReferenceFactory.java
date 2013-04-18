@@ -79,7 +79,7 @@ public class ReferenceFactory {
     public Class getClassOfype(String type) {
         Class ret = null;
         
-        ret = types.get("type").getClass();
+        ret = types.get(type).getClass();
         
         return ret;
     }

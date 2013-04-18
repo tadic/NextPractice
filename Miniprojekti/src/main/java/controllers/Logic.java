@@ -157,6 +157,10 @@ public class Logic implements LogicInterface {
     public void updateReference(Reference ref) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
+    
+    public void clearAll() {
+        repository.clearAll();
+    }
 
     private List<Reference> getAll() {
         List<Reference> l = new ArrayList<Reference>();

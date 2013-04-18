@@ -29,6 +29,7 @@ public interface LogicInterface {
     public void saveAllToFile(String fileName) throws Exception;
     //Tiedostossa olevien Reference-olioiden tuominen tiedostosta repositoriolle muistiin
     public void loadFile(String fileName);
+    public void clearAll();
     
     //THESE ARE GOING AWAYYYYYYY
     public String[][] getRequiredFields();
