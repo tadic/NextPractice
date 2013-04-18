@@ -207,7 +207,7 @@ public class StubGUI implements GuiInterface {
     /**
      * Opens an form for creating an inprociidings reference.
      */
-    @Override
+
     public void openReferenceForm() {
 
         referenceframe = new JFrame();
@@ -302,7 +302,11 @@ public class StubGUI implements GuiInterface {
                 if (fileNameToSave.length() < 2) {
                     fileNameToSave = "inpro"; // default filename
                 }
-                logic.saveAllToFile("inproceedings.txt");
+                try {
+                    logic.saveAllToFile("inproceedings.txt");
+                } catch (Exception ex) {
+                    Logger.getLogger(StubGUI.class.getName()).log(Level.SEVERE, null, ex);
+                }
 
             }
         }
@@ -346,4 +350,9 @@ public class StubGUI implements GuiInterface {
 //    public void openFile(String nameOfFile) {
 //        
 //    }
+
+    @Override
+    public void openReferenceForm(String referenceType) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 }

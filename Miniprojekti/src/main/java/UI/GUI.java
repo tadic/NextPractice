@@ -175,17 +175,21 @@ public class GUI implements GuiInterface {
                 System.out.println(textFields.get(i).getText());
                 System.out.println(fields.get(i).getValue());
             } else if (ae.getSource() == saveReference) {
-<<<<<<< HEAD
+
 //                logic.createReference(requiredLabels, optionalLabels);
-=======
+
                 //logic.createReference(requiredLabels, optionalLabels);
                 logic.createReference(fileNameToSave, fields);
->>>>>>> 30dd1130617e850f25f379d10b20f3db6791aaf0
+
                 fileNameToSave = textFields.get(textFields.size() - 1).getText();
                 if (fileNameToSave.length() < 2) {
                     fileNameToSave = "inpro"; // default filename
                 }
-                logic.saveAllToFile("inproceedings.txt");
+                try {
+                    logic.saveAllToFile("inproceedings.txt");
+                } catch (Exception ex) {
+                    Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
+                }
 
             }
             
@@ -250,24 +254,24 @@ public class GUI implements GuiInterface {
 //        try {
 //            inproceeding.isRegular(null);                   // if not regular, it goes throw IllegalArgumentException with propriate meassage.
             fileSaver.saveToFile(nameOfFile, inproceeding);
-<<<<<<< HEAD
+
+////        } catch (IllegalArgumentException ex) {
+////             JOptionPane.showMessageDialog(referenceframe, ex.getMessage());
+////        } catch (Exception e){
+////            Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, e);
+////        }
+//
+//
+//                        
+//        
+//
+
 //        } catch (IllegalArgumentException ex) {
 //             JOptionPane.showMessageDialog(referenceframe, ex.getMessage());
 //        } catch (Exception e){
 //            Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, e);
 //        }
 
+    }}
 
-                        
-        
 
-=======
-        } catch (IllegalArgumentException ex) {
-             JOptionPane.showMessageDialog(referenceframe, ex.getMessage());
-        } catch (Exception e){
-            Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, e);
-        }
->>>>>>> 30dd1130617e850f25f379d10b20f3db6791aaf0
-    }
-
-}
