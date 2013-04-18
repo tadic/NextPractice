@@ -32,7 +32,7 @@ public class App {
         Converter converter = new Converter();
    //     try {
   //          logic.convertLoadedToBibtex();
-                            GUI gui = new GUI(logic,converter);
+                            GUI gui = new GUI(logic);
                             gui.initGUI();
      //   } catch (IOException ex) {
        //     Logger.getLogger(App.class.getName()).log(Level.SEVERE, null, ex);

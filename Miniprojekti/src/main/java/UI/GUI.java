@@ -43,18 +43,14 @@ public class GUI implements GuiInterface {
     private JButton newReference;
     private JButton loadReference;
     private JButton saveReference;
-    private JFileChooser fileOpener;
+    private JButton addReference;
+    private JButton convertToBibTex;
     private ArrayList<JTextField> textFields;
     private List<Field> fields;
-    private String[][] requiredLabels;
-    private String[][] optionalLabels;
-    private FileSaver fileSaver;
-    private Converter converter;
     private JFrame referenceframe;
 
-    public GUI(LogicInterface l, Converter c) {
+    public GUI(LogicInterface l) {
         logic = l;
-        converter = c;
         initGUI();
     }
 
@@ -93,7 +89,7 @@ public class GUI implements GuiInterface {
                 }
             }
         });
-
+        
         panel.add(newReference);
         panel.add(loadReference);
 
@@ -111,6 +107,7 @@ public class GUI implements GuiInterface {
         frame.setVisible(true);
 
     }
+
     /**
      * Opens an form for creating an inprociidings reference.
      */
@@ -125,8 +122,6 @@ public class GUI implements GuiInterface {
         textFields = new ArrayList<JTextField>();
         fields = logic.getFields(referenceType);
 
-        fileSaver = new FileSaver(new Converter());
-        
         int length = fields.size();
 
         for (int i = 0; i < length + 2; i++) {
@@ -149,12 +144,18 @@ public class GUI implements GuiInterface {
             } else if (i == length + 1) {
                 saveReference = new JButton("Save");
                 saveReference.addActionListener(this);
+                addReference = new JButton("Add");
+                addReference.addActionListener(this);
+                convertToBibTex = new JButton("Convert");
+                convertToBibTex.addActionListener(this);
                 panel.add(saveReference);
+                panel.add(addReference);
+                panel.add(convertToBibTex);
             }
 
         }
 
-        SpringUtilities.makeCompactGrid(panel, length + 1, 2, 6, 6, 6, 6);
+        SpringUtilities.makeCompactGrid(panel, length + 2, 2, 6, 6, 6, 6);
 
         referenceframe.pack();
         referenceframe.setLocationRelativeTo(null);
@@ -168,31 +169,36 @@ public class GUI implements GuiInterface {
      */
     @Override
     public void actionPerformed(ActionEvent ae) {
-        String fileNameToSave = "inpro";
+        String fileNameToSave = "default";
         for (int i = 0; i < textFields.size() - 1; i++) {
             if (ae.getSource() == textFields.get(i)) {
                 fields.get(i).setValue(textFields.get(i).getText());
                 System.out.println(textFields.get(i).getText());
                 System.out.println(fields.get(i).getValue());
             } else if (ae.getSource() == saveReference) {
-
-//                logic.createReference(requiredLabels, optionalLabels);
-
-                //logic.createReference(requiredLabels, optionalLabels);
-                logic.createReference(fileNameToSave, fields);
-
                 fileNameToSave = textFields.get(textFields.size() - 1).getText();
+                logic.createReference(fileNameToSave, fields);
                 if (fileNameToSave.length() < 2) {
-                    fileNameToSave = "inpro"; // default filename
+                    fileNameToSave = "default"; // default filename
                 }
                 try {
-                    logic.saveAllToFile("inproceedings.txt");
+                    logic.saveAllToFile(fileNameToSave + ".ref");
                 } catch (Exception ex) {
                     Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
                 }
 
+            } else if (ae.getSource() == addReference) {
+                fileNameToSave = textFields.get(textFields.size() - 1).getText();
+                logic.createReference(fileNameToSave, fields);
+            } else if (ae.getSource() == convertToBibTex) {
+                fileNameToSave = textFields.get(textFields.size() - 1).getText();
+                try {
+                    saveAsBibtex(fileNameToSave);
+                } catch (IOException ex) {
+                    Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
-            
+
         }
         try {
             this.saveAsBibtex(fileNameToSave + ".txt");
@@ -200,40 +206,40 @@ public class GUI implements GuiInterface {
             Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     /*
      * Opens a window for choosing a reference type for a new reference
-     */    
+     */
     public void openReferenceChooser() {
         JFrame chooserFrame = new JFrame();
         SpringLayout layout = new SpringLayout();
         JPanel panel = new JPanel();
         chooserFrame.add(panel);
         panel.setLayout(layout);
-        
+
         final JTextField textField = new JTextField(15);
         JLabel label = new JLabel("Give reference type:");
         JButton button = new JButton("Open");
-        
+
         button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
-                if(logic.getReferenceTypes().contains(textField.getText())) {
+                if (logic.getReferenceTypes().contains(textField.getText())) {
                     openReferenceForm(textField.getText());
                 }
             }
         });
-        
+
         panel.add(label);
         panel.add(textField);
         panel.add(button);
-       
+
         SpringUtilities.makeCompactGrid(panel, 1, 3, 6, 6, 6, 6);
-        
+
         chooserFrame.pack();
         chooserFrame.setLocationRelativeTo(null);
         chooserFrame.setVisible(true);
-        
+
     }
 
     /**
@@ -244,34 +250,6 @@ public class GUI implements GuiInterface {
      */
     @Override
     public void saveAsBibtex(String nameOfFile) throws IOException {
-        Inproceedings inproceeding = new Inproceedings(logic.getFields("inproceedings"));
-
-
-        inproceeding.setFieldValue(FType.author, textFields.get(1).getText());
-        inproceeding.setFieldValue(FType.booktitle, textFields.get(2).getText());
-        inproceeding.setFieldValue(FType.title, textFields.get(3).getText());
-        inproceeding.setFieldValue(FType.year, textFields.get(4).getText());
-//        try {
-//            inproceeding.isRegular(null);                   // if not regular, it goes throw IllegalArgumentException with propriate meassage.
-            fileSaver.saveToFile(nameOfFile, inproceeding);
-
-////        } catch (IllegalArgumentException ex) {
-////             JOptionPane.showMessageDialog(referenceframe, ex.getMessage());
-////        } catch (Exception e){
-////            Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, e);
-////        }
-//
-//
-//                        
-//        
-//
-
-//        } catch (IllegalArgumentException ex) {
-//             JOptionPane.showMessageDialog(referenceframe, ex.getMessage());
-//        } catch (Exception e){
-//            Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, e);
-//        }
-
-    }}
-
-
+        logic.convertAllToBibtex(nameOfFile);
+    }
+}
