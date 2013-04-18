@@ -2,7 +2,6 @@ package repositories;
 
 import entity.FType;
 import entity.Reference;
-import entity.Field;
 import exception.RepositoryException;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -151,7 +150,17 @@ public class GenericDataFileRepository implements GenericRepository {
         }
         return list;
     }
+    
+    /**
+     * Finds all references in repository
+     * @return List of references
+     */
+    @Override
+    public List<Reference> findAll() {
+        return new ArrayList(objects.values());
+    }
 
+    
     /**
      * Finds all specified entities in repository having specified field value
      *

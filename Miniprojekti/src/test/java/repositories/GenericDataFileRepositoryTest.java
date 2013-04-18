@@ -4,6 +4,7 @@
  */
 package repositories;
 
+import entity.Book;
 import entity.FType;
 import entity.Reference;
 import entity.Inproceedings;
@@ -113,7 +114,26 @@ public class GenericDataFileRepositoryTest {
     }
 
     @Test
-    public void testFindAll() throws Exception {
+    public void testFindAllReferences() throws Exception {
+        GenericRepository instance = GenericDataFileRepository.getInstance();
+        instance.clearAll();
+
+        Inproceedings inproceedings = new Inproceedings();
+        inproceedings.setFieldValue(FType.author, "Author1");
+        instance.create(inproceedings);
+        
+        Book book = new Book();
+        book.setFieldValue(FType.title, "book");
+        instance.create(book);
+        
+        List<Reference> result = instance.findAll();
+        assertEquals(2, result.size());
+        assertEquals("Author1", result.get(0).getFieldValue(FType.author));
+        assertEquals("book", result.get(1).getFieldValue(FType.title));
+    }
+
+    @Test
+    public void testFindAllInproceedings() throws Exception {
         GenericRepository instance = GenericDataFileRepository.getInstance();
         instance.clearAll();
         List<Inproceedings> expResult = new ArrayList<Inproceedings>();
@@ -304,7 +324,6 @@ public class GenericDataFileRepositoryTest {
 
         @Override
         protected void initMyFields() {
-            
         }
 
         @Override
