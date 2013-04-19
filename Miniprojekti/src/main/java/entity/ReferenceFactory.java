@@ -73,7 +73,9 @@ public class ReferenceFactory {
      * @return new Reference with the field values supplied in fields
      */
     public Reference createReference(String referenceType, List<Field> fields) {
-        return new Inproceedings(fields);
+        Reference ref = types.get(referenceType);
+        ref.setFields(fields);
+        return ref;
     }
     
     public Class getClassOfype(String type) {

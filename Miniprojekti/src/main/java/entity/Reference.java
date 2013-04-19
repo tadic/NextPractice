@@ -61,6 +61,9 @@ public abstract class Reference implements Serializable {
     public List<Field> getFields() {
         return fields;
     }
+    public void setFields(List<Field> list) {
+        this.fields = list;
+    }
     
     public List<String> getTags(){
         return tags;
