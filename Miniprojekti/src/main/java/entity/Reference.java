@@ -236,8 +236,4 @@ public abstract class Reference implements Serializable {
         }
         return true;
     }
-
-    void setFields(List<Field> fields) {
-        this.fields = fields;
-    }
 }

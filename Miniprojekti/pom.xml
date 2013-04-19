@@ -22,6 +22,18 @@
             <scope>test</scope>
             <type>jar</type>
         </dependency>
+        <dependency>
+            <groupId>org.apache.mahout.watchmaker</groupId>
+            <artifactId>watchmaker-swing</artifactId>
+            <version>0.5.0</version>
+            <type>jar</type>
+        </dependency>
+        
+    <dependency>
+      <groupId>org.swinglabs</groupId>
+      <artifactId>swing-layout</artifactId>
+      <version>1.0.3</version>
+    </dependency>
     </dependencies>
   
     <build>
