@@ -48,6 +48,7 @@ public class GUI implements GuiInterface {
     private ArrayList<JTextField> textFields;
     private List<Field> fields;
     private JFrame referenceframe;
+    private String currentRefType;
 
     public GUI(LogicInterface l) {
         logic = l;
@@ -89,7 +90,7 @@ public class GUI implements GuiInterface {
                 }
             }
         });
-        
+
         panel.add(newReference);
         panel.add(loadReference);
 
@@ -175,36 +176,62 @@ public class GUI implements GuiInterface {
                 fields.get(i).setValue(textFields.get(i).getText());
                 System.out.println(textFields.get(i).getText());
                 System.out.println(fields.get(i).getValue());
-            } else if (ae.getSource() == saveReference) {
-                fileNameToSave = textFields.get(textFields.size() - 1).getText();
-                logic.createReference(fileNameToSave, fields);
-                if (fileNameToSave.length() < 2) {
-                    fileNameToSave = "default"; // default filename
-                }
-                try {
-                    logic.saveAllToFile(fileNameToSave + ".ref");
-                } catch (Exception ex) {
-                    Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
-                }
+//            } else if (ae.getSource() == saveReference) {
+//                fileNameToSave = textFields.get(textFields.size() - 1).getText();
+//                logic.createReference(fileNameToSave, fields);
+//                if (fileNameToSave.length() < 2) {
+//                    fileNameToSave = "default"; // default filename
+//                }
+//                try {
+//                    logic.saveAllToFile(fileNameToSave + ".ref");
+//                } catch (Exception ex) {
+//                    Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
+//                }
+//
+//            } else if (ae.getSource() == addReference) {
+//                fileNameToSave = textFields.get(textFields.size() - 1).getText();
+//                logic.createReference(fileNameToSave, fields);
+//            } else if (ae.getSource() == convertToBibTex) {
+//                fileNameToSave = textFields.get(textFields.size() - 1).getText();
+//                try {
+//                    saveAsBibtex(fileNameToSave);
+//                } catch (IOException ex) {
+//                    Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
+//                }
+//            }
 
-            } else if (ae.getSource() == addReference) {
-                fileNameToSave = textFields.get(textFields.size() - 1).getText();
-                logic.createReference(fileNameToSave, fields);
-            } else if (ae.getSource() == convertToBibTex) {
-                fileNameToSave = textFields.get(textFields.size() - 1).getText();
-                try {
-                    saveAsBibtex(fileNameToSave);
-                } catch (IOException ex) {
-                    Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
-                }
+            }
+        }
+        if (ae.getSource() == saveReference) {
+            fileNameToSave = textFields.get(textFields.size() - 1).getText();
+            logic.createReference(fileNameToSave, fields);
+            if (fileNameToSave.length() < 2) {
+                fileNameToSave = "default"; // default filename
+            }
+            try {
+                logic.saveAllToFile(fileNameToSave + ".ref");
+            } catch (Exception ex) {
+                Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
             }
 
+        } else if (ae.getSource() == addReference) {
+            fileNameToSave = textFields.get(textFields.size() - 1).getText();
+            logic.createReference("inproceedings", fields);
+        } else if (ae.getSource() == convertToBibTex) {
+            fileNameToSave = textFields.get(textFields.size() - 1).getText();
+            try {
+                saveAsBibtex(fileNameToSave);
+            } catch (IOException ex) {
+                Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
-        try {
-            this.saveAsBibtex(fileNameToSave + ".txt");
-        } catch (IOException ex) {
-            Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
-        }
+
+//        try {
+//            this.saveAsBibtex(fileNameToSave + ".txt");
+//        } catch (IOException ex) {
+//            Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+
     }
 
     /*

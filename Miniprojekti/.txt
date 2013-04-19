@@ -1,8 +1,12 @@
+<<<<<<< HEAD
 @inproceedings{Author,
     author = {Author},
     title = {Title},
     booktitle = {Booktitle},
     year = {1988}
+=======
+@inproceedings{
+>>>>>>> ab144d46cf21707e1db0e34ecc253cde154614b9
 }@inproceedings{
 }@inproceedings{
 }@inproceedings{
@@ -15,11 +19,26 @@
 }@inproceedings{
 }@inproceedings{
 }@inproceedings{
+<<<<<<< HEAD
 }@inproceedings{Author,
     author = {Author},
     title = {Title},
     booktitle = {Booktitle},
     year = {1988}
+=======
+>>>>>>> ab144d46cf21707e1db0e34ecc253cde154614b9
+}@inproceedings{
+}@inproceedings{
+}@inproceedings{
+}@inproceedings{
+}@inproceedings{
+}@inproceedings{
+}@inproceedings{
+}@inproceedings{
+}@inproceedings{
+}@inproceedings{
+}@inproceedings{
+<<<<<<< HEAD
 }@inproceedings{
 }@inproceedings{
 }@inproceedings{
@@ -33,82 +52,6 @@
 }@inproceedings{
 }@inproceedings{
 }@inproceedings{
-}@inproceedings{
-}@inproceedings{
-}@inproceedings{
-}@inproceedings{
-}@inproceedings{
-}@inproceedings{
-}@inproceedings{
-}@inproceedings{
-}@inproceedings{
-}@inproceedings{
-}@inproceedings{
-}@inproceedings{Author,
-    author = {Author},
-    title = {Title},
-    booktitle = {Booktitle},
-    year = {1988}
-}@inproceedings{iuyiuyiuy,
-    author = {iuyiu},
-    title = {yiuy},
-    publisher = {iuyiuy},
-    year = {2012}
-}@inproceedings{iuyiuyiuy,
-    author = {iuyiu},
-    title = {yiuy},
-    publisher = {iuyiuy},
-    year = {2012}
-}@inproceedings{iuyiuyiuy,
-    author = {iuyiu},
-    title = {yiuy},
-    publisher = {iuyiuy},
-    year = {2012}
-}@inproceedings{iuyiuyiuy,
-    author = {iuyiu},
-    title = {yiuy},
-    publisher = {iuyiuy},
-    year = {2012}
-}@inproceedings{iuyiuyiuy,
-    author = {iuyiu},
-    title = {yiuy},
-    publisher = {iuyiuy},
-    year = {2012}
-}@inproceedings{iuyiuyiuy,
-    author = {iuyiu},
-    title = {yiuy},
-    publisher = {iuyiuy},
-    year = {2012}
-}@inproceedings{iuyiuyiuy,
-    author = {iuyiu},
-    title = {yiuy},
-    publisher = {iuyiuy},
-    year = {2012}
-}@inproceedings{iuyiuyiuy,
-    author = {iuyiu},
-    title = {yiuy},
-    publisher = {iuyiuy},
-    year = {2012}
-}@inproceedings{iuyiuyiuy,
-    author = {iuyiu},
-    title = {yiuy},
-    publisher = {iuyiuy},
-    year = {2012}
-}@inproceedings{iuyiuyiuy,
-    author = {iuyiu},
-    title = {yiuy},
-    publisher = {iuyiuy},
-    year = {2012}
-}@inproceedings{iuyiuyiuy,
-    author = {iuyiu},
-    title = {yiuy},
-    publisher = {iuyiuy},
-    year = {2012}
-}@inproceedings{iuyiuyiuy,
-    author = {iuyiu},
-    title = {yiuy},
-    publisher = {iuyiuy},
-    year = {2012}
 }@inproceedings{Author,
     author = {Author},
     title = {Title},
@@ -179,4 +122,71 @@
     title = {Title},
     booktitle = {Booktitle},
     year = {1988}
+}@inproceedings{iuyiuyiuy,
+    author = {iuyiu},
+    title = {yiuy},
+    publisher = {iuyiuy},
+    year = {2012}
+}@inproceedings{iuyiuyiuy,
+    author = {iuyiu},
+    title = {yiuy},
+    publisher = {iuyiuy},
+    year = {2012}
+}@inproceedings{iuyiuyiuy,
+    author = {iuyiu},
+    title = {yiuy},
+    publisher = {iuyiuy},
+    year = {2012}
+}@inproceedings{iuyiuyiuy,
+    author = {iuyiu},
+    title = {yiuy},
+    publisher = {iuyiuy},
+    year = {2012}
+}@inproceedings{iuyiuyiuy,
+    author = {iuyiu},
+    title = {yiuy},
+    publisher = {iuyiuy},
+    year = {2012}
+}@inproceedings{iuyiuyiuy,
+    author = {iuyiu},
+    title = {yiuy},
+    publisher = {iuyiuy},
+    year = {2012}
+}@inproceedings{iuyiuyiuy,
+    author = {iuyiu},
+    title = {yiuy},
+    publisher = {iuyiuy},
+    year = {2012}
+}@inproceedings{iuyiuyiuy,
+    author = {iuyiu},
+    title = {yiuy},
+    publisher = {iuyiuy},
+    year = {2012}
+}@inproceedings{iuyiuyiuy,
+    author = {iuyiu},
+    title = {yiuy},
+    publisher = {iuyiuy},
+    year = {2012}
+}@inproceedings{iuyiuyiuy,
+    author = {iuyiu},
+    title = {yiuy},
+    publisher = {iuyiuy},
+    year = {2012}
+}@inproceedings{iuyiuyiuy,
+    author = {iuyiu},
+    title = {yiuy},
+    publisher = {iuyiuy},
+    year = {2012}
+}@inproceedings{iuyiuyiuy,
+    author = {iuyiu},
+    title = {yiuy},
+    publisher = {iuyiuy},
+    year = {2012}
+}@inproceedings{Author,
+    author = {Author},
+    title = {Title},
+    booktitle = {Booktitle},
+    year = {1988}
+=======
+>>>>>>> ab144d46cf21707e1db0e34ecc253cde154614b9
 }

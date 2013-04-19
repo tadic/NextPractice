@@ -5,6 +5,7 @@
 package entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -234,5 +235,9 @@ public abstract class Reference implements Serializable {
             return false;
         }
         return true;
+    }
+
+    void setFields(List<Field> fields) {
+        this.fields = fields;
     }
 }

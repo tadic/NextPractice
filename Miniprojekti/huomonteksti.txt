@@ -1,6 +1,0 @@
-@inproceedings{te:2005,
-    author = {tero},
-    title = {jee},
-    booktitle = {huomo},
-    year = {2005}
-}
