@@ -48,6 +48,7 @@ public class GUI implements GuiInterface {
     private ArrayList<JTextField> textFields;
     private List<Field> fields;
     private JFrame referenceframe;
+    private String currentRefType;
 
     public GUI(LogicInterface l) {
         logic = l;
@@ -215,7 +216,7 @@ public class GUI implements GuiInterface {
 
         } else if (ae.getSource() == addReference) {
             fileNameToSave = textFields.get(textFields.size() - 1).getText();
-            logic.createReference(fileNameToSave, fields);
+            logic.createReference("inproceedings", fields);
         } else if (ae.getSource() == convertToBibTex) {
             fileNameToSave = textFields.get(textFields.size() - 1).getText();
             try {
