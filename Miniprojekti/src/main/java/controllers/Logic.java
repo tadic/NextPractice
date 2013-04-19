@@ -84,7 +84,7 @@ public class Logic implements LogicInterface {
      * @param fileName name of the file to be saved
      */
     @Override
-    public void convertAllToBibtex(String fileName) {
+    public void convertAllToBibtex(String fileName) throws IOException {
         List<Reference> references = getAll();
         convertSelectedToBibtex(references, fileName);
     }
@@ -96,8 +96,8 @@ public class Logic implements LogicInterface {
      * @param fileName name of the file to be saved
      */
     @Override
-    public void convertSelectedToBibtex(List<Reference> references, String fileName) {
-//        fileSaver.saveToFile(fileName, references);
+    public void convertSelectedToBibtex(List<Reference> references, String fileName) throws IOException {
+        fileSaver.saveToFile(fileName, references);
     }
 
     /**

@@ -4,9 +4,10 @@
  */
 package controllers;
 
-import entity.Inproceedings;
+import entity.Reference;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.List;
 
 /**
  *
@@ -26,14 +27,22 @@ public class FileSaver {
     /**
      * Saves inproceeding to file as bibtex
      * @param filename
-     * @param inproceeding
+     * @param ref
      * @throws IOException 
      */
-    public void saveToFile(String filename,Inproceedings inproceeding) throws IOException {
+    public void saveToFile(String filename,Reference ref) throws IOException {
         FileWriter filewriter = new FileWriter(filename);
-        filewriter.write(converter.toBibTex(inproceeding));
+        filewriter.write(converter.toBibTex(ref));
         filewriter.close();
         
+    }
+    
+    public void saveToFile(String filename, List<Reference> references) throws IOException {
+        FileWriter filewriter = new FileWriter(filename, true);
+        for (Reference reference : references) {
+            filewriter.write(converter.toBibTex(reference));
+        }
+        filewriter.close();
     }
     
 }

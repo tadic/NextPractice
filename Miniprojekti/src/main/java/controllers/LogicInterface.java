@@ -14,13 +14,13 @@ public interface LogicInterface {
     // Referenssityyppit, referenssityypin kentät ja referenssin luonti.
     public List<String> getReferenceTypes();
     public List<Field> getFields(String referenceType);
-    //RcreateReference luo referenssin, antaa sen repositoriolle muistiin ja palauttaa sen guille
+    //createReference luo referenssin, antaa sen repositoriolle muistiin ja palauttaa sen guille
     public Reference createReference(String referenceType, List<Field> fields);
     public void updateReference(Reference ref);
     
     //Repositoriolla muistissa olevien Reference-olioiden tallettaminen
-    public void convertAllToBibtex(String fileName);
-    public void convertSelectedToBibtex(List<Reference> references, String fileName);
+    public void convertAllToBibtex(String fileName) throws IOException;
+    public void convertSelectedToBibtex(List<Reference> references, String fileName) throws IOException;
     //Repositoriolla muistissa olevien Reference-olioiden hakeminen
     public List<Reference> getAllReferences();
     public List<Reference> getReferencesByField(String type, FType ftype, Object value) throws RepositoryException;

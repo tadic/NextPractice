@@ -81,44 +81,44 @@ public class LogicTest {
         assertEquals("Fields of created reference are wrong", result.getFields(), fields);
     }
 
-    @Test
-    public void legacyTestRequiredFields() {
-        String[][] expected = {{"referenceId", ""}, {"author", ""}, {"title", ""}, {"booktitle", ""}, {"year", ""}};
-        String[][] result = logic.getRequiredFields();
-
-        assertEquals(expected.length, result.length);
-        for (int i = 0; i < expected.length; i++) {
-            assertEquals(expected[i][0], result[i][0]);
-            assertEquals(expected[i][1], result[i][1]);
-        }
-    }
-
-    @Test
-    public void legacyTestOptionalFields() {
-        String[][] expected = {{"editor", ""}, {"volume/number", ""}, {"series", ""}, {"pages", ""}, {"address", ""},
-            {"month", ""}, {"organization", ""}, {"publisher", ""}, {"note", ""}, {"key", ""}};
-        String[][] result = logic.getOptionalFields();
-
-        assertEquals(expected.length, result.length);
-        for (int i = 0; i < expected.length; i++) {
-            assertEquals(expected[i][0], result[i][0]);
-            assertEquals(expected[i][1], result[i][1]);
-        }
-    }
-
-    @Test
-    public void legacyCreateInproceedings() {
-        String[][] req = {{"referenceId", "ReferenceId"}, {"author", "Author"}, {"title", "Title"}, {"booktitle", "Booktitle"}, {"year", "Year"}};
-        String[][] opt = {{"editor", "Editor"}, {"volume", "VolumeNumber"}, {"series", "Series"}, {"pages", "Pages"}, {"address", "Address"},
-            {"month", "Month"}, {"organization", "Organization"}, {"publisher", "Publisher"}, {"note", "Note"}, {"key", "Key"}};
-        Object expClass = Inproceedings.class;
-        List<Field> expFields = inproceedingsFields();
-
-        Reference result = logic.createReference(req, opt);
-
-        assertEquals("Returned class not same as expected", result.getClass(), expClass);
-        assertEquals("Fields of created reference are wrong", result.getFields(), expFields);
-    }
+//    @Test
+//    public void legacyTestRequiredFields() {
+//        String[][] expected = {{"referenceId", ""}, {"author", ""}, {"title", ""}, {"booktitle", ""}, {"year", ""}};
+//        String[][] result = logic.getRequiredFields();
+//
+//        assertEquals(expected.length, result.length);
+//        for (int i = 0; i < expected.length; i++) {
+//            assertEquals(expected[i][0], result[i][0]);
+//            assertEquals(expected[i][1], result[i][1]);
+//        }
+//    }
+//
+//    @Test
+//    public void legacyTestOptionalFields() {
+//        String[][] expected = {{"editor", ""}, {"volume/number", ""}, {"series", ""}, {"pages", ""}, {"address", ""},
+//            {"month", ""}, {"organization", ""}, {"publisher", ""}, {"note", ""}, {"key", ""}};
+//        String[][] result = logic.getOptionalFields();
+//
+//        assertEquals(expected.length, result.length);
+//        for (int i = 0; i < expected.length; i++) {
+//            assertEquals(expected[i][0], result[i][0]);
+//            assertEquals(expected[i][1], result[i][1]);
+//        }
+//    }
+//
+//    @Test
+//    public void legacyCreateInproceedings() {
+//        String[][] req = {{"referenceId", "ReferenceId"}, {"author", "Author"}, {"title", "Title"}, {"booktitle", "Booktitle"}, {"year", "Year"}};
+//        String[][] opt = {{"editor", "Editor"}, {"volume", "VolumeNumber"}, {"series", "Series"}, {"pages", "Pages"}, {"address", "Address"},
+//            {"month", "Month"}, {"organization", "Organization"}, {"publisher", "Publisher"}, {"note", "Note"}, {"key", "Key"}};
+//        Object expClass = Inproceedings.class;
+//        List<Field> expFields = inproceedingsFields();
+//
+//        Reference result = logic.createReference(req, opt);
+//
+//        assertEquals("Returned class not same as expected", result.getClass(), expClass);
+//        assertEquals("Fields of created reference are wrong", result.getFields(), expFields);
+//    }
 
     @Test
     public void getAllTest() {

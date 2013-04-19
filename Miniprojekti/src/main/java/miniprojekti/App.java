@@ -38,10 +38,10 @@ public class App {
        //     Logger.getLogger(App.class.getName()).log(Level.SEVERE, null, ex);
         //}
         
-        List<Reference> l = logic.getAllReferences();
-        for (Reference reference : l) {
-            System.out.println("jea");
-            System.out.println(reference.getFieldValue(FType.title));
-        }
+//        List<Reference> l = logic.getAllReferences();
+//        for (Reference reference : l) {
+//            System.out.println("jea");
+//            System.out.println(reference.getFieldValue(FType.title));
+//        }
     }
 }
