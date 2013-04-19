@@ -27,6 +27,7 @@ public class Logic implements LogicInterface {
         repository = GenericDataFileRepository.getInstance();
         converter = new Converter();
         fileSaver = new FileSaver(converter);
+        repository.clearAll();
     }
 
     /**
@@ -85,7 +86,7 @@ public class Logic implements LogicInterface {
      */
     @Override
     public void convertAllToBibtex(String fileName) throws IOException {
-        List<Reference> references = getAll();
+        List<Reference> references = repository.findAll();
         convertSelectedToBibtex(references, fileName);
     }
 
@@ -109,7 +110,7 @@ public class Logic implements LogicInterface {
      */
     @Override
     public List<Reference> getAllReferences() {
-        return getAll();
+        return repository.findAll();
     }
 
     /**
@@ -157,17 +158,10 @@ public class Logic implements LogicInterface {
     public void updateReference(Reference ref) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
-    
+
+    @Override
     public void clearAll() {
         repository.clearAll();
-    }
-
-    private List<Reference> getAll() {
-        List<Reference> l = new ArrayList<Reference>();
-        l.addAll(repository.findAll(Inproceedings.class));
-        l.addAll(repository.findAll(Book.class));
-        l.addAll(repository.findAll(Article.class));
-        return l;
     }
 
     @Override

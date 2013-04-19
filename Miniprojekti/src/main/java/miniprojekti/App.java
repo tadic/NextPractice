@@ -16,32 +16,51 @@ import java.util.logging.Logger;
 public class App {
 
     public static void main(String[] args) {
+
         LogicInterface logic = new Logic();
 
-        List<Field> fields = new ArrayList<Field>();
+        GUI gui = new GUI(logic);
 
-        fields.add(new Field(FType.referenceId, "Author", true));
-        fields.add(new Field(FType.author, "Author", true));
-        fields.add(new Field(FType.title, "Title", true));
-        fields.add(new Field(FType.booktitle, "Booktitle", true));
-        fields.add(new Field(FType.year, "1988", true));
+        List<Field> inpro = logic.getFields("inproceedings");
+        inpro.get(1).setValue("niko1");
+        inpro.get(2).setValue("niko1");
+        inpro.get(3).setValue("niko1");
+        inpro.get(4).setValue("2001");
+
+        logic.createReference("inproceedings", inpro);
 
 
-        Reference in = logic.createReference("inproceedings", fields);
-        
-        Converter converter = new Converter();
-   //     try {
-  //          logic.convertLoadedToBibtex();
-                            GUI gui = new GUI(logic);
-                            gui.initGUI();
-     //   } catch (IOException ex) {
-       //     Logger.getLogger(App.class.getName()).log(Level.SEVERE, null, ex);
-        //}
-        
-//        List<Reference> l = logic.getAllReferences();
-//        for (Reference reference : l) {
-//            System.out.println("jea");
-//            System.out.println(reference.getFieldValue(FType.title));
-//        }
+        List<Field> inpro2 = logic.getFields("inproceedings");
+        inpro2.get(1).setValue("niko2");
+        inpro2.get(2).setValue("niko2");
+        inpro2.get(3).setValue("niko2");
+        inpro2.get(4).setValue("1988");
+
+        logic.createReference("inproceedings", inpro2);
+
+        List<Reference> ref = logic.getAllReferences();
+
+        System.out.println("listassa : " + ref.size());
+
+        for (Reference reference : ref) {
+            System.out.println(reference.getFieldValue(FType.author));
+        }
+
+        System.out.println(inpro.get(1).getValue());
+        System.out.println(inpro2.get(1).getValue());
+
+
+
+
+        try {
+            logic.convertAllToBibtex("fileee");
+        } catch (Exception ex) {
+            Logger.getLogger(App.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+
+
+
+
     }
 }
