@@ -245,6 +245,7 @@ public abstract class Reference implements Serializable {
     @Override
        public String toString(){
           StringBuilder sb = new StringBuilder(refType);
+          sb.append("---");
           for (Field field:getFields()){
               if (field.isRequired()){
               sb.append(", ");
@@ -253,9 +254,9 @@ public abstract class Reference implements Serializable {
                   break;
               }
           }
-          while (sb.toString().length()<60){
+          while (sb.toString().length()<80){
               sb.append(" ");
           }
-          return sb.toString().substring(0, 60);
+          return sb.toString().substring(0, 79);
       }
 }

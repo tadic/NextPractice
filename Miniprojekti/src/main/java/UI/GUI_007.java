@@ -6,6 +6,7 @@ import controllers.FileSaver;
 import entity.Article;
 import entity.FType;
 import entity.Field;
+import entity.Inproceedings;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
@@ -28,6 +29,8 @@ import javax.swing.text.Document;
 import org.uncommons.swing.SpringUtilities;
 import entity.Reference;
 import entity.ReferenceFactory;
+import java.awt.Color;
+import java.io.FileReader;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -36,9 +39,12 @@ import java.util.logging.Logger;
  * @author ivantadic
  */
 public class  GUI_007 extends javax.swing.JFrame {
+    private int currentRow;
     Converter convert;
     private Reference ref;
     private ArrayList<Reference> listOfRef; 
+    private ArrayList<Reference> filteredList; 
+    private String documentName = "newBibTex.bib";
     JTextField text;
     ArrayList<JTextField> listOfFields;
 
@@ -64,17 +70,20 @@ public class  GUI_007 extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
+        referenceArea = new javax.swing.JTextArea();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTextArea2 = new javax.swing.JTextArea();
+        documentArea = new javax.swing.JTextArea();
         AddToDocument = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
         jButton3 = new javax.swing.JButton();
+        jButtonNew = new javax.swing.JButton();
+        jButtonOpen = new javax.swing.JButton();
         jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
-
+        jTextField1 = new javax.swing.JTextField();
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowActivated(java.awt.event.WindowEvent evt) {
@@ -104,24 +113,24 @@ public class  GUI_007 extends javax.swing.JFrame {
 
         jLabel2.setText("Optional Fields");
 
-        jTextArea1.setEditable(false);
-        jTextArea1.setColumns(35);
-        jTextArea1.setRows(5);
-        jScrollPane1.setViewportView(jTextArea1);
+        referenceArea.setEditable(false);
+        referenceArea.setColumns(35);
+        referenceArea.setRows(5);
+        jScrollPane1.setViewportView(referenceArea);
 
-        jTextArea2.setEditable(false);
-        jTextArea2.setColumns(35);
-        jTextArea2.setRows(5);
-        jScrollPane2.setViewportView(jTextArea2);
+        documentArea.setEditable(false);
+        documentArea.setColumns(35);
+        documentArea.setRows(5);
+        jScrollPane2.setViewportView(documentArea);
 
-        AddToDocument.setText("Add to document");
+        AddToDocument.setText("Add/Save to Document");
         AddToDocument.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
             }
         });
 
-        jButton2.setText("Save");
+        jButton2.setText("Save Document");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton2ActionPerformed(evt);
@@ -131,14 +140,43 @@ public class  GUI_007 extends javax.swing.JFrame {
         jLabel3.setText("Reference:");
 
         jButton3.setText("Delete");
+        jButtonNew.setText("New");
+        jButtonNew.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonNewActionPerformed(evt);
+            }
+        });
+        jButtonOpen.setText("Open");
+        jButtonOpen.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonOpenActionPerformed(evt);
+            }
+        });
         jButton3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton3ActionPerformed(evt);
             }
         });
 
-        jLabel5.setText("Bibtex Document:");
-
+        documentArea.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                documentAreaFocusGained(evt);
+            }
+        });
+        documentArea.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                documentAreaKeyRelesed(evt);
+            }
+        });
+        jTextField1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jFilterKeyReleased(evt);
+            }
+        });
+        jLabel5.setText(documentName);
+        jLabel6.setText("find:");
+        jTextField1.setVisible(true);
+        jPanel3.add(jTextField1);
         org.jdesktop.layout.GroupLayout jPanel3Layout = new org.jdesktop.layout.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -148,6 +186,10 @@ public class  GUI_007 extends javax.swing.JFrame {
                     .add(jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
                         .add(jPanel3Layout.createSequentialGroup()
                             .addContainerGap()
+                            .add(jButtonNew)
+                            .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                            .add(jButtonOpen)
+                            .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                             .add(jButton3)
                             .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                             .add(jButton2))
@@ -164,7 +206,9 @@ public class  GUI_007 extends javax.swing.JFrame {
                                     .add(jScrollPane1)))))
                     .add(jPanel3Layout.createSequentialGroup()
                         .add(12, 12, 12)
-                        .add(jLabel5)))
+                        .add(jLabel5, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 230, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                        .add(jLabel6)
+                        .add(jTextField1)))
                 .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
@@ -177,11 +221,15 @@ public class  GUI_007 extends javax.swing.JFrame {
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
                 .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 137, Short.MAX_VALUE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jLabel5, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 16, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                .add(jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                 .add(jLabel5)
+                .add(jLabel6)
+                .add(jTextField1))
                 .add(jScrollPane2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 289, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(jButtonNew)
+                    .add(jButtonOpen)
                     .add(jButton2)
                     .add(jButton3))
                 .addContainerGap())
@@ -248,6 +296,7 @@ public class  GUI_007 extends javax.swing.JFrame {
         pack();
     }// </editor-fold>                        
 private void setUpForm(){
+        currentRow = -1;
         convert = new Converter();
         ReferenceFactory rf = new ReferenceFactory();
         SpringLayout layout = new SpringLayout();
@@ -258,7 +307,7 @@ private void setUpForm(){
         this.setVisible(true);
 }
 
-private void setUpFields(JPanel jpane, SpringLayout layout, List<Field> listOfFields){
+    private void setUpFields(JPanel jpane, SpringLayout layout, List<Field> listOfFields){
     jpane.removeAll();
     jpane.setLayout(layout);
     for (Field field: listOfFields){
@@ -282,14 +331,14 @@ private void setUpFields(JPanel jpane, SpringLayout layout, List<Field> listOfFi
                   private void printIt() {
                      ref.setFieldValue(FType.valueOf(text.getName()), text.getText());
                      
-                     jTextArea1.setText(convert.toBibTex(ref));
+                     referenceArea.setText(convert.toBibTex(ref));
                   }
             });
 
         jpane.add(text);
             
         }
-        jTextArea1.setText(convert.toBibTex(ref));
+        referenceArea.setText(convert.toBibTex(ref));
         
         SpringUtilities.makeCompactGrid(jpane,
                                 listOfFields.size(), 2, //rows, cols
@@ -297,6 +346,7 @@ private void setUpFields(JPanel jpane, SpringLayout layout, List<Field> listOfFi
                                 2, 2);
         jpane.setVisible(true);
 }
+    
     private void formWindowActivated(java.awt.event.WindowEvent evt) {                                     
          if (ref==null){
              setUpForm();
@@ -307,6 +357,58 @@ private void setUpFields(JPanel jpane, SpringLayout layout, List<Field> listOfFi
             setUpForm();
     }                                           
 
+    private void jButtonNewActionPerformed(java.awt.event.ActionEvent evt) {        
+        if (listOfRef.size()>0){
+            JOptionPane.showMessageDialog(this, "You must first save or delete old document", "BibTex checker",JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        documentName = "newBibTex.bib";
+        jLabel5.setText(documentName);
+    }
+    private void jButtonOpenActionPerformed(java.awt.event.ActionEvent evt) { 
+        System.err.println("sad samo");
+        String fileContent = null;
+        if (listOfRef!=null && listOfRef.size()>0){
+            JOptionPane.showMessageDialog(this, "You must first save or delete old document", "BibTex checker",JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        JFileChooser chooser = new JFileChooser();
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("BibTex Documents", "bib", "BIB");
+        chooser.setFileFilter(filter);
+        int returnVal = chooser.showSaveDialog(jButton2);
+            if(returnVal == JFileChooser.OPEN_DIALOG) {
+            File file = chooser.getSelectedFile();
+            String filePath = file.getPath();
+            try {
+                fileContent = readFile(filePath);
+                //System.out.println(fileContent);
+                documentName = file.getName();
+                listOfRef = getReferencesFromContent(fileContent);
+                setDocumentArea(listOfRef);
+            } catch (Exception ioe) {
+                // ... handle errors!
+            }
+             jLabel5.setText(documentName);
+         }
+            
+    }
+    
+    private String readFile(String fileName) {  
+        File file = new File(fileName);
+        String content = null;
+        try {
+           FileReader reader = new FileReader(file);
+           char[] chars = new char[(int) file.length()];
+           reader.read(chars);
+           content = new String(chars);
+           reader.close();
+         } catch (IOException e) {
+            e.printStackTrace();
+         }
+        return content;
+    }
+    
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {                                         
         JFileChooser chooser = new JFileChooser();
         FileNameExtensionFilter filter = new FileNameExtensionFilter("BibTex Documents", "bib", "BIB");
@@ -324,21 +426,26 @@ private void setUpFields(JPanel jpane, SpringLayout layout, List<Field> listOfFi
         
         try {
             fs.saveToFile(filePath, listOfRef);
-//            PrintStream ps = new PrintStream(file);
-//            ps.print(jTextArea2.getText());
-//            ps.close();
         } catch (IOException ioe) {
             // ... handle errors!
         }
     }
 
 
-    }                                        
+    }       
+    private void documentAreaFocusGained(java.awt.event.FocusEvent evt) {
+       currentRow = 0;
+       filteredList = listOfRef;
+       setGUIForCurrentRow(currentRow);
+    }
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {  
-        boolean regular=false;
         try {
-            regular = ref.isRegular(listOfRef);
+            if (currentRow != -1){      // current reference is one from the list
+                ref.isRegular(null);
+            } else {                // current reference is new and refId is to be checked
+                ref.isRegular(listOfRef);
+            }
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage(), "Field Checker",JOptionPane.WARNING_MESSAGE);
             return;
@@ -346,7 +453,9 @@ private void setUpFields(JPanel jpane, SpringLayout layout, List<Field> listOfFi
         if (listOfRef==null){
             listOfRef = new ArrayList<Reference>();
         }
-        listOfRef.add(ref);
+        if (currentRow == -1){      //if it's new
+            listOfRef.add(ref);
+        }
         ref = new ReferenceFactory().createReference(jComboBox1.getSelectedItem().toString());
         setDocumentArea(listOfRef);
         clearFields(jPanel1);
@@ -359,18 +468,53 @@ private void setUpFields(JPanel jpane, SpringLayout layout, List<Field> listOfFi
             jt.setText(null);
         }
     }
+    private void setUpRequiredFileds(JPanel jPanel){
+        for (int i=1; i<jPanel.getComponentCount(); i+=2){
+            JTextField jt = (JTextField) jPanel.getComponent(i);
+            jt.setText(ref.getFields().get((i-1)/2).getValue());
+        }
+    }
     private void setDocumentArea(List<Reference> list){
-        jTextArea2.setText("");
+        documentArea.setText("");
+        if (list==null){
+            return;
+        }
         for (Reference r:list){
            System.out.println(r.getFields().get(1).getValue() + " " + r.getFields().get(2).getValue());
-           jTextArea2.append(r.toString());
-           jTextArea2.append("\n");
+           documentArea.append(r.toString());
+           documentArea.append("\n");
         }
     }
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {                                         
-        jTextArea2.setText("");
-    }                                        
+        documentArea.setText("");
+    }     
+    private void selectRow(int n){
+        documentArea.select(n*80, (n+1)*80);
+        System.out.println("Rwo selected "+ n);
+    }
+    
+    private void setGUIForCurrentRow(int n){
+        selectRow(n);
+        ref = filteredList.get(n);
+        referenceArea.setText(convert.toBibTex(ref));
+        setUpRequiredFileds(jPanel1);
+    }
+    private void documentAreaKeyRelesed(java.awt.event.KeyEvent evt) {
+        int c = evt.getKeyCode();
+        if (c==40 && currentRow<filteredList.size()-1){
+             currentRow++;
+        } else  if (c==38 && currentRow>0){
+            currentRow--;
+        }
+        setGUIForCurrentRow(currentRow);
+        
+    }
 
+    private void jFilterKeyReleased(java.awt.event.KeyEvent evt) {
+        String filterWord = jTextField1.getText().trim();
+        filteredList = setFilter(listOfRef, filterWord);
+        setDocumentArea(filteredList);
+    }
     private static void addTextField(Container container){
         JTextField text = new JTextField();
         container.add(text);
@@ -389,18 +533,222 @@ private void setUpFields(JPanel jpane, SpringLayout layout, List<Field> listOfFi
     private javax.swing.JButton AddToDocument;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButtonNew;
+    private javax.swing.JButton jButtonOpen;
     private javax.swing.JComboBox jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTextArea jTextArea1;
-    private javax.swing.JTextArea jTextArea2;
+    private javax.swing.JTextArea referenceArea;
+    private javax.swing.JTextArea documentArea;
+    private javax.swing.JTextField jTextField1;
     // End of variables declaration                   
+
+    private ArrayList<String> getWords(String filter){
+        ArrayList<String> list = new ArrayList<String>();
+        System.out.println("Filer: " + filter);
+        int j=0;
+        for (int i=0; i<filter.length(); i++){
+            if (filter.charAt(i)==' '){
+                list.add(filter.substring(j,i));
+                System.out.println(":" + filter.substring(j,i));
+                j=i+1;
+            }
+        }
+        list.add(filter.substring(j,filter.length()));
+        return list;
+    }
+    
+    private boolean isContaintsWords(Reference r, ArrayList<String>words){
+        boolean contains = false;
+        for (String word: words){
+            contains = false;
+            if (r.getReferenceType().contains(word)){
+                contains = true;
+            } else {
+                for (Field f: r.getFields()){
+                   if (f.getValue().contains(word)){
+                       contains = true;
+                       break;
+                   } 
+                }
+            }
+            if (!contains){
+                return false;
+            }
+        }
+        return true;
+    }
+    private ArrayList<Reference> setFilter(ArrayList<Reference> listOfRef, String filter) {
+        if (listOfRef==null){
+            return null;
+        }
+        ArrayList<Reference> list = new ArrayList<Reference>();
+        ArrayList<String> words = getWords(filter);
+        for (Reference r: listOfRef){
+            if (isContaintsWords(r, words)){
+                 list.add(r);
+            } 
+        }
+        return list;
+    }
+
+    private ArrayList<Reference> getReferencesFromContent(String fileContent) {
+        ArrayList<Reference> list = new ArrayList<Reference>();
+        //System.out.println("All content\n" + fileContent + "\n-------------");
+        String referenceAsText = null;
+        int j= fileContent.indexOf("@");
+        int i=j+1;
+        while (i<fileContent.length()){
+            if (fileContent.charAt(i)=='@'){
+                referenceAsText = fileContent.substring(j, i);
+                //System.out.println("odvojena ref: \n\n" +referenceAsText);
+                Reference r = toReference(referenceAsText);
+                if (r!=null){
+                    list.add(r);
+                }
+                j=i;
+            }
+            i++;
+        }
+        referenceAsText = fileContent.substring(j, i);
+        Reference r = toReference(referenceAsText);
+        if (r!=null){
+            list.add(r);
+        }
+        return list;
+        
+    }
+    
+       public String getFieldNameFromLine(String l){
+        String line = l.trim();
+        for (int i=0; i<line.length(); i++){
+            if (line.charAt(i)==' ' || line.charAt(i)=='='){
+                return line.substring(0, i);
+            }
+        }
+        return null;
+    }
+    public String getFieldValueFromLine(String l){
+        String line = l.trim();
+        int from=0;
+        int to = 0;
+        for (int i=0; i<line.length(); i++){
+            if (line.charAt(i)=='{'){
+                from=i+1;
+            }
+        }
+        for (int i=line.length()-1; i>from; i--){
+            if (line.charAt(i)=='}'){
+                to=i;
+            }
+        }
+        if (from<to){
+            return line.substring(from, to);
+        }
+        return null;
+    }
+    private String getReferenceType(String text){
+        int i=1; 
+        text = text.trim();
+        if (text.charAt(0)!='@'){
+           return null;
+        }
+        while (text.charAt(i)!=' ' && text.charAt(i)!='{' && i<text.length() ){
+            i++;
+        }
+        if (text.charAt(i)==' ' || text.charAt(i)=='{'){
+            return text.substring(1, i);
+        }
+        return null;
+            
+    }
+        public String returnSpecChars(String text){
+        StringBuilder sb = new StringBuilder();
+        for (int i=0; i<text.length(); i++){
+            if (text.length()>(i+3) && text.charAt(i)== '\\' && text.charAt(i+1)=='"'){
+                    if (text.substring(i+2, i+4).equals("AA")){
+                        sb.append('Å');
+                        i+=3;
+                    } else if (text.substring(i+2, i+4).equals("aa")){
+                        sb.append('å');
+                        i+=3;
+                    } else if (text.length()==(i+4)){
+                        sb.append(text.charAt(i));
+                    } else  if (text.length()> (i+4)){  
+                        if (text.substring(i+2, i+5).equals("{A}")){
+                            sb.append('Ä');
+                            i+=4;
+                        } else if (text.substring(i+2, i+5).equals("{a}")){
+                            sb.append('ä');
+                            i+=4;
+                        } else if (text.substring(i+2, i+5).equals("{O}")){
+                            sb.append('Ö');
+                            i+=4;
+                        } else if (text.substring(i+2, i+5).equals("{o}")){
+                            sb.append('ö');
+                            i+=4;
+                        } else {
+                            sb.append(text.charAt(i));
+                        }
+                    }
+            } else {
+                sb.append(text.charAt(i));
+            }
+        }
+        return sb.toString();
+    }
+        
+    public ArrayList<String> getNonEmptyLines(String text){
+        ArrayList<String> list = new ArrayList<String>();
+        int from = 0;
+        int to = 0;
+        String txt = returnSpecChars(text.trim());
+        while (txt.length()> to){
+            if (txt.charAt(to)=='\n'){
+                if (from!=to){
+                    list.add(txt.substring(from, to));
+                }
+                from = to+1;
+            }
+            to++;
+        }
+        if (from!=to){
+            list.add(txt.substring(from, to));
+        }
+        return list;
+    }
+    
+    public Reference toReference(String bibTex){
+        String refType = getReferenceType(bibTex);
+        if (refType==null){
+            return null;
+        }
+        Reference r = new ReferenceFactory().createReference(refType);
+        ArrayList<String> lines = getNonEmptyLines(bibTex);
+        int j=0;
+        while (bibTex.charAt(j)!='{' && j<bibTex.length()){
+            j++;
+        }
+        if (j==bibTex.length()){
+            return null;
+        }
+        String apu = lines.get(0).trim().substring(j).trim().substring(1);
+        apu = apu.substring(0, apu.length()-1);
+        r.getFields().get(0).setValue(apu);
+        for (int i=1; i<(lines.size()-1); i++){
+            String fieldName = getFieldNameFromLine(lines.get(i));
+            String fieldValue = getFieldValueFromLine(lines.get(i));
+            r.setFieldValue(FType.valueOf(fieldName), fieldValue);
+        }
+        return r;
+    }
 }

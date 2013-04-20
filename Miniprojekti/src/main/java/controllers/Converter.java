@@ -26,7 +26,7 @@ public class Converter {
                         append(repSpecChars(ref.getFields().get(i).getValue())).append("}");
             }
         }
-        text.append("\n}");
+        text.append("\n}\n");
         return text.toString();
     }
     
