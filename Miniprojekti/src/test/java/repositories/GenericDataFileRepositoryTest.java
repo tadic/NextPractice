@@ -6,6 +6,7 @@ package repositories;
 
 import entity.Book;
 import entity.FType;
+import entity.Field;
 import entity.Reference;
 import entity.Inproceedings;
 import java.io.File;
@@ -323,11 +324,15 @@ public class GenericDataFileRepositoryTest {
         }
 
         @Override
-        protected void initMyFields() {
+        public List<Field> myFields() {
+            throw new UnsupportedOperationException("Not supported yet.");
         }
 
         @Override
-        protected void initTypeAndTags() {
+        public String initType() {
+            throw new UnsupportedOperationException("Not supported yet.");
         }
+
+
     }
 }

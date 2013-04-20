@@ -21,18 +21,13 @@ public class Article extends Reference{
     }
 
     @Override
-    protected void initMyFields() {
-        fields = myFields();
+    public String initType() {
+        return "article";
     }
+
+
     @Override
-    protected void initTypeAndTags() {
-        tags = new ArrayList<String>();
-        refType = "article";
-    }
-
-
-
-    private List<Field> myFields() {
+    public List<Field> myFields() {
         List<Field> myFields = new ArrayList<Field>();
         myFields.add(new Field(FType.referenceId, true));
         myFields.add(new Field(FType.author, true));

@@ -15,23 +15,29 @@ import java.util.List;
  */
 public abstract class Reference implements Serializable {
 
-    protected int id;
-    protected List<Field> fields;
-    protected List <String> tags;
-    protected String refType;
+    private int id;
+    private List<Field> fields;
+    private List <String> tags;
+    private String refType;
 
-    protected abstract void initMyFields();
-    protected abstract void initTypeAndTags();
+    public abstract List<Field> myFields();
+    public abstract String initType();
 
     public Reference() {
-        initMyFields();
-        initTypeAndTags();
+        initialise(myFields());
     }
     
     public Reference(List<Field> fields) {
-        this.fields = fields;
-        initTypeAndTags();
+        initialise(fields);
     }    
+    
+    private void initialise(List<Field> list){
+         this.refType = initType();
+         fields = new ArrayList<Field>();
+         for (Field f:list){
+             fields.add(f);
+         }
+    }
     
     public int getId() {
         return id;
@@ -236,4 +242,20 @@ public abstract class Reference implements Serializable {
         }
         return true;
     }
+    @Override
+       public String toString(){
+          StringBuilder sb = new StringBuilder(refType);
+          for (Field field:getFields()){
+              if (field.isRequired()){
+              sb.append(", ");
+              sb.append(field.getValue());
+              } else {
+                  break;
+              }
+          }
+          while (sb.toString().length()<60){
+              sb.append(" ");
+          }
+          return sb.toString().substring(0, 60);
+      }
 }

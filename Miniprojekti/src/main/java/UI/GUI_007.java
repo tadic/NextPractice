@@ -2,6 +2,8 @@ package UI;
 
 
 import controllers.Converter;
+import controllers.FileSaver;
+import entity.Article;
 import entity.FType;
 import entity.Field;
 import java.awt.Component;
@@ -36,7 +38,7 @@ import java.util.logging.Logger;
 public class  GUI_007 extends javax.swing.JFrame {
     Converter convert;
     private Reference ref;
-    private List<Reference> listOfRef; 
+    private ArrayList<Reference> listOfRef; 
     JTextField text;
     ArrayList<JTextField> listOfFields;
 
@@ -91,7 +93,7 @@ public class  GUI_007 extends javax.swing.JFrame {
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(0, 520, Short.MAX_VALUE)
+            .add(0, 460, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -103,12 +105,12 @@ public class  GUI_007 extends javax.swing.JFrame {
         jLabel2.setText("Optional Fields");
 
         jTextArea1.setEditable(false);
-        jTextArea1.setColumns(20);
+        jTextArea1.setColumns(35);
         jTextArea1.setRows(5);
         jScrollPane1.setViewportView(jTextArea1);
 
         jTextArea2.setEditable(false);
-        jTextArea2.setColumns(20);
+        jTextArea2.setColumns(35);
         jTextArea2.setRows(5);
         jScrollPane2.setViewportView(jTextArea2);
 
@@ -249,12 +251,10 @@ private void setUpForm(){
         convert = new Converter();
         ReferenceFactory rf = new ReferenceFactory();
         SpringLayout layout = new SpringLayout();
-        if (ref==null){
-            ref = rf.createReference(jComboBox1.getSelectedItem().toString());
-            setUpFields(jPanel1, layout, rf.getFields(ref.getReferenceType(), true));
-            setUpFields(jPanel2, layout, rf.getFields(ref.getReferenceType(), false));
-        }
-        
+        ref = rf.createReference(jComboBox1.getSelectedItem().toString());
+        setUpFields(jPanel1, layout, rf.getFields(ref.getReferenceType(), true));
+        setUpFields(jPanel2, layout, rf.getFields(ref.getReferenceType(), false));
+
         this.setVisible(true);
 }
 
@@ -263,7 +263,7 @@ private void setUpFields(JPanel jpane, SpringLayout layout, List<Field> listOfFi
     jpane.setLayout(layout);
     for (Field field: listOfFields){
             JLabel label = new JLabel(field.getKey().toString(), JLabel.TRAILING);
-            final JTextField text = new JTextField(35);
+            final JTextField text = new JTextField(30);
             label.setPreferredSize(new Dimension(75,5));
             jpane.add(label);  
             text.setName(field.getKey().name());
@@ -298,11 +298,13 @@ private void setUpFields(JPanel jpane, SpringLayout layout, List<Field> listOfFi
         jpane.setVisible(true);
 }
     private void formWindowActivated(java.awt.event.WindowEvent evt) {                                     
-      setUpForm();
+         if (ref==null){
+             setUpForm();
+         }
     }                                    
 
     private void jComboBox1ItemStateChanged(java.awt.event.ItemEvent evt) {                                            
-        setUpForm();        // TODO add your handling code here:
+            setUpForm();
     }                                           
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {                                         
@@ -316,12 +318,15 @@ private void setUpFields(JPanel jpane, SpringLayout layout, List<Field> listOfFi
         String filePath = file.getPath();
         if(!filePath.toLowerCase().endsWith(".bib"))
         {
-            file = new File(filePath + ".bib");
+            filePath += ".bib";
         }
+        FileSaver fs = new FileSaver(convert);
+        
         try {
-            PrintStream ps = new PrintStream(file);
-            ps.print(jTextArea2.getText());
-            ps.close();
+            fs.saveToFile(filePath, listOfRef);
+//            PrintStream ps = new PrintStream(file);
+//            ps.print(jTextArea2.getText());
+//            ps.close();
         } catch (IOException ioe) {
             // ... handle errors!
         }
@@ -338,21 +343,30 @@ private void setUpFields(JPanel jpane, SpringLayout layout, List<Field> listOfFi
             JOptionPane.showMessageDialog(this, ex.getMessage(), "Field Checker",JOptionPane.WARNING_MESSAGE);
             return;
         }
-
-            jTextArea2.append(jTextArea1.getText());
-            jTextArea2.append("\n");
-            for (int i=1; i<jPanel1.getComponentCount(); i+=2){
-                JTextField jt = (JTextField) jPanel1.getComponent(i);
-                jt.setText(null);
-            }
-
-            for (int i=1; i<jPanel2.getComponentCount(); i+=2){
-                JTextField jt = (JTextField) jPanel2.getComponent(i);
-                jt.setText(null);
-            }
-        
+        if (listOfRef==null){
+            listOfRef = new ArrayList<Reference>();
+        }
+        listOfRef.add(ref);
+        ref = new ReferenceFactory().createReference(jComboBox1.getSelectedItem().toString());
+        setDocumentArea(listOfRef);
+        clearFields(jPanel1);
+        clearFields(jPanel2);
     }                                        
 
+    private void clearFields(JPanel jPanel){
+        for (int i=1; i<jPanel.getComponentCount(); i+=2){
+            JTextField jt = (JTextField) jPanel.getComponent(i);
+            jt.setText(null);
+        }
+    }
+    private void setDocumentArea(List<Reference> list){
+        jTextArea2.setText("");
+        for (Reference r:list){
+           System.out.println(r.getFields().get(1).getValue() + " " + r.getFields().get(2).getValue());
+           jTextArea2.append(r.toString());
+           jTextArea2.append("\n");
+        }
+    }
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {                                         
         jTextArea2.setText("");
     }                                        

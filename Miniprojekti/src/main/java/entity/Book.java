@@ -20,19 +20,16 @@ public class Book extends Reference{
         super();
     }
 
+
     @Override
-    protected void initMyFields() {
-        fields = myFields();
-    }
-    @Override
-    protected void initTypeAndTags() {
-        tags = new ArrayList<String>();
-        refType = "book";
+    public String initType() {
+        return "book";
     }
 
 
 
-    private List<Field> myFields() {
+    @Override
+    public List<Field> myFields() {
         List<Field> myFields = new ArrayList<Field>();
         myFields.add(new Field(FType.referenceId, true));
         myFields.add(new Field(FType.author, true));
