@@ -221,7 +221,14 @@ public abstract class Reference implements Serializable {
     }
     
     
-    
+    public boolean isEmpty(){
+        for (Field f:this.getFields()){
+            if (f.getValue().length()>1){
+                return false;
+            }
+        }
+        return true;
+    }
     
     
     

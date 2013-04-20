@@ -289,9 +289,8 @@ public class  GUI_007 extends javax.swing.JFrame {
     }// </editor-fold>                        
 private void setUpForm(){
         logic.setCurrentRow(-1);
-        ReferenceFactory rf = new ReferenceFactory();
+       // ReferenceFactory rf = new ReferenceFactory();
         SpringLayout layout = new SpringLayout();
-        //ref = logic.createReference(jComboBox1.getSelectedItem().toString());
         logic.createNewRef(jComboBox1.getSelectedItem().toString());
         setUpFields(jPanel1, layout, logic.getRequiredFields());
         setUpFields(jPanel2, layout, logic.getOptionalFields());
@@ -308,6 +307,7 @@ private void setUpForm(){
             label.setPreferredSize(new Dimension(75,5));
             jpane.add(label);  
             text.setName(field.getKey().name());
+            text.setText(field.getValue());
             label.setLabelFor(text);
             text.getDocument().addDocumentListener(new DocumentListener() {
                   public void changedUpdate(DocumentEvent documentEvent) {
@@ -340,12 +340,11 @@ private void setUpForm(){
 }
     
     private void formWindowActivated(java.awt.event.WindowEvent evt) {                                     
-         if (logic.getRef()==null){
              setUpForm();
-         }
+         
     }                                    
 
-    private void jComboBox1ItemStateChanged(java.awt.event.ItemEvent evt) {                                            
+    private void jComboBox1ItemStateChanged(java.awt.event.ItemEvent evt) { 
             setUpForm();
     }                                           
 
@@ -418,8 +417,13 @@ private void setUpForm(){
     }       
     
     private void documentAreaFocusGained(java.awt.event.FocusEvent evt) {
+        if (logic.getListOfRef()==null){
+            return;
+        }
        logic.setCurrentRow(0);
-       logic.setFilteredList(logic.getListOfRef());
+        String filterWord = jTextField1.getText().trim();
+        logic.setFilter(filterWord);
+        setDocumentArea(logic.getFilteredList());
        setGUIForCurrentRow(logic.getCurrentRow());
     }
 
@@ -481,10 +485,15 @@ private void setUpForm(){
     }
     
     private void setGUIForCurrentRow(int n){
-        selectRow(n);
         logic.setRef(logic.getFilteredList().get(n));
+        
+        jComboBox1.setSelectedItem(logic.getRef().getReferenceType());
+        logic.setRef(logic.getFilteredList().get(n));
+        logic.setCurrentRow(n);
+        selectRow(n);
         referenceArea.setText(logic.currentRefToBibTex());
         setUpRequiredFileds(jPanel1);
+        
     }
     private void documentAreaKeyRelesed(java.awt.event.KeyEvent evt) {
         int c = evt.getKeyCode();
@@ -504,69 +513,10 @@ private void setUpForm(){
         setDocumentArea(logic.getFilteredList());
     }
         
-    private boolean isContaintsWords(Reference r, ArrayList<String>words){
-        boolean contains = false;
-        for (String word: words){
-            contains = false;
-            if (r.getReferenceType().contains(word)){
-                contains = true;
-            } else {
-                for (Field f: r.getFields()){
-                   if (f.getValue().contains(word)){
-                       contains = true;
-                       break;
-                   } 
-                }
-            }
-            if (!contains){
-                return false;
-            }
-        }
-        return true;
-    }
-    private ArrayList<String> getWords(String filter){
-        ArrayList<String> list = new ArrayList<String>();
-        System.out.println("Filer: " + filter);
-        int j=0;
-        for (int i=0; i<filter.length(); i++){
-            if (filter.charAt(i)==' '){
-                list.add(filter.substring(j,i));
-                System.out.println(":" + filter.substring(j,i));
-                j=i+1;
-            }
-        }
-        list.add(filter.substring(j,filter.length()));
-        return list;
-    }
-
-    private ArrayList<Reference> setFilter(ArrayList<Reference> listOfRef, String filter) {
-        if (listOfRef==null){
-            return null;
-        }
-        ArrayList<Reference> list = new ArrayList<Reference>();
-        ArrayList<String> words = getWords(filter);
-        for (Reference r: listOfRef){
-            if (isContaintsWords(r, words)){
-                 list.add(r);
-            } 
-        }
-        return list;
-    }
     private static void addTextField(Container container){
         JTextField text = new JTextField();
         container.add(text);
-    }
-    /**
-     * @param args the command line arguments
-     */
-//    public static void main(String args[]) {
-//        java.awt.EventQueue.invokeLater(new Runnable() {
-//            public void run() {
-//                new GUI_007().setVisible(true);
-//            }
-//        });
-//    }
-    // Variables declaration - do not modify                     
+    }                    
     private javax.swing.JButton AddToDocument;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;

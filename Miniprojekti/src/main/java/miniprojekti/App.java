@@ -1,25 +1,13 @@
 package miniprojekti;
 
-import UI.GUI;
 import UI.GUI_007;
-import controllers.Converter;
-import controllers.LogicInterface;
 import controllers.Logic_007;
-import entity.FType;
-import entity.Field;
-import entity.Reference;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class App {
 
     public static void main(String[] args) {
 
         Logic_007 logic = new Logic_007();
-
         new GUI_007(logic);
         
 

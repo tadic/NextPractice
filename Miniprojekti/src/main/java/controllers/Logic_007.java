@@ -37,7 +37,7 @@ public class Logic_007 {
     private ArrayList<Reference> filteredList;          // list for filtering
     private String documentName = "newBibTex.bib";      // default name of document
     private String documentPath;                        // path 
-    private boolean documentsIsSaved;
+    private boolean documentsIsSaved = true;
     ArrayList<JTextField> listOfFields;
 
     public Reference getRef() {
@@ -94,7 +94,7 @@ public class Logic_007 {
     }
 
     public void setDocumentPath(String filePath) {
-       if(!filePath.toLowerCase().endsWith(".bib")){
+       if(filePath!=null && !filePath.toLowerCase().endsWith(".bib")){
             filePath += ".bib";
         }
         this.documentPath = filePath;
@@ -271,7 +271,11 @@ public class Logic_007 {
     public void clearAll() {
         repository.clearAll();
     }
-
+/**
+ * Extract words from text
+ * @param filter is text to be extracted
+ * @return list of words
+ */
     private ArrayList<String> getWords(String filter){
         ArrayList<String> list = new ArrayList<String>();
         System.out.println("Filer: " + filter);
@@ -286,10 +290,14 @@ public class Logic_007 {
         list.add(filter.substring(j,filter.length()));
         return list;
     }
-
+/**
+ * Applies filter words on reference list and set result to filteredList.
+ * @param filter is list of search words
+ */
    public void setFilter(String filter) {
         if (listOfRef==null){
             filteredList=null;
+            return;
         }
         filteredList = new ArrayList<Reference>();
         ArrayList<String> words = getWords(filter);
@@ -299,7 +307,13 @@ public class Logic_007 {
             } 
         }
     }
-        private boolean isContaintsWords(Reference r, ArrayList<String>words){
+   /**
+    * Checks if reference contains all of the words from filter criteria.
+    * @param r reference to be checked
+    * @param words list of criteria
+    * @return 
+    */
+        private boolean isContaintsWords(Reference r, ArrayList<String> words){
         boolean contains = false;
         for (String word: words){
             contains = false;
@@ -322,20 +336,10 @@ public class Logic_007 {
 
     public List<Field> getRequiredFields() {
         return RFactory.getFields(ref.getReferenceType(), true);
+
     }
 
     public List<Field> getOptionalFields() {
         return RFactory.getFields(ref.getReferenceType(), false);
-    }
-
-    public Reference createReference(String[][] required, String[][] optional) {
-        List<Field> fields = new ArrayList<Field>();
-        for (String[] row : required) {
-            fields.add(new Field(FType.valueOf(row[0]), row[1], true));
-        }
-        for (String[] row : optional) {
-            fields.add(new Field(FType.valueOf(row[0]), row[1], false));
-        }
-        return (Reference) createReference("inproceedings", fields);
     }
 }

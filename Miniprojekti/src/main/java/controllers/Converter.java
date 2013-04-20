@@ -20,6 +20,9 @@ public class Converter {
      * @return bibTex form of Inproceedings instance.
      */
     public String toBibTex(Reference ref){ 
+        if (ref==null){
+            return null;
+        }
         StringBuilder text = new StringBuilder("@" + ref.getReferenceType() + "{");
         text.append(repSpecChars(ref.getFieldValue(FType.referenceId))); 
         for (int i=1; i<ref.getFields().size(); i++){
@@ -59,12 +62,10 @@ public class Converter {
     
     private ArrayList<String> getWords(String filter){
         ArrayList<String> list = new ArrayList<String>();
-        System.out.println("Filer: " + filter);
         int j=0;
         for (int i=0; i<filter.length(); i++){
             if (filter.charAt(i)==' '){
                 list.add(filter.substring(j,i));
-                System.out.println(":" + filter.substring(j,i));
                 j=i+1;
             }
         }
@@ -83,7 +84,6 @@ public class Converter {
         while (i<fileContent.length()){
             if (fileContent.charAt(i)=='@'){
                 referenceAsText = fileContent.substring(j, i);
-                //System.out.println("odvojena ref: \n\n" +referenceAsText);
                 Reference r = toReference(referenceAsText);
                 if (r!=null){
                     list.add(r);
@@ -111,22 +111,22 @@ public class Converter {
         return null;
     }
     public String getFieldValueFromLine(String l){
-        String line = l.trim();
-        int from=0;
-        int to = 0;
-        for (int i=0; i<line.length(); i++){
-            if (line.charAt(i)=='{'){
-                from=i+1;
-            }
+        int to;
+        int from=l.indexOf("=")+1;
+        String line = l.substring(from, l.length()-1);
+        line = line.trim();
+        if (line.charAt(0)=='{'){
+            from = 1;
+            to = line.length()-1;
+        } else {
+            from = 0;
+            to = line.length();
         }
-        for (int i=line.length()-1; i>from; i--){
-            if (line.charAt(i)=='}'){
-                to=i;
-            }
-        }
+  
         if (from<to){
             return line.substring(from, to);
         }
+        
         return null;
     }
     private String getReferenceType(String text){
@@ -139,7 +139,7 @@ public class Converter {
             i++;
         }
         if (text.charAt(i)==' ' || text.charAt(i)=='{'){
-            return text.substring(1, i);
+            return text.substring(1, i).toLowerCase();
         }
         return null;
             
@@ -205,10 +205,13 @@ public class Converter {
         if (refType==null){
             return null;
         }
+        if (!(new ReferenceFactory().getReferenceTypes().contains(refType))){
+            return null;
+        }
         Reference r = new ReferenceFactory().createReference(refType);
         ArrayList<String> lines = getNonEmptyLines(bibTex);
         int j=0;
-        while (bibTex.charAt(j)!='{' && j<bibTex.length()){
+        while (j<bibTex.length() && bibTex.charAt(j)!='{'){
             j++;
         }
         if (j==bibTex.length()){
