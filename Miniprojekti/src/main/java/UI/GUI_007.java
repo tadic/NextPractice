@@ -340,7 +340,9 @@ private void setUpForm(){
 }
     
     private void formWindowActivated(java.awt.event.WindowEvent evt) {                                     
-             setUpForm();
+        if (logic.getRef()==null){  
+        setUpForm();
+        }
          
     }                                    
 
@@ -403,6 +405,7 @@ private void setUpForm(){
         
             if(returnVal == JFileChooser.APPROVE_OPTION) {
                  file = chooser.getSelectedFile();
+                logic.setDocumentName(file.getName());
                 filePath = file.getPath();
             }
         }
@@ -410,7 +413,8 @@ private void setUpForm(){
         logic.setDocumentPath(filePath);
         try {
             logic.saveDocument();
-            JOptionPane.showMessageDialog(this, "Bibtex document " + logic.getDocumentName() + " is saved!", "Field Saver",JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Bibtex document " + logic.getDocumentName() + " is saved!", "Field Saver",JOptionPane.INFORMATION_MESSAGE);
+            return;
         } catch (Exception ioe) {
             JOptionPane.showMessageDialog(this, "Bibtex document " + logic.getDocumentName() + " is not saved!", "Field Saver",JOptionPane.WARNING_MESSAGE);
         }
