@@ -84,7 +84,6 @@ public class ReferenceTest {
         List<Field> list = rf.getFields("book");
         Reference book = new Book(list);
         assertNotNull(book);
-        assertNotNull(book.getTags());
         assertEquals("book", book.getReferenceType());
         assertEquals(rf.getFields("book").size(), book.getFields().size());
     }
@@ -95,7 +94,6 @@ public class ReferenceTest {
         List<Field> list = rf.getFields("article");
         Reference article = new Article(list);
         assertNotNull(article);
-        assertNotNull(article.getTags());
         assertEquals("article", article.getReferenceType());
         assertEquals(rf.getFields("article").size(), article.getFields().size());
     }

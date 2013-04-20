@@ -1,9 +1,10 @@
 package miniprojekti;
 
 import UI.GUI;
+import UI.GUI_007;
 import controllers.Converter;
-import controllers.Logic;
 import controllers.LogicInterface;
+import controllers.Logic_007;
 import entity.FType;
 import entity.Field;
 import entity.Reference;
@@ -17,9 +18,10 @@ public class App {
 
     public static void main(String[] args) {
 
-        LogicInterface logic = new Logic();
+        Logic_007 logic = new Logic_007();
 
-        GUI gui = new GUI(logic);
+        new GUI_007(logic);
+        
 
 //        List<Field> inpro = logic.getFields("inproceedings");
 //        inpro.get(1).setValue("niko1");

@@ -34,6 +34,10 @@ public abstract class Reference implements Serializable {
     private void initialise(List<Field> list){
          this.refType = initType();
          fields = new ArrayList<Field>();
+         if (list==null){
+             fields=null;
+             return;
+         }
          for (Field f:list){
              fields.add(f);
          }
@@ -202,7 +206,7 @@ public abstract class Reference implements Serializable {
                 }
             }
         }
-//         if year is not null and not empty
+        //         if year is not null and not empty
         for (int i=0; i<year.trim().length(); i++){
             if (year.charAt(i)>'9' || year.charAt(i)<'0'){ 
                 throw new IllegalArgumentException("Year value must be a number");

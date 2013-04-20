@@ -3,56 +3,48 @@ package UI;
 
 import controllers.Converter;
 import controllers.FileSaver;
-import entity.Article;
+import controllers.Logic_007;
+import controllers.LogicInterface;
+import controllers.Reader;
 import entity.FType;
 import entity.Field;
-import entity.Inproceedings;
-import java.awt.Component;
+import entity.Reference;
+import entity.ReferenceFactory;
 import java.awt.Container;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
-import java.io.PrintStream;
 import java.util.ArrayList;
-import javax.swing.BoxLayout;
-import javax.swing.JLabel;
-import javax.swing.JTextField;
+import java.util.List;
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import javax.swing.text.Document;
 import org.uncommons.swing.SpringUtilities;
-import entity.Reference;
-import entity.ReferenceFactory;
-import java.awt.Color;
-import java.io.FileReader;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 /**
  *
  * @author ivantadic
  */
 public class  GUI_007 extends javax.swing.JFrame {
-    private int currentRow;
-    Converter convert;
-    private Reference ref;
-    private ArrayList<Reference> listOfRef; 
-    private ArrayList<Reference> filteredList; 
-    private String documentName = "newBibTex.bib";
+   // private int currentRow;
+    //Converter convert;
+    private Logic_007 logic;
+   // private Reference ref;
+//    private ArrayList<Reference> listOfRef; 
+//    private ArrayList<Reference> filteredList; 
+//    private String documentName = "newBibTex.bib";
+//    private String documentPath;
+//    private boolean documentsIsSaved;
     JTextField text;
-    ArrayList<JTextField> listOfFields;
+ //   ArrayList<JTextField> listOfFields;
 
     /**
      * Creates new form NewJFrame
      */
-    public GUI_007() {
+    public GUI_007(Logic_007 l) {
+        logic = l;
         initComponents();
+        this.setVisible(true);
     }
 
     /**
@@ -133,7 +125,7 @@ public class  GUI_007 extends javax.swing.JFrame {
         jButton2.setText("Save Document");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                jButtonSavePerformed(evt);
             }
         });
 
@@ -173,7 +165,7 @@ public class  GUI_007 extends javax.swing.JFrame {
                 jFilterKeyReleased(evt);
             }
         });
-        jLabel5.setText(documentName);
+        jLabel5.setText(logic.getDocumentName());
         jLabel6.setText("find:");
         jTextField1.setVisible(true);
         jPanel3.add(jTextField1);
@@ -296,13 +288,13 @@ public class  GUI_007 extends javax.swing.JFrame {
         pack();
     }// </editor-fold>                        
 private void setUpForm(){
-        currentRow = -1;
-        convert = new Converter();
+        logic.setCurrentRow(-1);
         ReferenceFactory rf = new ReferenceFactory();
         SpringLayout layout = new SpringLayout();
-        ref = rf.createReference(jComboBox1.getSelectedItem().toString());
-        setUpFields(jPanel1, layout, rf.getFields(ref.getReferenceType(), true));
-        setUpFields(jPanel2, layout, rf.getFields(ref.getReferenceType(), false));
+        //ref = logic.createReference(jComboBox1.getSelectedItem().toString());
+        logic.createNewRef(jComboBox1.getSelectedItem().toString());
+        setUpFields(jPanel1, layout, logic.getRequiredFields());
+        setUpFields(jPanel2, layout, logic.getOptionalFields());
 
         this.setVisible(true);
 }
@@ -329,16 +321,16 @@ private void setUpForm(){
 
                   }
                   private void printIt() {
-                     ref.setFieldValue(FType.valueOf(text.getName()), text.getText());
+                     logic.getRef().setFieldValue(FType.valueOf(text.getName()), text.getText());
                      
-                     referenceArea.setText(convert.toBibTex(ref));
+                     referenceArea.setText(logic.currentRefToBibTex());
                   }
             });
 
         jpane.add(text);
             
         }
-        referenceArea.setText(convert.toBibTex(ref));
+        referenceArea.setText(logic.currentRefToBibTex());
         
         SpringUtilities.makeCompactGrid(jpane,
                                 listOfFields.size(), 2, //rows, cols
@@ -348,7 +340,7 @@ private void setUpForm(){
 }
     
     private void formWindowActivated(java.awt.event.WindowEvent evt) {                                     
-         if (ref==null){
+         if (logic.getRef()==null){
              setUpForm();
          }
     }                                    
@@ -358,21 +350,24 @@ private void setUpForm(){
     }                                           
 
     private void jButtonNewActionPerformed(java.awt.event.ActionEvent evt) {        
-        if (listOfRef.size()>0){
-            JOptionPane.showMessageDialog(this, "You must first save or delete old document", "BibTex checker",JOptionPane.WARNING_MESSAGE);
+        if (!logic.isDocumentsIsSaved()){
+            JOptionPane.showMessageDialog(this, "You must first save old document", "BibTex checker",JOptionPane.WARNING_MESSAGE);
             return;
         }
-        documentName = "newBibTex.bib";
-        jLabel5.setText(documentName);
+        logic.setDocumentName("newBibTex.bib");
+        logic.setDocumentPath(null);
+        logic.setListOfRef(null);
+        logic.setDocumentsIsSaved(true);
+        setDocumentArea(logic.getListOfRef());
+        jLabel5.setText(logic.getDocumentName());
     }
     private void jButtonOpenActionPerformed(java.awt.event.ActionEvent evt) { 
-        System.err.println("sad samo");
         String fileContent = null;
-        if (listOfRef!=null && listOfRef.size()>0){
-            JOptionPane.showMessageDialog(this, "You must first save or delete old document", "BibTex checker",JOptionPane.WARNING_MESSAGE);
+        if (!logic.isDocumentsIsSaved()){
+            JOptionPane.showMessageDialog(this, "You must first save old document", "BibTex checker",JOptionPane.WARNING_MESSAGE);
             return;
         }
-
+        Reader read = new Reader();
         JFileChooser chooser = new JFileChooser();
         FileNameExtensionFilter filter = new FileNameExtensionFilter("BibTex Documents", "bib", "BIB");
         chooser.setFileFilter(filter);
@@ -381,83 +376,73 @@ private void setUpForm(){
             File file = chooser.getSelectedFile();
             String filePath = file.getPath();
             try {
-                fileContent = readFile(filePath);
-                //System.out.println(fileContent);
-                documentName = file.getName();
-                listOfRef = getReferencesFromContent(fileContent);
-                setDocumentArea(listOfRef);
+                fileContent = read.fromFile(filePath);
+                logic.setDocumentName(file.getName());
+                logic.setDocumentPath(filePath);
+                logic.setListOfRef(logic.getConverter().toReferenceList(fileContent));
+                logic.setDocumentsIsSaved(true);
+                setDocumentArea(logic.getListOfRef());
             } catch (Exception ioe) {
                 // ... handle errors!
             }
-             jLabel5.setText(documentName);
+             jLabel5.setText(logic.getDocumentName());
          }
             
     }
     
-    private String readFile(String fileName) {  
-        File file = new File(fileName);
-        String content = null;
-        try {
-           FileReader reader = new FileReader(file);
-           char[] chars = new char[(int) file.length()];
-           reader.read(chars);
-           content = new String(chars);
-           reader.close();
-         } catch (IOException e) {
-            e.printStackTrace();
-         }
-        return content;
-    }
-    
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {                                         
-        JFileChooser chooser = new JFileChooser();
-        FileNameExtensionFilter filter = new FileNameExtensionFilter("BibTex Documents", "bib", "BIB");
-        chooser.setFileFilter(filter);
+    private void jButtonSavePerformed(java.awt.event.ActionEvent evt) {  
+        File file;
+        String filePath = logic.getDocumentPath();
 
-        int returnVal = chooser.showSaveDialog(jButton2);
-        if(returnVal == JFileChooser.APPROVE_OPTION) {
-        File file = chooser.getSelectedFile();
-        String filePath = file.getPath();
-        if(!filePath.toLowerCase().endsWith(".bib"))
-        {
-            filePath += ".bib";
-        }
-        FileSaver fs = new FileSaver(convert);
+        if (!logic.getDocumentName().equals("newBibTex.bib")){     // if path exists
+            filePath = logic.getDocumentPath();
+        } else {
+            JFileChooser chooser = new JFileChooser();
+            FileNameExtensionFilter filter = new FileNameExtensionFilter("BibTex Documents", "bib", "BIB");
+            chooser.setFileFilter(filter);
+            int returnVal = chooser.showSaveDialog(jButton2);
         
-        try {
-            fs.saveToFile(filePath, listOfRef);
-        } catch (IOException ioe) {
-            // ... handle errors!
+            if(returnVal == JFileChooser.APPROVE_OPTION) {
+                 file = chooser.getSelectedFile();
+                filePath = file.getPath();
+            }
         }
-    }
-
-
+        
+        logic.setDocumentPath(filePath);
+        try {
+            logic.saveDocument();
+            JOptionPane.showMessageDialog(this, "Bibtex document " + logic.getDocumentName() + " is saved!", "Field Saver",JOptionPane.WARNING_MESSAGE);
+        } catch (Exception ioe) {
+            JOptionPane.showMessageDialog(this, "Bibtex document " + logic.getDocumentName() + " is not saved!", "Field Saver",JOptionPane.WARNING_MESSAGE);
+        }
     }       
+    
     private void documentAreaFocusGained(java.awt.event.FocusEvent evt) {
-       currentRow = 0;
-       filteredList = listOfRef;
-       setGUIForCurrentRow(currentRow);
+       logic.setCurrentRow(0);
+       logic.setFilteredList(logic.getListOfRef());
+       setGUIForCurrentRow(logic.getCurrentRow());
     }
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {  
         try {
-            if (currentRow != -1){      // current reference is one from the list
-                ref.isRegular(null);
+            if (logic.getCurrentRow() != -1){      // current reference is one from the list
+                logic.getRef().isRegular(null);
             } else {                // current reference is new and refId is to be checked
-                ref.isRegular(listOfRef);
+                logic.getRef().isRegular(logic.getListOfRef());
             }
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage(), "Field Checker",JOptionPane.WARNING_MESSAGE);
             return;
         }
-        if (listOfRef==null){
-            listOfRef = new ArrayList<Reference>();
+        if (logic.getListOfRef() ==null){
+            logic.setListOfRef(new ArrayList<Reference>());
         }
-        if (currentRow == -1){      //if it's new
-            listOfRef.add(ref);
+        if (logic.getCurrentRow() == -1){      //if it's new
+            logic.getListOfRef().add(logic.getRef());
         }
-        ref = new ReferenceFactory().createReference(jComboBox1.getSelectedItem().toString());
-        setDocumentArea(listOfRef);
+        logic.setDocumentsIsSaved(false);
+        logic.createNewRef(jComboBox1.getSelectedItem().toString());
+        setDocumentArea(logic.getListOfRef());
         clearFields(jPanel1);
         clearFields(jPanel2);
     }                                        
@@ -471,7 +456,7 @@ private void setUpForm(){
     private void setUpRequiredFileds(JPanel jPanel){
         for (int i=1; i<jPanel.getComponentCount(); i+=2){
             JTextField jt = (JTextField) jPanel.getComponent(i);
-            jt.setText(ref.getFields().get((i-1)/2).getValue());
+            jt.setText(logic.getRef().getFields().get((i-1)/2).getValue());
         }
     }
     private void setDocumentArea(List<Reference> list){
@@ -485,8 +470,10 @@ private void setUpForm(){
            documentArea.append("\n");
         }
     }
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {                                         
-        documentArea.setText("");
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) { 
+        logic.setListOfRef(null);
+        logic.setDocumentsIsSaved(false);
+        setDocumentArea(logic.getListOfRef());
     }     
     private void selectRow(int n){
         documentArea.select(n*80, (n+1)*80);
@@ -495,25 +482,75 @@ private void setUpForm(){
     
     private void setGUIForCurrentRow(int n){
         selectRow(n);
-        ref = filteredList.get(n);
-        referenceArea.setText(convert.toBibTex(ref));
+        logic.setRef(logic.getFilteredList().get(n));
+        referenceArea.setText(logic.currentRefToBibTex());
         setUpRequiredFileds(jPanel1);
     }
     private void documentAreaKeyRelesed(java.awt.event.KeyEvent evt) {
         int c = evt.getKeyCode();
-        if (c==40 && currentRow<filteredList.size()-1){
-             currentRow++;
-        } else  if (c==38 && currentRow>0){
-            currentRow--;
+        if (c==40 && logic.getCurrentRow()<logic.getFilteredList().size()-1){
+             logic.setCurrentRow(logic.getCurrentRow()+1);
+        } else  if (c==38 && logic.getCurrentRow()>0){
+             logic.setCurrentRow(logic.getCurrentRow()-1);
+
         }
-        setGUIForCurrentRow(currentRow);
+        setGUIForCurrentRow(logic.getCurrentRow());
         
     }
 
     private void jFilterKeyReleased(java.awt.event.KeyEvent evt) {
         String filterWord = jTextField1.getText().trim();
-        filteredList = setFilter(listOfRef, filterWord);
-        setDocumentArea(filteredList);
+        logic.setFilter(filterWord);
+        setDocumentArea(logic.getFilteredList());
+    }
+        
+    private boolean isContaintsWords(Reference r, ArrayList<String>words){
+        boolean contains = false;
+        for (String word: words){
+            contains = false;
+            if (r.getReferenceType().contains(word)){
+                contains = true;
+            } else {
+                for (Field f: r.getFields()){
+                   if (f.getValue().contains(word)){
+                       contains = true;
+                       break;
+                   } 
+                }
+            }
+            if (!contains){
+                return false;
+            }
+        }
+        return true;
+    }
+    private ArrayList<String> getWords(String filter){
+        ArrayList<String> list = new ArrayList<String>();
+        System.out.println("Filer: " + filter);
+        int j=0;
+        for (int i=0; i<filter.length(); i++){
+            if (filter.charAt(i)==' '){
+                list.add(filter.substring(j,i));
+                System.out.println(":" + filter.substring(j,i));
+                j=i+1;
+            }
+        }
+        list.add(filter.substring(j,filter.length()));
+        return list;
+    }
+
+    private ArrayList<Reference> setFilter(ArrayList<Reference> listOfRef, String filter) {
+        if (listOfRef==null){
+            return null;
+        }
+        ArrayList<Reference> list = new ArrayList<Reference>();
+        ArrayList<String> words = getWords(filter);
+        for (Reference r: listOfRef){
+            if (isContaintsWords(r, words)){
+                 list.add(r);
+            } 
+        }
+        return list;
     }
     private static void addTextField(Container container){
         JTextField text = new JTextField();
@@ -522,13 +559,13 @@ private void setUpForm(){
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new GUI_007().setVisible(true);
-            }
-        });
-    }
+//    public static void main(String args[]) {
+//        java.awt.EventQueue.invokeLater(new Runnable() {
+//            public void run() {
+//                new GUI_007().setVisible(true);
+//            }
+//        });
+//    }
     // Variables declaration - do not modify                     
     private javax.swing.JButton AddToDocument;
     private javax.swing.JButton jButton2;
@@ -552,203 +589,4 @@ private void setUpForm(){
     private javax.swing.JTextField jTextField1;
     // End of variables declaration                   
 
-    private ArrayList<String> getWords(String filter){
-        ArrayList<String> list = new ArrayList<String>();
-        System.out.println("Filer: " + filter);
-        int j=0;
-        for (int i=0; i<filter.length(); i++){
-            if (filter.charAt(i)==' '){
-                list.add(filter.substring(j,i));
-                System.out.println(":" + filter.substring(j,i));
-                j=i+1;
-            }
-        }
-        list.add(filter.substring(j,filter.length()));
-        return list;
-    }
-    
-    private boolean isContaintsWords(Reference r, ArrayList<String>words){
-        boolean contains = false;
-        for (String word: words){
-            contains = false;
-            if (r.getReferenceType().contains(word)){
-                contains = true;
-            } else {
-                for (Field f: r.getFields()){
-                   if (f.getValue().contains(word)){
-                       contains = true;
-                       break;
-                   } 
-                }
-            }
-            if (!contains){
-                return false;
-            }
-        }
-        return true;
-    }
-    private ArrayList<Reference> setFilter(ArrayList<Reference> listOfRef, String filter) {
-        if (listOfRef==null){
-            return null;
-        }
-        ArrayList<Reference> list = new ArrayList<Reference>();
-        ArrayList<String> words = getWords(filter);
-        for (Reference r: listOfRef){
-            if (isContaintsWords(r, words)){
-                 list.add(r);
-            } 
-        }
-        return list;
-    }
-
-    private ArrayList<Reference> getReferencesFromContent(String fileContent) {
-        ArrayList<Reference> list = new ArrayList<Reference>();
-        //System.out.println("All content\n" + fileContent + "\n-------------");
-        String referenceAsText = null;
-        int j= fileContent.indexOf("@");
-        int i=j+1;
-        while (i<fileContent.length()){
-            if (fileContent.charAt(i)=='@'){
-                referenceAsText = fileContent.substring(j, i);
-                //System.out.println("odvojena ref: \n\n" +referenceAsText);
-                Reference r = toReference(referenceAsText);
-                if (r!=null){
-                    list.add(r);
-                }
-                j=i;
-            }
-            i++;
-        }
-        referenceAsText = fileContent.substring(j, i);
-        Reference r = toReference(referenceAsText);
-        if (r!=null){
-            list.add(r);
-        }
-        return list;
-        
-    }
-    
-       public String getFieldNameFromLine(String l){
-        String line = l.trim();
-        for (int i=0; i<line.length(); i++){
-            if (line.charAt(i)==' ' || line.charAt(i)=='='){
-                return line.substring(0, i);
-            }
-        }
-        return null;
-    }
-    public String getFieldValueFromLine(String l){
-        String line = l.trim();
-        int from=0;
-        int to = 0;
-        for (int i=0; i<line.length(); i++){
-            if (line.charAt(i)=='{'){
-                from=i+1;
-            }
-        }
-        for (int i=line.length()-1; i>from; i--){
-            if (line.charAt(i)=='}'){
-                to=i;
-            }
-        }
-        if (from<to){
-            return line.substring(from, to);
-        }
-        return null;
-    }
-    private String getReferenceType(String text){
-        int i=1; 
-        text = text.trim();
-        if (text.charAt(0)!='@'){
-           return null;
-        }
-        while (text.charAt(i)!=' ' && text.charAt(i)!='{' && i<text.length() ){
-            i++;
-        }
-        if (text.charAt(i)==' ' || text.charAt(i)=='{'){
-            return text.substring(1, i);
-        }
-        return null;
-            
-    }
-        public String returnSpecChars(String text){
-        StringBuilder sb = new StringBuilder();
-        for (int i=0; i<text.length(); i++){
-            if (text.length()>(i+3) && text.charAt(i)== '\\' && text.charAt(i+1)=='"'){
-                    if (text.substring(i+2, i+4).equals("AA")){
-                        sb.append('Å');
-                        i+=3;
-                    } else if (text.substring(i+2, i+4).equals("aa")){
-                        sb.append('å');
-                        i+=3;
-                    } else if (text.length()==(i+4)){
-                        sb.append(text.charAt(i));
-                    } else  if (text.length()> (i+4)){  
-                        if (text.substring(i+2, i+5).equals("{A}")){
-                            sb.append('Ä');
-                            i+=4;
-                        } else if (text.substring(i+2, i+5).equals("{a}")){
-                            sb.append('ä');
-                            i+=4;
-                        } else if (text.substring(i+2, i+5).equals("{O}")){
-                            sb.append('Ö');
-                            i+=4;
-                        } else if (text.substring(i+2, i+5).equals("{o}")){
-                            sb.append('ö');
-                            i+=4;
-                        } else {
-                            sb.append(text.charAt(i));
-                        }
-                    }
-            } else {
-                sb.append(text.charAt(i));
-            }
-        }
-        return sb.toString();
-    }
-        
-    public ArrayList<String> getNonEmptyLines(String text){
-        ArrayList<String> list = new ArrayList<String>();
-        int from = 0;
-        int to = 0;
-        String txt = returnSpecChars(text.trim());
-        while (txt.length()> to){
-            if (txt.charAt(to)=='\n'){
-                if (from!=to){
-                    list.add(txt.substring(from, to));
-                }
-                from = to+1;
-            }
-            to++;
-        }
-        if (from!=to){
-            list.add(txt.substring(from, to));
-        }
-        return list;
-    }
-    
-    public Reference toReference(String bibTex){
-        String refType = getReferenceType(bibTex);
-        if (refType==null){
-            return null;
-        }
-        Reference r = new ReferenceFactory().createReference(refType);
-        ArrayList<String> lines = getNonEmptyLines(bibTex);
-        int j=0;
-        while (bibTex.charAt(j)!='{' && j<bibTex.length()){
-            j++;
-        }
-        if (j==bibTex.length()){
-            return null;
-        }
-        String apu = lines.get(0).trim().substring(j).trim().substring(1);
-        apu = apu.substring(0, apu.length()-1);
-        r.getFields().get(0).setValue(apu);
-        for (int i=1; i<(lines.size()-1); i++){
-            String fieldName = getFieldNameFromLine(lines.get(i));
-            String fieldValue = getFieldValueFromLine(lines.get(i));
-            r.setFieldValue(FType.valueOf(fieldName), fieldValue);
-        }
-        return r;
-    }
 }
