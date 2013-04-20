@@ -372,7 +372,7 @@ private void setUpForm(){
         JFileChooser chooser = new JFileChooser();
         FileNameExtensionFilter filter = new FileNameExtensionFilter("BibTex Documents", "bib", "BIB");
         chooser.setFileFilter(filter);
-        int returnVal = chooser.showSaveDialog(jButton2);
+        int returnVal = chooser.showOpenDialog(jButton2);
             if(returnVal == JFileChooser.OPEN_DIALOG) {
             File file = chooser.getSelectedFile();
             String filePath = file.getPath();
