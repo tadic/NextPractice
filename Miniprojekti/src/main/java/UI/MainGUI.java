@@ -73,7 +73,6 @@ public class MainGUI extends JFrame implements View {
 
     @Override
     public void modelPropertyChange(PropertyChangeEvent evt) {
-        System.out.println(evt.getPropertyName());
         if (evt.getPropertyName().equals(MainGUIController.REFERENCES)) {
             referencesTablemodel.setReferences((List<Reference>) evt.getNewValue());
         } else if (evt.getPropertyName().equals(MainGUIController.COLLECTED_REFERENCES)) {
