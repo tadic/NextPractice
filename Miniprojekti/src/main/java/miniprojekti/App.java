@@ -25,6 +25,7 @@ public class App {
 //
 //        GUI gui = new GUI(logic);
 
+
 //        List<Field> inpro = logic.getFields("inproceedings");
 //        inpro.get(1).setValue("niko1");
 //        inpro.get(2).setValue("niko1");

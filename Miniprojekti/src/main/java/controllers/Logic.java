@@ -64,7 +64,7 @@ public class Logic implements LogicInterface {
         Reference created = repository.create(RFactory.createReference(referenceType, fields));
         return created;
     }
-
+    
     /**
      * Loads References in specified file to memory.
      *

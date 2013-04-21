@@ -44,7 +44,7 @@ public class TestConverter {
                 "booktitle = {SIGCSE '02: Proceedings of the 33rd SIGCSE technical symposium on Computer science education},\n    " +
                 "year = {2002},\n    editor = {one},\n    volume/number = {two},\n    series = {three},\n    " +
                 "pages = {four},\n    address = {five},\n    month = {six},\n    organization = {seven},\n    " +
-                "publisher = {eight},\n    note = {nine},\n    key = {ten}\n}";
+                "publisher = {eight},\n    note = {nine},\n    key = {ten}\n}\n";
                 System.out.println(expValue);
                 System.out.println(convert.toBibTex(ref));
                
@@ -59,7 +59,7 @@ public class TestConverter {
                 "booktitle = {SIGCSE '02: Proceedings of the 33rd SIGCSE technical symposium on Computer science education},\n    " +
                 "year = {2002},\n    editor = {one},\n    volume/number = {two},\n    series = {three},\n    " +
                 "pages = {four},\n    address = {five},\n    month = {six},\n    organization = {seven},\n    " +
-                "publisher = {eight},\n    note = {nine},\n    key = {ten}\n}";
+                "publisher = {eight},\n    note = {nine},\n    key = {ten}\n}\n";
         assertEquals(expValue, convert.toBibTex(ref));
     }
     @Test
@@ -73,7 +73,7 @@ public class TestConverter {
         String expValue = "@book{book_11,\n    author = {Author},\n    " +
                 "title = {Title},\n    " +
                 "publisher = {Publisher: Publisher...},\n    " +
-                "year = {2013}\n}";
+                "year = {2013}\n}\n";
         // System.out.println(expValue);
         //System.out.println(convert.toBibTex(article));
         assertEquals(expValue, convert.toBibTex(book));
@@ -89,7 +89,7 @@ public class TestConverter {
         String expValue = "@article{arti_11,\n    author = {Author},\n    " +
                 "title = {Ti\\\"AA\\\"aat\\\"{O}le\\\"{A}},\n    " +
                 "journal = {Journal...p\\\"{o}p\\\"{a}\\\"{a}},\n    " +
-                "year = {2013}\n}";
+                "year = {2013}\n}\n";
         System.out.println(expValue);
         System.out.println(convert.toBibTex(article));
         assertEquals(expValue, convert.toBibTex(article));
