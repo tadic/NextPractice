@@ -36,9 +36,6 @@ public class GenericDataFileRepositoryTest {
             inproceedings.setFieldValue(FType.title, "Title" + i);
             inproceedings.setFieldValue(FType.author.year, "" + (2000 + i));
             repository.create(inproceedings);
-
-            TestDummy t = new TestDummy("TestDummy" + i);
-            repository.create(t);
         }
     }
 
@@ -305,34 +302,5 @@ public class GenericDataFileRepositoryTest {
         int countEnd = instance.count(Inproceedings.class);
 
         assertTrue(countEnd == countStart - 1);
-    }
-
-    class TestDummy extends Reference implements Serializable {
-
-        private String text;
-
-        public TestDummy(String text) {
-            this.text = text;
-        }
-
-        public String getText() {
-            return text;
-        }
-
-        public void setText(String text) {
-            this.text = text;
-        }
-
-        @Override
-        public List<Field> myFields() {
-            throw new UnsupportedOperationException("Not supported yet.");
-        }
-
-        @Override
-        public String initType() {
-            throw new UnsupportedOperationException("Not supported yet.");
-        }
-
-
     }
 }

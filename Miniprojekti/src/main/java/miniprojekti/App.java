@@ -1,12 +1,16 @@
 package miniprojekti;
 
 import UI.GUI;
+import UI.MainGUI;
+import UI.MainGUIController;
+import UI.MainGUIModel;
 import controllers.Converter;
 import controllers.Logic;
 import controllers.LogicInterface;
 import entity.FType;
 import entity.Field;
 import entity.Reference;
+import java.awt.EventQueue;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,9 +21,9 @@ public class App {
 
     public static void main(String[] args) {
 
-        LogicInterface logic = new Logic();
-
-        GUI gui = new GUI(logic);
+//        LogicInterface logic = new Logic();
+//
+//        GUI gui = new GUI(logic);
 
 //        List<Field> inpro = logic.getFields("inproceedings");
 //        inpro.get(1).setValue("niko1");
@@ -60,6 +64,16 @@ public class App {
 //        }
 
 
+        final MainGUI g = new MainGUI();
+        MainGUIModel m = new MainGUIModel();
+        final MainGUIController c = new MainGUIController(g, m);
+
+        EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                g.setVisible(true);
+                c.populateReferencesWithTestData();
+            }
+        });
 
 
 

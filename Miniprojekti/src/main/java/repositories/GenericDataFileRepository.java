@@ -47,6 +47,19 @@ public class GenericDataFileRepository implements GenericRepository {
     private GenericDataFileRepository() {
     }
 
+    @Override
+    public List<Class<?>> findAllClassess() {
+        List<Class<?>> classes = new ArrayList<Class<?>>();
+        for (Object o : objects.values()) {
+            if (!classes.contains(o.getClass())) {
+                classes.add(o.getClass());
+            }
+        }
+        return classes;
+    }
+    
+    
+
     /**
      * Loads data objects from file.
      *

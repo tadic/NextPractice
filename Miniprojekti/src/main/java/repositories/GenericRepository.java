@@ -15,7 +15,9 @@ import java.util.List;
  * @author jarno
  */
 public interface GenericRepository {
-
+    
+    List<Class<?>> findAllClassess();
+    
     <T extends Reference> int count(Class<T> type);
 
     <T extends Reference> T create(T entity);
