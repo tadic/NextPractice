@@ -26,25 +26,15 @@ import org.uncommons.swing.SpringUtilities;
  * @author ivantadic
  */
 public class  GUI_007 extends javax.swing.JFrame {
-   // private int currentRow;
-    //Converter convert;
-    private Logic_007 logic;
-   // private Reference ref;
-//    private ArrayList<Reference> listOfRef; 
-//    private ArrayList<Reference> filteredList; 
-//    private String documentName = "newBibTex.bib";
-//    private String documentPath;
-//    private boolean documentsIsSaved;
-    JTextField text;
- //   ArrayList<JTextField> listOfFields;
 
-    /**
-     * Creates new form NewJFrame
-     */
+    private Logic_007 logic;
+    //JTextField text;
     public GUI_007(Logic_007 l) {
         logic = l;
         initComponents();
+        this.setTitle("BibTeX editor");
         this.setVisible(true);
+        
     }
 
     /**
@@ -294,7 +284,7 @@ private void setUpForm(){
         logic.createNewRef(jComboBox1.getSelectedItem().toString());
         setUpFields(jPanel1, layout, logic.getRequiredFields());
         setUpFields(jPanel2, layout, logic.getOptionalFields());
-
+        this.setTitle("BibteX editor");
         this.setVisible(true);
 }
 

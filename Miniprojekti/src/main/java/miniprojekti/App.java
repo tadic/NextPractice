@@ -1,12 +1,14 @@
 package miniprojekti;
 
 import UI.GUI;
+import UI.GUI_007;
 import UI.MainGUI;
 import UI.MainGUIController;
 import UI.MainGUIModel;
 import controllers.Converter;
 import controllers.Logic;
 import controllers.LogicInterface;
+import controllers.Logic_007;
 import entity.FType;
 import entity.Field;
 import entity.Reference;
@@ -20,12 +22,12 @@ import java.util.logging.Logger;
 public class App {
 
     public static void main(String[] args) {
+ //       new GUI_007(new Logic_007());
 
-//        LogicInterface logic = new Logic();
-//
+        
+        
+//     LogicInterface logic = new Logic();
 //        GUI gui = new GUI(logic);
-
-
 //        List<Field> inpro = logic.getFields("inproceedings");
 //        inpro.get(1).setValue("niko1");
 //        inpro.get(2).setValue("niko1");
