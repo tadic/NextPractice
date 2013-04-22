@@ -117,6 +117,7 @@ public class MainGUI extends JFrame implements View {
         miSave = new JMenuItem("Save");
         miSaveAs = new JMenuItem("Save As");
         miSaveAs.addActionListener(new ActionListener() {
+            
             @Override
             public void actionPerformed(ActionEvent e) {
                 int returnVal = fc.showSaveDialog(MainGUI.this);
