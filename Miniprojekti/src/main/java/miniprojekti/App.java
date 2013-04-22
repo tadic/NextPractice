@@ -1,14 +1,14 @@
 package miniprojekti;
 
 import UI.GUI;
-import UI.GUI_007;
+import UI.GUINewReferences;
 import UI.MainGUI;
 import UI.MainGUIController;
 import UI.MainGUIModel;
 import controllers.Converter;
-import controllers.Logic;
+import controllers.Logic___Vanha;
 import controllers.LogicInterface;
-import controllers.Logic_007;
+import controllers.Logic;
 import entity.FType;
 import entity.Field;
 import entity.Reference;
@@ -22,7 +22,7 @@ import java.util.logging.Logger;
 public class App {
 
     public static void main(String[] args) {
-       new GUI_007(new Logic_007());
+   //    new GUINewReferences();
 
         
 

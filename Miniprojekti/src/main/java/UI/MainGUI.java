@@ -170,10 +170,11 @@ public class MainGUI extends JFrame implements View {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                //IKKUNAN AVAAMINEN
-                
+                callGUINewReferences();
             }
         });
+        
+        
         JMenuItem miDelete = new JMenuItem("Delete");
         miDelete.addActionListener(new ActionListener() {
             @Override
@@ -224,6 +225,22 @@ public class MainGUI extends JFrame implements View {
         setSize(800, 600);
         pack();
     }
+    
+//      Ideana oli, että oldList on repositoryList(tietokanta), koska pitää checkata isUnique()
+//      Se toinen on se joka muuttuu GUINewReference:ssa, 
+//      Se create metodi ottaa sun MainFrame:n parametrina koska sen pitää trigeroida joku MainFram:in metodi
+//      joka tekisi homman kun GUINewReference on valmis!(mä käytin makeCollectedReferencesBibtexString())
+    
+//      EN onnistunut tehdä siten, että create palauttaa listan! Jos sulla on idea - sano tai korjaa itse!
+//     Mutta mä testasin vähän ja se toimi näin.
+    
+private void callGUINewReferences(){
+     ArrayList<Reference> resultList = new ArrayList<Reference>();
+     ArrayList<Reference> oldList = new ArrayList<Reference>();
+     GUINewReferences.create(oldList, resultList, this);
+}
+
+
 
     public JToolBar makeToolbar() {
         JToolBar toolBar = new JToolBar("Still draggable");
@@ -253,7 +270,7 @@ public class MainGUI extends JFrame implements View {
         JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
     }
 
-    private void makeCollectedReferencesBibtexString(List<Reference> list) {
+    public void makeCollectedReferencesBibtexString(List<Reference> list) {
         StringBuilder sb = new StringBuilder();
         for (Reference r : list) {
             sb.append(converter.toBibTex(r)).append("\n");

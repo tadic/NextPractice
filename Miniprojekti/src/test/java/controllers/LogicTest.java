@@ -25,7 +25,7 @@ import static org.junit.Assert.*;
  */
 public class LogicTest {
 
-    Logic logic;
+    Logic___Vanha logic;
     ReferenceFactory factory;
 
     public LogicTest() {
@@ -41,7 +41,7 @@ public class LogicTest {
 
     @Before
     public void setUp() {
-        logic = new Logic();
+        logic = new Logic___Vanha();
         factory = new ReferenceFactory();
         logic.clearAll();
     }
@@ -51,7 +51,7 @@ public class LogicTest {
     }
 
     /**
-     * Test of getFields method, of class Logic.
+     * Test of getFields method, of class Logic___Vanha.
      */
     @Test
     public void getFieldsForInproceedings() {

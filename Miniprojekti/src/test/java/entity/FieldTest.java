@@ -4,7 +4,7 @@
  */
 package entity;
 
-import controllers.Logic;
+import controllers.Logic___Vanha;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -87,7 +87,7 @@ public class FieldTest {
     
     @Test
     public void differentClassEqual() {
-        assertFalse(fullField.equals(new Logic()));
+        assertFalse(fullField.equals(new Logic___Vanha()));
     }
     
     @Test
