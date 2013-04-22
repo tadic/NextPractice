@@ -32,7 +32,16 @@ public class Logic {
     public void setCurrentRow(int currentRow) {
         this.currentRow = currentRow;
     }
-    private Reference ref;                              // working reference
+
+    public Reference getOldReference() {
+        return oldReference;
+    }
+
+    public void setOldReference(Reference oldReference) {
+        this.oldReference = oldReference;
+    }
+    private Reference ref;        
+    private Reference oldReference;// working reference
     private List<Reference> listOfRef;             // documet's list of references
     private List<Reference> filteredList;   
     private List<Reference> oldList;   // list for filtering

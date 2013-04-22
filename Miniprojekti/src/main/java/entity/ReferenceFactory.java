@@ -17,9 +17,20 @@ public class ReferenceFactory {
     
     public ReferenceFactory() {
         types = new HashMap<String, Reference>();
-        types.put("inproceedings", new Inproceedings());
-        types.put("book", new Book());
         types.put("article", new Article());
+        types.put("book", new Book());
+        types.put("booklet", new Booklet());
+        types.put("conference", new Conference());
+        types.put("inbook", new Inbook());
+        types.put("incollection", new Incollection());
+        types.put("inproceedings", new Inproceedings());
+        types.put("manual", new Manual());
+        types.put("mastersthesis", new Mastersthesis());
+        types.put("misc", new Misc());
+        types.put("phdthesis", new Phdthesis());
+        types.put("proceedings", new Proceedings());
+        types.put("techreport", new Techreport());
+        types.put("unpublished", new Unpublished());
     }
     
     /**

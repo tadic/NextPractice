@@ -1,50 +1,32 @@
 package UI;
 
-
-import controllers.Converter;
-import controllers.FileSaver;
 import controllers.Logic;
-import controllers.LogicInterface;
-import controllers.Reader;
 import entity.FType;
 import entity.Field;
 import entity.Reference;
-import entity.ReferenceFactory;
-import java.awt.Container;
 import java.awt.Dimension;
-import java.awt.EventQueue;
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import javax.swing.filechooser.FileNameExtensionFilter;
 import org.uncommons.swing.SpringUtilities;
-/**
- *
- * @author ivantadic
- */
+
 public class  GUINewReferences extends javax.swing.JFrame {
     private MainGUI mainFrame;
     private Logic logic;
-    //JTextField text;
-    public GUINewReferences(){
-    }
+
     public GUINewReferences(ArrayList<Reference> oldList, ArrayList<Reference> list, MainGUI mainFrame) {
         logic = new Logic();
         logic.setListOfRef(list);
         logic.setOldList(oldList);
         initComponents();
+        this.mainFrame = mainFrame;
         this.setTitle("BibTeX creator");
         this.setVisible(true);
-        this.mainFrame = mainFrame;
-        
     }
 
-    @SuppressWarnings("unchecked")
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">                          
+
     private void initComponents() {
 
         jComboBox1 = new javax.swing.JComboBox();
@@ -60,8 +42,6 @@ public class  GUINewReferences extends javax.swing.JFrame {
         jButton2 = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
         jButton3 = new javax.swing.JButton();
-        jButtonNew = new javax.swing.JButton();
-        jButtonOpen = new javax.swing.JButton();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
@@ -123,21 +103,10 @@ public class  GUINewReferences extends javax.swing.JFrame {
         jLabel3.setText("Reference:");
 
         jButton3.setText("Delete");
-//        jButtonNew.setText("New");
-//        jButtonNew.addActionListener(new java.awt.event.ActionListener() {
-//            public void actionPerformed(java.awt.event.ActionEvent evt) {
-//                jButtonNewActionPerformed(evt);
-//            }
-//        });
-//        jButtonOpen.setText("Open");
-//        jButtonOpen.addActionListener(new java.awt.event.ActionListener() {
-//            public void actionPerformed(java.awt.event.ActionEvent evt) {
-//                jButtonOpenActionPerformed(evt);
-//            }
-//        });
+
         jButton3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                jButtonDeleteActionPerformed(evt);
             }
         });
 
@@ -169,10 +138,6 @@ public class  GUINewReferences extends javax.swing.JFrame {
                     .add(jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
                         .add(jPanel3Layout.createSequentialGroup()
                             .addContainerGap()
-//                            .add(jButtonNew)
-//                            .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-//                            .add(jButtonOpen)
-//                            .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                             .add(jButton3)
                             .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                             .add(jButton2))
@@ -211,8 +176,6 @@ public class  GUINewReferences extends javax.swing.JFrame {
                 .add(jScrollPane2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 289, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-//                    .add(jButtonNew)
-//                    .add(jButtonOpen)
                     .add(jButton2)
                     .add(jButton3))
                 .addContainerGap())
@@ -278,16 +241,19 @@ public class  GUINewReferences extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>                        
-private void setUpForm(){
+       /**
+     * Set ups the form.
+     * @param evt 
+     */
+    private void setUpForm(){
         logic.setCurrentRow(-1);
-       // ReferenceFactory rf = new ReferenceFactory();
         SpringLayout layout = new SpringLayout();
         logic.createNewRef(jComboBox1.getSelectedItem().toString());
         setUpFields(jPanel1, layout, logic.getRequiredFields());
         setUpFields(jPanel2, layout, logic.getOptionalFields());
         this.setTitle("BibteX editor");
         this.setVisible(true);
-}
+    }
 
     private void setUpFields(JPanel jpane, SpringLayout layout, List<Field> listOfFields){
     jpane.removeAll();
@@ -329,65 +295,31 @@ private void setUpForm(){
                                 2, 2);
         jpane.setVisible(true);
 }
-    
+ 
     private void formWindowActivated(java.awt.event.WindowEvent evt) {                                     
         if (logic.getRef()==null){  
-        setUpForm();
+            setUpForm();
         }
-         
     }                                    
-
+    /**
+     * Set ups form for the current - chosen reference.
+     * @param evt 
+     */
     private void jComboBox1ItemStateChanged(java.awt.event.ItemEvent evt) { 
             setUpForm();
     }                                           
-
-//    private void jButtonNewActionPerformed(java.awt.event.ActionEvent evt) {        
-//        if (!logic.isDocumentsIsSaved()){
-//            JOptionPane.showMessageDialog(this, "You must first save old document", "BibTex checker",JOptionPane.WARNING_MESSAGE);
-//            return;
-//        }
-//        logic.setDocumentName("newBibTex.bib");
-//        logic.setDocumentPath(null);
-//        logic.setListOfRef(null);
-//        logic.setDocumentsIsSaved(true);
-//        setDocumentArea(logic.getListOfRef());
-//        jLabel5.setText(logic.getDocumentName());
-//    }
-//    private void jButtonOpenActionPerformed(java.awt.event.ActionEvent evt) { 
-//        String fileContent = null;
-//        if (!logic.isDocumentsIsSaved()){
-//            JOptionPane.showMessageDialog(this, "You must first save old document", "BibTex checker",JOptionPane.WARNING_MESSAGE);
-//            return;
-//        }
-//        Reader read = new Reader();
-//        JFileChooser chooser = new JFileChooser();
-//        FileNameExtensionFilter filter = new FileNameExtensionFilter("BibTex Documents", "bib", "BIB");
-//        chooser.setFileFilter(filter);
-//        int returnVal = chooser.showOpenDialog(jButton2);
-//            if(returnVal == JFileChooser.OPEN_DIALOG) {
-//            File file = chooser.getSelectedFile();
-//            String filePath = file.getPath();
-//            try {
-//                fileContent = read.fromFile(filePath);
-//                logic.setDocumentName(file.getName());
-//                logic.setDocumentPath(filePath);
-//                logic.setListOfRef(logic.getConverter().toReferenceList(fileContent));
-//                logic.setDocumentsIsSaved(true);
-//                setDocumentArea(logic.getListOfRef());
-//            } catch (Exception ioe) {
-//                // ... handle errors!
-//            }
-//             jLabel5.setText(logic.getDocumentName());
-//         }
-//            
-//    }
-    
+    /**
+     * Passing list of created references to the MainGUI and closes frame.
+     * @param evt 
+     */
     private void jButtonSavePerformed(java.awt.event.ActionEvent evt) {  
         this.mainFrame.makeCollectedReferencesBibtexString(logic.getListOfRef());
-
         this.dispose();
     }       
-    
+    /**
+     * Select first row - Reference from the filtered list of reference.
+     * @param evt 
+     */
     private void documentAreaFocusGained(java.awt.event.FocusEvent evt) {
         if (logic.getListOfRef()==null){
             return;
@@ -398,7 +330,10 @@ private void setUpForm(){
         setDocumentArea(logic.getFilteredList());
        setGUIForCurrentRow(logic.getCurrentRow());
     }
-
+    /**
+     * Checks is Reference regular, and if it is - adds it into the list. If it isn't regular, it returns appropriate message.
+     * @param evt 
+     */
     private void jAddReferenceActionPerformed(java.awt.event.ActionEvent evt) {  
         try {
             if (logic.getCurrentRow() != -1){      // current reference is one from the list
@@ -411,14 +346,9 @@ private void setUpForm(){
             JOptionPane.showMessageDialog(this, ex.getMessage(), "Field Checker",JOptionPane.WARNING_MESSAGE);
             return;
         }
-        if (logic.getListOfRef() ==null){
-            System.out.println("Lista ne sme biti prazna!!!!!!!!!!!!!!!!");
-            logic.setListOfRef(new ArrayList<Reference>());
-        }
         if (logic.getCurrentRow() == -1){      //if it's new
             logic.getListOfRef().add(logic.getRef());
         }
-        logic.setDocumentsIsSaved(false);
         logic.createNewRef(jComboBox1.getSelectedItem().toString());
         setDocumentArea(logic.getListOfRef());
         clearFields(jPanel1);
@@ -431,12 +361,20 @@ private void setUpForm(){
             jt.setText(null);
         }
     }
+    /**
+     * Set up required fields from current - selected reference to form for editing.
+     * @param jPanel 
+     */
     private void setUpRequiredFileds(JPanel jPanel){
         for (int i=1; i<jPanel.getComponentCount(); i+=2){
             JTextField jt = (JTextField) jPanel.getComponent(i);
             jt.setText(logic.getRef().getFields().get((i-1)/2).getValue());
         }
     }
+    /**
+     * Sets document area to the list of references.
+     * @param list 
+     */
     private void setDocumentArea(List<Reference> list){
         documentArea.setText("");
         if (list==null){
@@ -448,16 +386,27 @@ private void setUpForm(){
            documentArea.append("\n");
         }
     }
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) { 
+    /**
+     * Clears current list of references and clears documentArea.
+     * @param evt 
+     */
+    private void jButtonDeleteActionPerformed(java.awt.event.ActionEvent evt) { 
         logic.getListOfRef().clear();
         logic.setDocumentsIsSaved(false);
         setDocumentArea(logic.getListOfRef());
-    }     
+    }  
+    /**
+     * Select row in the Document - TextArea
+     * @param n 
+     */
     private void selectRow(int n){
         documentArea.select(n*80, (n+1)*80);
-        System.out.println("Rwo selected "+ n);
     }
     
+    /**
+     * Get current row-Reference which is selected and setUp all GUI field to values of current Reference.
+     * @param n is the number of row - Reference in the filtered list.
+     */
     private void setGUIForCurrentRow(int n){
         logic.setRef(logic.getFilteredList().get(n));
         
@@ -469,6 +418,11 @@ private void setUpForm(){
         setUpRequiredFileds(jPanel1);
         
     }
+    
+    /**
+     * pickUp current row and take it as current Reference
+     * @param evt
+     */
     private void documentAreaKeyRelesed(java.awt.event.KeyEvent evt) {
         int c = evt.getKeyCode();
         if (c==40 && logic.getCurrentRow()<logic.getFilteredList().size()-1){
@@ -478,29 +432,30 @@ private void setUpForm(){
 
         }
         setGUIForCurrentRow(logic.getCurrentRow());
-        
     }
-
+    /**
+     * Applies filter to the list of reference and show filtered list.
+     * @param evt 
+     */
     private void jFilterKeyReleased(java.awt.event.KeyEvent evt) {
         String filterWord = jTextField1.getText().trim();
         logic.setFilter(filterWord);
         setDocumentArea(logic.getFilteredList());
     }
         
-    private static void addTextField(Container container){
-        JTextField text = new JTextField();
-        container.add(text);
-    }         
-    
+    /**
+     * Create list of references and applies it to the MainGUI frame.
+     * @param oldList   Database list of References.
+     * @param list  Current list.
+     * @param mainFrame Main frame from which create method is called.
+     */
     public static void create(ArrayList<Reference> oldList, ArrayList<Reference> list, MainGUI mainFrame){
-        new GUINewReferences(oldList, list, mainFrame);
+        GUINewReferences gui = new GUINewReferences(oldList, list, mainFrame);
     }
     
     private javax.swing.JButton AddToDocument;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButtonNew;
-    private javax.swing.JButton jButtonOpen;
     private javax.swing.JComboBox jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -517,5 +472,4 @@ private void setUpForm(){
     private javax.swing.JTextArea documentArea;
     private javax.swing.JTextField jTextField1;
     // End of variables declaration                   
-
 }
