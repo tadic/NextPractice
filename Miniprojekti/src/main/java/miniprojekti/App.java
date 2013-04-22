@@ -22,50 +22,9 @@ import java.util.logging.Logger;
 public class App {
 
     public static void main(String[] args) {
- //       new GUI_007(new Logic_007());
+       new GUI_007(new Logic_007());
 
         
-        
-//     LogicInterface logic = new Logic();
-//        GUI gui = new GUI(logic);
-//        List<Field> inpro = logic.getFields("inproceedings");
-//        inpro.get(1).setValue("niko1");
-//        inpro.get(2).setValue("niko1");
-//        inpro.get(3).setValue("niko1");
-//        inpro.get(4).setValue("2001");
-//
-//        logic.createReference("inproceedings", inpro);
-//
-//
-//        List<Field> inpro2 = logic.getFields("inproceedings");
-//        inpro2.get(1).setValue("niko2");
-//        inpro2.get(2).setValue("niko2");
-//        inpro2.get(3).setValue("niko2");
-//        inpro2.get(4).setValue("1988");
-//
-//        logic.createReference("inproceedings", inpro2);
-//
-//        List<Reference> ref = logic.getAllReferences();
-//
-//        System.out.println("listassa : " + ref.size());
-//
-//        for (Reference reference : ref) {
-//            System.out.println(reference.getFieldValue(FType.author));
-//        }
-//
-//        System.out.println("listaa");
-//        System.out.println(inpro.get(1).getValue());
-//        System.out.println(inpro2.get(1).getValue());
-//
-//
-//
-//
-//        try {
-//            logic.convertAllToBibtex("fileee");
-//        } catch (Exception ex) {
-//            Logger.getLogger(App.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-
 
         final MainGUI g = new MainGUI();
         MainGUIModel m = new MainGUIModel();
@@ -74,7 +33,7 @@ public class App {
         EventQueue.invokeLater(new Runnable() {
             public void run() {
                 g.setVisible(true);
-                c.populateReferencesWithTestData();
+//                c.populateReferencesWithTestData();
             }
         });
 

@@ -66,6 +66,7 @@ public class MainGUI extends JFrame implements View {
         initComponents();
     }
 
+    
     @Override
     public void registerController(MainGUIController c) {
         this.controller = c;
@@ -165,6 +166,14 @@ public class MainGUI extends JFrame implements View {
 
         JMenu operations = new JMenu("Operations");
         JMenuItem miCreate = new JMenuItem("Create");
+        miCreate.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //IKKUNAN AVAAMINEN
+                
+            }
+        });
         JMenuItem miDelete = new JMenuItem("Delete");
         miDelete.addActionListener(new ActionListener() {
             @Override
