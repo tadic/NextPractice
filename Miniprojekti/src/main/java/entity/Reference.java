@@ -5,7 +5,6 @@
 package entity;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -17,7 +16,6 @@ public abstract class Reference implements Serializable {
 
     private int id;
     private List<Field> fields;
-    private List<String> tags = new ArrayList<String>();
     private String refType;
 
     public abstract List<Field> myFields();
@@ -34,10 +32,7 @@ public abstract class Reference implements Serializable {
 
     private void initialise(List<Field> list) {
         if (list != null) {
-            fields = new ArrayList<Field>();
-            for (Field f : list) {
-                fields.add(f);
-            }
+            setFields(list);
         }
         this.refType = initType();
     }
@@ -74,10 +69,6 @@ public abstract class Reference implements Serializable {
 
     public void setFields(List<Field> list) {
         this.fields = list;
-    }
-
-    public List<String> getTags() {
-        return tags;
     }
 
     public String getReferenceType() {
@@ -232,14 +223,6 @@ public abstract class Reference implements Serializable {
         return true;
     }
 
-    public boolean isEmpty() {
-        for (Field f : this.getFields()) {
-            if (f.getValue().length() > 1) {
-                return false;
-            }
-        }
-        return true;
-    }
 
     @Override
     public int hashCode() {

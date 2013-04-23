@@ -12,6 +12,7 @@ import entity.ReferenceFactory;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.EventQueue;
+import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -27,18 +28,16 @@ import org.uncommons.swing.SpringUtilities;
  */
 public class  GUIEditReference extends javax.swing.JFrame {
     private MainGUI mainFrame;
-    private Logic logic;
-    //JTextField text;
-    public GUIEditReference(){
-    }
-    public GUIEditReference(MainGUI mainFrame) {
-        logic = new Logic();
+    private LogicInterface logic;
 
+    public GUIEditReference(Reference ref, List<Reference> list,  MainGUI mainFrame) {
+        this.logic = new Logic();
         initComponents();
-        this.setTitle("BibTeX creator");
         this.setVisible(true);
         this.mainFrame = mainFrame;
-        logic.setOldReference(null);
+        logic.setOldReference(ref);
+        
+        setGUIForReference(ref);
     }
 
     @SuppressWarnings("unchecked")
@@ -52,19 +51,12 @@ public class  GUIEditReference extends javax.swing.JFrame {
         jPanel3 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         referenceArea = new javax.swing.JTextArea();
-        //jScrollPane2 = new javax.swing.JScrollPane();
-//        documentArea = new javax.swing.JTextArea();
-        //AddToDocument = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
         jButton3 = new javax.swing.JButton();
-//        jButtonNew = new javax.swing.JButton();
-//        jButtonOpen = new javax.swing.JButton();
-  //      jLabel5 = new javax.swing.JLabel();
-        //jLabel6 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
-//        jTextField1 = new javax.swing.JTextField();
+        this.setTitle("BibTex editor");
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowActivated(java.awt.event.WindowEvent evt) {
@@ -87,7 +79,7 @@ public class  GUIEditReference extends javax.swing.JFrame {
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(0, 86, Short.MAX_VALUE)
+            .add(0, 70, Short.MAX_VALUE)
         );
 
         jLabel1.setText("Required Fields");
@@ -109,7 +101,12 @@ public class  GUIEditReference extends javax.swing.JFrame {
 
         jLabel3.setText("Reference:");
 
-        jButton3.setText("Delete");
+        jButton3.setText("Cancel");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonCancelPerformed(evt);
+            }
+        });
         org.jdesktop.layout.GroupLayout jPanel3Layout = new org.jdesktop.layout.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -216,16 +213,15 @@ public class  GUIEditReference extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>                        
-private void setUpForm(){
-        logic.setCurrentRow(-1);
-       // ReferenceFactory rf = new ReferenceFactory();
-        SpringLayout layout = new SpringLayout();
-        logic.createNewRef(jComboBox1.getSelectedItem().toString());
-        setUpFields(jPanel1, layout, logic.getRequiredFields());
-        setUpFields(jPanel2, layout, logic.getOptionalFields());
-        this.setTitle("BibteX editor");
-        this.setVisible(true);
-}
+    private void setUpForm(){
+            logic.setCurrentRow(-1);
+            SpringLayout layout = new SpringLayout();
+            logic.createNewRef(jComboBox1.getSelectedItem().toString());
+            setUpFields(jPanel1, layout, logic.getRequiredFields());
+            setUpFields(jPanel2, layout, logic.getOptionalFields());
+            this.setTitle("BibteX editor");
+            this.setVisible(true);
+    }
 
  private void setUpFields(JPanel jpane, SpringLayout layout, List<Field> listOfFields){
     jpane.removeAll();
@@ -279,32 +275,23 @@ private void setUpForm(){
             setUpForm();
     }                                           
 
-    private void jButtonSavePerformed(java.awt.event.ActionEvent evt) {  
-        this.mainFrame.makeCollectedReferencesBibtexString(logic.getListOfRef());
-
+    private void jButtonCancelPerformed(ActionEvent evt) {
+        System.out.print(logic.getConverter().toBibTex(logic.getOldReference()));
         this.dispose();
-    }       
+    }
     
-    private void jSaveReferenceActionPerformed(java.awt.event.ActionEvent evt) {  
-        try {
-            if (logic.getCurrentRow() != -1){      // current reference is one from the list
-                logic.getRef().isRegular(logic.getOldList());
-            } else {                // current reference is new and refId is to be checked
-                logic.getRef().isRegular(logic.getOldList());
-                //logic.getRef().isUnique(logic.getListOfRef());
-            }
+    private void jButtonSavePerformed(java.awt.event.ActionEvent evt) {  
+         try {
+            logic.getRef().isRegular(logic.getOldList());
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage(), "Field Checker",JOptionPane.WARNING_MESSAGE);
             return;
         }
-    }                                        
+        System.out.print(logic.getConverter().toBibTex(logic.getRef()));
+        // Plase to call mainGUI setReference method
+        this.dispose();
+    }       
 
-    private void clearFields(JPanel jPanel){
-        for (int i=1; i<jPanel.getComponentCount(); i+=2){
-            JTextField jt = (JTextField) jPanel.getComponent(i);
-            jt.setText(null);
-        }
-    }
     private void setUpRequiredFileds(JPanel jPanel){
         for (int i=1; i<jPanel.getComponentCount(); i+=2){
             JTextField jt = (JTextField) jPanel.getComponent(i);
@@ -313,20 +300,20 @@ private void setUpForm(){
     }
     
     private void setGUIForReference(Reference r){
-
         jComboBox1.setSelectedItem(r.getReferenceType());
         logic.setRef(r);
-
         referenceArea.setText(logic.currentRefToBibTex());
         setUpRequiredFileds(jPanel1);
-        
     }
           
-public static void edit(MainGUI mainFrame){
-        new GUIEditReference(mainFrame);
-    }
- public static void main(String args[]) {
-       new GUIEditReference(null);
+    public static void edit(Reference r, List<Reference> list, MainGUI mainFrame){
+          new GUIEditReference(r, list, mainFrame);
+        }
+    
+    public static void main(String args[]) {
+         Reference r = new ReferenceFactory().createReference("book");
+         r.setFieldValue(FType.referenceId, "rrrrr");
+         new GUIEditReference(r, null, null);
     }
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;    //private javax.swing.JButton jButtonOpen;

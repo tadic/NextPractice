@@ -16,162 +16,129 @@ import javax.swing.JTextField;
 import repositories.GenericDataFileRepository;
 import repositories.GenericRepository;
 
-public class Logic {
+public class Logic implements LogicInterface {
 
-    private GenericRepository repository;
     private ReferenceFactory RFactory;
-    private FileSaver fileSaver;
     private Converter converter;
-    
-    private int currentRow;
-
-    public int getCurrentRow() {
-        return currentRow;
-    }
-
-    public void setCurrentRow(int currentRow) {
-        this.currentRow = currentRow;
-    }
-
-    public Reference getOldReference() {
-        return oldReference;
-    }
-
-    public void setOldReference(Reference oldReference) {
-        this.oldReference = oldReference;
-    }
     private Reference ref;        
     private Reference oldReference;// working reference
     private List<Reference> listOfRef;             // documet's list of references
     private List<Reference> filteredList;   
     private List<Reference> oldList;   // list for filtering
-    private String documentName = "newBibTex.bib";      // default name of document
-    private String documentPath;                        // path 
+    private int currentRow;
 
-    public List<Reference> getOldList() {
-        return oldList;
-    }
-
-    public void setOldList(List<Reference> oldList) {
-        this.oldList = oldList;
-    }
-    private boolean documentsIsSaved = true;
     ArrayList<JTextField> listOfFields;
 
     public Logic() {
         RFactory = new ReferenceFactory();
-        repository = GenericDataFileRepository.getInstance();
         converter = new Converter();
-        fileSaver = new FileSaver(converter);
-        repository.clearAll();
     }
     
+    @Override
+    public int getCurrentRow() {
+        return currentRow;
+    }
+
+    @Override
+    public void setCurrentRow(int currentRow) {
+        this.currentRow = currentRow;
+    }
+
+    @Override
+    public Reference getOldReference() {
+        return oldReference;
+    }
+
+    @Override
+    public void setOldReference(Reference oldReference) {
+        this.oldReference = oldReference;
+    }
+
+    @Override
+    public List<Reference> getOldList() {
+        return oldList;
+    }
+
+    @Override
+    public void setOldList(List<Reference> oldList) {
+        this.oldList = oldList;
+    }
+    
+    @Override
     public Reference getRef() {
         return ref;
     }
 
-    public GenericRepository getRepository() {
-        return repository;
-    }
-
-    public void setRepository(GenericRepository repository) {
-        this.repository = repository;
-    }
-
+    @Override
     public ReferenceFactory getRFactory() {
         return RFactory;
     }
 
+    @Override
     public void setRFactory(ReferenceFactory RFactory) {
         this.RFactory = RFactory;
     }
 
-    public FileSaver getFileSaver() {
-        return fileSaver;
-    }
-
-    public void setFileSaver(FileSaver fileSaver) {
-        this.fileSaver = fileSaver;
-    }
-
+    @Override
     public Converter getConverter() {
         return converter;
     }
+    @Override
     public String currentRefToBibTex(){
      return converter.toBibTex(ref);
     }
+    @Override
     public void setRef(Reference r){
         this.ref = r;
     }
+    @Override
     public void setConverter(Converter converter) {
         this.converter = converter;
     }
 
-    public String getDocumentName() {
-        return documentName;
-    }
-
-    public void setDocumentName(String documentName) {
-        this.documentName = documentName;
-    }
-
-    public String getDocumentPath() {
-        return documentPath;
-    }
-
-    public void setDocumentPath(String filePath) {
-       if(filePath!=null && !filePath.toLowerCase().endsWith(".bib")){
-            filePath += ".bib";
-        }
-        this.documentPath = filePath;
-    }
-
-    public boolean isDocumentsIsSaved() {
-        return documentsIsSaved;
-    }
-
-    public void setDocumentsIsSaved(boolean documentsIsSaved) {
-        this.documentsIsSaved = documentsIsSaved;
-    }
-
+    @Override
     public ArrayList<JTextField> getListOfFields() {
         return listOfFields;
     }
 
+    @Override
     public void setListOfFields(ArrayList<JTextField> listOfFields) {
         this.listOfFields = listOfFields;
     }
 
+    @Override
     public void createNewRef(String name) {
         Reference r = new ReferenceFactory().createReference(name);
         this.ref = r;
     }
 
+    @Override
     public List<Reference> getListOfRef() {
         return listOfRef;
     }
 
+    @Override
     public void setListOfRef(List<Reference> listOfRef) {
         this.listOfRef = listOfRef;
     }
 
+    @Override
     public List<Reference> getFilteredList() {
         return filteredList;
     }
 
+    @Override
     public void setFilteredList(List<Reference> filteredList) {
         this.filteredList = filteredList;
     }
 
-
-
     /**
      * Returns a list of all field object of a reference
-     *
      * @param referenceType Name of the reference type known by the
      * ReferenceFactory
      * @return List<Field> References' fields
      */
+    @Override
     public List<Field> getFields(String referenceType) {
         return RFactory.getFields(referenceType);
     }
@@ -181,116 +148,12 @@ public class Logic {
      *
      * @return Set<String> Reference type names
      */
+    @Override
     public List<String> getReferenceTypes() {
         return RFactory.getReferenceTypes();
     }
 
-    /**
-     * Creates reference, passes it to repository and returns the reference.
-     *
-     * @param referenceType Name of the reference type to be created
-     * @param fields List of field objects for the new reference
-     * @return Created reference
-     */
-    public Reference createReference(String referenceType, List<Field> fields) {
-        Reference created = repository.create(RFactory.createReference(referenceType, fields));
-        return created;
-    }
-    
-    public Reference createReference(String referenceType) {
-        Reference created = repository.create(RFactory.createReference(referenceType));
-        return created;
-    }
-
-    /**
-     * Loads References in specified file to memory.
-     *
-     * @param fileName Name of the file containing the References.
-     */
-    public void loadFile(String fileName) {
-        try {
-            repository.loadDataFromFile(new File(fileName));
-        } catch (RepositoryException e) {
-        }
-    }
-
-    /**
-     * Converts all references currently in repository to bibtex and saves them
-     * in a file.
-     *
-     * @param fileName name of the file to be saved
-     */
-    public void convertAllToBibtex(String fileName) throws IOException {
-        List<Reference> references = repository.findAll();
-        convertSelectedToBibtex(references, fileName);
-    }
-
-    /**
-     * Converts selected references to bibtex and saves them in a file.
-     *
-     * @param references list of references to convert
-     * @param fileName name of the file to be saved
-     */
-    public void convertSelectedToBibtex(List<Reference> references, String fileName) throws IOException {
-        fileSaver.saveToFile(fileName, references);
-    }
-
-    /**
-     * Gives a list of all references currently loaded in repository. Note:
-     * includes only references created in this session and loaded using
-     * loadFile-method.
-     *
-     * @return list of all references
-     */
-    public List<Reference> getAllReferences() {
-        return repository.findAll();
-    }
-
-    /**
-     * Gives list of references searched by field. Note: includes only
-     * references created in this session and loaded using loadFile-method.
-     *
-     * @param type name of the reference type to search
-     * @param ftype field type to use in search
-     * @param value searched field value
-     * @return list of found references
-     * @throws RepositoryException
-     */
-    public List<Reference> getReferencesByField(String type, FType ftype, Object value) throws RepositoryException {
-        return repository.findByField(RFactory.getClassOfype(type), ftype, value);
-    }
-
-    /**
-     * Gives a list of all references of a given type. Note: includes only
-     * references created in this session and loaded using loadFile-method.
-     *
-     * @param type type of reference as string
-     * @return list of references
-     */
-    public List<Reference> getReferenceByType(String type) {
-        return repository.findAll(RFactory.getClassOfype(type));
-    }
-
-    /**
-     * Saves all references to file using repository. Note: NOT in
-     * bibtex-format. For that you must use convertAllToBibtex- or
-     * convertSelectedToBibtex-method.
-     *
-     * @param fileName name of the file as string
-     * @throws Exception IOException or RepositoryException
-     */
-    public void saveDocument() throws Exception {
-        fileSaver.saveToFile(documentPath, listOfRef);
-        documentsIsSaved = true;
-    }
-
-    public void updateReference(Reference ref) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    public void clearAll() {
-        repository.clearAll();
-    }
+//    
 /**
  * Extract words from text
  * @param filter is text to be extracted
@@ -314,6 +177,7 @@ public class Logic {
  * Applies filter words on reference list and set result to filteredList.
  * @param filter is list of search words
  */
+    @Override
    public void setFilter(String filter) {
         if (listOfRef==null){
             filteredList=null;
@@ -333,7 +197,7 @@ public class Logic {
     * @param words list of criteria
     * @return 
     */
-        private boolean isContaintsWords(Reference r, ArrayList<String> words){
+      private boolean isContaintsWords(Reference r, ArrayList<String> words){
         boolean contains = false;
         for (String word: words){
             contains = false;
@@ -354,11 +218,13 @@ public class Logic {
         return true;
     }
 
+    @Override
     public List<Field> getRequiredFields() {
         return RFactory.getFields(ref.getReferenceType(), true);
 
     }
 
+    @Override
     public List<Field> getOptionalFields() {
         return RFactory.getFields(ref.getReferenceType(), false);
     }

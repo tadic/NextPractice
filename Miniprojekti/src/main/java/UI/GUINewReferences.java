@@ -1,6 +1,7 @@
 package UI;
 
 import controllers.Logic;
+import controllers.LogicInterface;
 import entity.FType;
 import entity.Field;
 import entity.Reference;
@@ -14,7 +15,7 @@ import org.uncommons.swing.SpringUtilities;
 
 public class  GUINewReferences extends javax.swing.JFrame {
     private MainGUI mainFrame;
-    private Logic logic;
+    private LogicInterface logic;
 
     public GUINewReferences(ArrayList<Reference> oldList, ArrayList<Reference> list, MainGUI mainFrame) {
         logic = new Logic();
@@ -125,7 +126,7 @@ public class  GUINewReferences extends javax.swing.JFrame {
                 jFilterKeyReleased(evt);
             }
         });
-        jLabel5.setText(logic.getDocumentName());
+        //jLabel5.setText(logic.getDocumentName());
         jLabel6.setText("find:");
         jTextField1.setVisible(true);
         jPanel3.add(jTextField1);
@@ -381,7 +382,7 @@ public class  GUINewReferences extends javax.swing.JFrame {
             return;
         }
         for (Reference r:list){
-           System.out.println(r.getFields().get(1).getValue() + " " + r.getFields().get(2).getValue());
+           //System.out.println(r.getFields().get(1).getValue() + " " + r.getFields().get(2).getValue());
            documentArea.append(r.toString());
            documentArea.append("\n");
         }
@@ -392,7 +393,7 @@ public class  GUINewReferences extends javax.swing.JFrame {
      */
     private void jButtonDeleteActionPerformed(java.awt.event.ActionEvent evt) { 
         logic.getListOfRef().clear();
-        logic.setDocumentsIsSaved(false);
+        //logic.setDocumentsIsSaved(false);
         setDocumentArea(logic.getListOfRef());
     }  
     /**

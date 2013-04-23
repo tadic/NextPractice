@@ -220,8 +220,8 @@ public class StubGUI implements GuiInterface {
         fileSaver = new FileSaver(new Converter());
 
 
-        requiredLabels = logic.getRequiredFields();
-        optionalLabels = logic.getOptionalFields();
+        //requiredLabels = logic.getRequiredFields();
+        //optionalLabels = logic.getOptionalFields();
 
 
         int length = requiredLabels.length + optionalLabels.length;
@@ -286,35 +286,35 @@ public class StubGUI implements GuiInterface {
 
     @Override
     public void actionPerformed(ActionEvent ae) {
-        String fileNameToSave = "inpro";
-        for (int i = 0; i < textFields.size() - 1; i++) {
-            if (ae.getSource() == textFields.get(i) && i < requiredLabels.length) {
-                requiredLabels[i][1] = textFields.get(i).getText();
-                System.out.println(textFields.get(i).getText());
-                System.out.println(requiredLabels[i][1]);
-            } else if (ae.getSource() == textFields.get(i) && i >= requiredLabels.length) {
-                optionalLabels[i - requiredLabels.length][1] = textFields.get(i).getText();
-                System.out.println(textFields.get(i).getText());
-                System.out.println(optionalLabels[i - requiredLabels.length][1]);
-            } else if (ae.getSource() == saveReference) {
-                logic.createReference(requiredLabels, optionalLabels);
-                fileNameToSave = textFields.get(textFields.size() - 1).getText();
-                if (fileNameToSave.length() < 2) {
-                    fileNameToSave = "inpro"; // default filename
-                }
-                try {
-                    logic.saveAllToFile("inproceedings.txt");
-                } catch (Exception ex) {
-                    Logger.getLogger(StubGUI.class.getName()).log(Level.SEVERE, null, ex);
-                }
-
-            }
-        }
-        try {
-            this.saveAsBibtex(fileNameToSave + ".txt");
-        } catch (IOException ex) {
-            Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
-        }
+//        String fileNameToSave = "inpro";
+//        for (int i = 0; i < textFields.size() - 1; i++) {
+//            if (ae.getSource() == textFields.get(i) && i < requiredLabels.length) {
+//                requiredLabels[i][1] = textFields.get(i).getText();
+//                System.out.println(textFields.get(i).getText());
+//                System.out.println(requiredLabels[i][1]);
+//            } else if (ae.getSource() == textFields.get(i) && i >= requiredLabels.length) {
+//                optionalLabels[i - requiredLabels.length][1] = textFields.get(i).getText();
+//                System.out.println(textFields.get(i).getText());
+//                System.out.println(optionalLabels[i - requiredLabels.length][1]);
+//            } else if (ae.getSource() == saveReference) {
+//                logic.createReference(requiredLabels, optionalLabels);
+//                fileNameToSave = textFields.get(textFields.size() - 1).getText();
+//                if (fileNameToSave.length() < 2) {
+//                    fileNameToSave = "inpro"; // default filename
+//                }
+//                try {
+//                    logic.saveAllToFile("inproceedings.txt");
+//                } catch (Exception ex) {
+//                    Logger.getLogger(StubGUI.class.getName()).log(Level.SEVERE, null, ex);
+//                }
+//
+//            }
+//        }
+//        try {
+//            this.saveAsBibtex(fileNameToSave + ".txt");
+//        } catch (IOException ex) {
+//            Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
+//        }
     }
 
     /**
@@ -334,7 +334,7 @@ public class StubGUI implements GuiInterface {
         inproceeding.setFieldValue(FType.year, textFields.get(4).getText());
         try {
             //        try {
-            if (inproceeding.isRegular(logic.getAllReferences())) {                // if not regular, it goes throw IllegalArgumentException with propriate meassage.
+            if (inproceeding.isRegular(logic.getListOfRef())) {                // if not regular, it goes throw IllegalArgumentException with propriate meassage.
                 fileSaver.saveToFile(nameOfFile, inproceeding);
             }
             //        } catch (IllegalArgumentException ex) {

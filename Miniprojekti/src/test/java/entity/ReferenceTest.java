@@ -1,5 +1,5 @@
 
-package controllers;
+package entity;
 
 import entity.Article;
 import entity.Book;

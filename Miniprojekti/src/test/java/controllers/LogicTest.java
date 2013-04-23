@@ -25,7 +25,7 @@ import static org.junit.Assert.*;
  */
 public class LogicTest {
 
-    Logic___Vanha logic;
+    Logic logic;
     ReferenceFactory factory;
 
     public LogicTest() {
@@ -41,9 +41,8 @@ public class LogicTest {
 
     @Before
     public void setUp() {
-        logic = new Logic___Vanha();
+        logic = new Logic();
         factory = new ReferenceFactory();
-        logic.clearAll();
     }
 
     @After
@@ -69,78 +68,6 @@ public class LogicTest {
         List<String> result = new ArrayList<String>(logic.getReferenceTypes());
         assertEquals(expTypes, result);
     }
-
-    @Test
-    public void createInproceedings() {
-        String referenceType = "inproceedings";
-        List<Field> fields = inproceedingsFields();
-        Object expClass = Inproceedings.class;
-
-        Reference result = logic.createReference(referenceType, fields);
-        assertEquals("Returned class not same as expected", result.getClass(), expClass);
-        assertEquals("Fields of created reference are wrong", result.getFields(), fields);
-    }
-
-//    @Test
-//    public void legacyTestRequiredFields() {
-//        String[][] expected = {{"referenceId", ""}, {"author", ""}, {"title", ""}, {"booktitle", ""}, {"year", ""}};
-//        String[][] result = logic.getRequiredFields();
-//
-//        assertEquals(expected.length, result.length);
-//        for (int i = 0; i < expected.length; i++) {
-//            assertEquals(expected[i][0], result[i][0]);
-//            assertEquals(expected[i][1], result[i][1]);
-//        }
-//    }
-//
-//    @Test
-//    public void legacyTestOptionalFields() {
-//        String[][] expected = {{"editor", ""}, {"volume/number", ""}, {"series", ""}, {"pages", ""}, {"address", ""},
-//            {"month", ""}, {"organization", ""}, {"publisher", ""}, {"note", ""}, {"key", ""}};
-//        String[][] result = logic.getOptionalFields();
-//
-//        assertEquals(expected.length, result.length);
-//        for (int i = 0; i < expected.length; i++) {
-//            assertEquals(expected[i][0], result[i][0]);
-//            assertEquals(expected[i][1], result[i][1]);
-//        }
-//    }
-//
-//    @Test
-//    public void legacyCreateInproceedings() {
-//        String[][] req = {{"referenceId", "ReferenceId"}, {"author", "Author"}, {"title", "Title"}, {"booktitle", "Booktitle"}, {"year", "Year"}};
-//        String[][] opt = {{"editor", "Editor"}, {"volume", "VolumeNumber"}, {"series", "Series"}, {"pages", "Pages"}, {"address", "Address"},
-//            {"month", "Month"}, {"organization", "Organization"}, {"publisher", "Publisher"}, {"note", "Note"}, {"key", "Key"}};
-//        Object expClass = Inproceedings.class;
-//        List<Field> expFields = inproceedingsFields();
-//
-//        Reference result = logic.createReference(req, opt);
-//
-//        assertEquals("Returned class not same as expected", result.getClass(), expClass);
-//        assertEquals("Fields of created reference are wrong", result.getFields(), expFields);
-//    }
-
-    @Test
-    public void getAllTest() {
-        List<Reference> exp = new ArrayList<Reference>();
-        for (int i = 0; i < 2; i++) {
-            exp.add(logic.createReference("inproceedings", populate(inproceedingsFields(), i)));
-        }        
-        
-        List<Reference> result = logic.getAllReferences();
-        assertEquals(exp, result);
-    }
-
-//    @Test
-//    public void getByField() throws RepositoryException {
-//        List<Reference> ref = new ArrayList<Reference>();
-//        for (int i = 0; i < 5; i++) {
-//            ref.add(logic.createReference("inproceedings", populate(inproceedingsFields(), i)));
-//        }
-//        List<Reference> result = logic.getReferencesByField("inproceedings", FType.title, "Title 3");
-////        assertEquals(1, result.size());
-////        assertEquals(result.get(0).getFieldValue(FType.title), "Title 3");
-//    }
 
     private List<Field> inproceedingsFields() {
         List<Field> fields = new ArrayList<Field>();
