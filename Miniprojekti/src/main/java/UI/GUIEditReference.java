@@ -24,21 +24,21 @@ public class GUIEditReference extends javax.swing.JFrame implements View {
 
     private LogicInterface logic;
     private MainGUIController controller;
-    private Reference ref;
+   // private Reference ref;
 
     public GUIEditReference(Reference ref, MainGUIController controller) {
-        System.out.println(ref.getReferenceType());
-        this.ref = ref;
+        //System.out.println(ref.getReferenceType());
+        //this.ref = ref;
         this.logic = new Logic();
         this.controller = controller;
-        logic.setOldReference(ref);
+        //logic.setOldReference(ref);
         logic.setRef(ref);
         
     }
 
     public void initAndShow() {
         initComponents();
-        setGUIForReference(ref);
+        setGUIForReference(logic.getRef());
         this.setVisible(true);
     }
 
@@ -55,7 +55,7 @@ public class GUIEditReference extends javax.swing.JFrame implements View {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">                          
     private void initComponents() {
 
-        jComboBox1 = new javax.swing.JComboBox();
+        //jComboBox1 = new javax.swing.JComboBox();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
@@ -69,19 +69,19 @@ public class GUIEditReference extends javax.swing.JFrame implements View {
         jPanel2 = new javax.swing.JPanel();
         this.setTitle("BibTex editor");
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        addWindowListener(new java.awt.event.WindowAdapter() {
-            public void windowActivated(java.awt.event.WindowEvent evt) {
-                formWindowActivated(evt);
-            }
-        });
+//        addWindowListener(new java.awt.event.WindowAdapter() {
+//            public void windowActivated(java.awt.event.WindowEvent evt) {
+//                formWindowActivated(evt);
+//            }
+//        });
 
-        String[] names = new String[]{"article", "book", "booklet", "conference", "inbook", "incollection", "inproceedings", "manual", "mastersthesis", "misc", "phdthesis", "proceedings", "techreport", "unpublished" };
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(names));
-        jComboBox1.addItemListener(new java.awt.event.ItemListener() {
-            public void itemStateChanged(java.awt.event.ItemEvent evt) {
-                jComboBox1ItemStateChanged(evt);
-            }
-        });
+ //       String[] names = new String[]{"article", "book", "booklet", "conference", "inbook", "incollection", "inproceedings", "manual", "mastersthesis", "misc", "phdthesis", "proceedings", "techreport", "unpublished" };
+//        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(names));
+//        jComboBox1.addItemListener(new java.awt.event.ItemListener() {
+//            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+//                jComboBox1ItemStateChanged(evt);
+//            }
+//        });
 
         org.jdesktop.layout.GroupLayout jPanel1Layout = new org.jdesktop.layout.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -158,7 +158,7 @@ public class GUIEditReference extends javax.swing.JFrame implements View {
                 .add(jButton3))
                 .addContainerGap()));
 
-        jLabel4.setText("Reference type:");
+        jLabel4.setText("Reference type: " + logic.getRef().getReferenceType());
 
         org.jdesktop.layout.GroupLayout jPanel2Layout = new org.jdesktop.layout.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -179,8 +179,8 @@ public class GUIEditReference extends javax.swing.JFrame implements View {
                 .add(jLabel1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 236, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .add(layout.createSequentialGroup()
                 .add(jLabel4)
-                .add(3, 3, 3)
-                .add(jComboBox1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                .add(3, 3, 3))
+                //  .add(jComboBox1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
                 .add(jPanel1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .add(layout.createSequentialGroup()
                 .add(6, 6, 6)
@@ -197,7 +197,7 @@ public class GUIEditReference extends javax.swing.JFrame implements View {
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                 .add(layout.createSequentialGroup()
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                .add(jComboBox1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                //.add(jComboBox1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .add(jLabel4))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jLabel1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 29, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
@@ -215,10 +215,10 @@ public class GUIEditReference extends javax.swing.JFrame implements View {
         pack();
     }// </editor-fold>                        
 
-    private void setUpForm() {
-        logic.setCurrentRow(-1);
+    private void setUpForm(Reference r) {
+        //logic.setCurrentRow(-1);
         SpringLayout layout = new SpringLayout();
-        logic.createNewRef(jComboBox1.getSelectedItem().toString());
+        //logic.createNewRef(r.getReferenceType());
         setUpFields(jPanel1, layout, logic.getRequiredFields());
         setUpFields(jPanel2, layout, logic.getOptionalFields());
         this.setTitle("BibteX editor");
@@ -252,13 +252,11 @@ public class GUIEditReference extends javax.swing.JFrame implements View {
 
                 private void printIt() {
                     logic.getRef().setFieldValue(FType.valueOf(text.getName()), text.getText());
-
                     referenceArea.setText(logic.currentRefToBibTex());
                 }
             });
 
             jpane.add(text);
-
         }
         referenceArea.setText(logic.currentRefToBibTex());
 
@@ -269,24 +267,13 @@ public class GUIEditReference extends javax.swing.JFrame implements View {
         jpane.setVisible(true);
     }
 
-    private void formWindowActivated(java.awt.event.WindowEvent evt) {
-        if (logic.getRef() == null) {
-            setUpForm();
-        }
-    }
-
-    private void jComboBox1ItemStateChanged(java.awt.event.ItemEvent evt) {
-        setUpForm();
-    }
-
     private void jButtonCancelPerformed(ActionEvent evt) {
-        System.out.print(logic.getConverter().toBibTex(logic.getOldReference()));
         this.dispose();
     }
 
     private void jButtonSavePerformed(java.awt.event.ActionEvent evt) {
         try {
-            logic.getRef().isRegular(logic.getOldList());
+            logic.getRef().isRegular(null);
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage(), "Field Checker", JOptionPane.WARNING_MESSAGE);
             return;
@@ -294,21 +281,21 @@ public class GUIEditReference extends javax.swing.JFrame implements View {
 //        System.out.print(logic.getConverter().toBibTex(logic.getRef()));
 //        // Plase to call mainGUI setReference method
 //        this.dispose();
-        controller.SaveEditetReference(logic.getRef());
+       controller.SaveEditetReference(logic.getRef());
     }
 
-    private void setUpRequiredFileds(JPanel jPanel) {
+    private void setUpRequiredFileds(JPanel jPanel, Reference r) {
         for (int i = 1; i < jPanel.getComponentCount(); i += 2) {
             JTextField jt = (JTextField) jPanel.getComponent(i);
-            jt.setText(logic.getRef().getFields().get((i - 1) / 2).getValue());
+            jt.setText(r.getFields().get((i - 1) / 2).getValue());
         }
     }
 
     private void setGUIForReference(Reference r) {
-        jComboBox1.setSelectedItem(r.getReferenceType());
+        setUpForm(r);
         logic.setRef(r);
         referenceArea.setText(logic.currentRefToBibTex());
-        setUpRequiredFileds(jPanel1);
+        setUpRequiredFileds(jPanel1, logic.getRef());
     }
 
 //    public static void edit(Reference r, List<Reference> list, MainGUI mainFrame){
@@ -321,7 +308,7 @@ public class GUIEditReference extends javax.swing.JFrame implements View {
     }
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;    //private javax.swing.JButton jButtonOpen;
-    private javax.swing.JComboBox jComboBox1;
+    //private javax.swing.JComboBox jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

@@ -364,7 +364,7 @@ public class  GUINewReferences extends javax.swing.JFrame implements View {
                 logic.getRef().isRegular(logic.getOldList());
             } else {                // current reference is new and refId is to be checked
                 logic.getRef().isRegular(logic.getListOfRef());
-                logic.getRef().isUnique(logic.getListOfRef());
+                logic.getRef().isUnique(logic.getOldList());
             }
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage(), "Field Checker",JOptionPane.WARNING_MESSAGE);
