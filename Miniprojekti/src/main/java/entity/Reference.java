@@ -31,10 +31,10 @@ public abstract class Reference implements Serializable {
     }
 
     private void initialise(List<Field> list) {
+        this.refType = initType();
         if (list != null) {
             setFields(list);
         }
-        this.refType = initType();
     }
 
     public int getId() {

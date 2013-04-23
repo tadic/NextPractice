@@ -45,7 +45,9 @@ public class Converter {
      * @return replaced text without spec characters.
      */
     private String repSpecChars(String word){
-
+        if(word == null)
+            return word;
+        
         StringBuilder str = new StringBuilder();
         for (char c: word.toCharArray()){
             switch (c){

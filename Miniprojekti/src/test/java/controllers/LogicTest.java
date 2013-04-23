@@ -6,11 +6,9 @@ package controllers;
 
 import entity.FType;
 import entity.Field;
-import entity.Inproceedings;
-import entity.Reference;
 import entity.ReferenceFactory;
-import exception.RepositoryException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -64,8 +62,22 @@ public class LogicTest {
         List<String> expTypes = new ArrayList<String>();
         expTypes.add("article");
         expTypes.add("book");
+        expTypes.add("booklet");
+        expTypes.add("conference");
+        expTypes.add("inbook");
+        expTypes.add("incollection");
         expTypes.add("inproceedings");
+        expTypes.add("manual");
+        expTypes.add("mastersthesis");
+        expTypes.add("misc");
+        expTypes.add("phdthesis");
+        expTypes.add("proceedings");
+        expTypes.add("techreport");
+        expTypes.add("unpublished");
+        
+        Collections.sort(expTypes);
         List<String> result = new ArrayList<String>(logic.getReferenceTypes());
+        Collections.sort(result);
         assertEquals(expTypes, result);
     }
 

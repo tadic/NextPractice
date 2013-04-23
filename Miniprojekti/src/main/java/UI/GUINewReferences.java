@@ -6,6 +6,7 @@ import entity.FType;
 import entity.Field;
 import entity.Reference;
 import java.awt.Dimension;
+import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.*;
@@ -13,21 +14,42 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import org.uncommons.swing.SpringUtilities;
 
-public class  GUINewReferences extends javax.swing.JFrame {
-    private MainGUI mainFrame;
+public class  GUINewReferences extends javax.swing.JFrame implements View {
+    private MainGUIController controller;
     private LogicInterface logic;
 
-    public GUINewReferences(ArrayList<Reference> oldList, ArrayList<Reference> list, MainGUI mainFrame) {
+    public GUINewReferences(MainGUIController controller, ArrayList<Reference> oldList, ArrayList<Reference> list) {
+        this.controller = controller;
+        logic = new Logic();
+        logic.setListOfRef(list);
+        logic.setOldList(oldList);
+    }
+
+    public GUINewReferences(ArrayList<Reference> oldList, ArrayList<Reference> list) {
         logic = new Logic();
         logic.setListOfRef(list);
         logic.setOldList(oldList);
         initComponents();
-        this.mainFrame = mainFrame;
         this.setTitle("BibTeX creator");
         this.setVisible(true);
     }
 
+    public void initAndShow() {
+        initComponents();
+        this.setTitle("BibTeX creator");
+        this.setVisible(true);
+    }
+    
+    @Override
+    public void modelPropertyChange(PropertyChangeEvent evt) {
+        
+    }
 
+    @Override
+    public void registerController(MainGUIController c) {
+        this.controller = c;
+    }
+    
     private void initComponents() {
 
         jComboBox1 = new javax.swing.JComboBox();
@@ -48,7 +70,7 @@ public class  GUINewReferences extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         jTextField1 = new javax.swing.JTextField();
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowActivated(java.awt.event.WindowEvent evt) {
                 formWindowActivated(evt);
@@ -314,8 +336,9 @@ public class  GUINewReferences extends javax.swing.JFrame {
      * @param evt 
      */
     private void jButtonSavePerformed(java.awt.event.ActionEvent evt) {  
-        this.mainFrame.makeCollectedReferencesBibtexString(logic.getListOfRef());
-        this.dispose();
+//        this.mainFrame.makeCollectedReferencesBibtexString(logic.getListOfRef());
+//        this.dispose();
+        controller.saveReferenceFromCreateNewReferenceDialog(logic.getListOfRef());
     }       
     /**
      * Select first row - Reference from the filtered list of reference.
@@ -450,9 +473,9 @@ public class  GUINewReferences extends javax.swing.JFrame {
      * @param list  Current list.
      * @param mainFrame Main frame from which create method is called.
      */
-    public static void create(ArrayList<Reference> oldList, ArrayList<Reference> list, MainGUI mainFrame){
-        GUINewReferences gui = new GUINewReferences(oldList, list, mainFrame);
-    }
+//    public static void create(ArrayList<Reference> oldList, ArrayList<Reference> list, MainGUI mainFrame){
+//        GUINewReferences gui = new GUINewReferences(oldList, list, mainFrame);
+//    }
     
     private javax.swing.JButton AddToDocument;
     private javax.swing.JButton jButton2;

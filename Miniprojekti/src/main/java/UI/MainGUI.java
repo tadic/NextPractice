@@ -53,7 +53,6 @@ public class MainGUI extends JFrame implements View {
 
     private static final String TITLE = "Miniproject";
     private MainGUIController controller;
-    private JMenuItem miOpen, miSave, miSaveAs, miExit;
     private JLabel lStatus;
     private ReferenceTablemodel referencesTablemodel = new ReferenceTablemodel();
     private UnifiedReferenceTablemodel collectedReferencesTablemodel = new UnifiedReferenceTablemodel();
@@ -61,12 +60,11 @@ public class MainGUI extends JFrame implements View {
     private JTextArea bibTextArea;
     private Converter converter = new Converter();
     final JFileChooser fc = new JFileChooser();
-    
+
     public MainGUI() {
         initComponents();
     }
 
-    
     @Override
     public void registerController(MainGUIController c) {
         this.controller = c;
@@ -98,7 +96,7 @@ public class MainGUI extends JFrame implements View {
 
         JMenuBar menubar = new JMenuBar();
         JMenu file = new JMenu("File");
-        miOpen = new JMenuItem("Open");
+        JMenuItem miOpen = new JMenuItem("Open");
         miOpen.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -115,10 +113,9 @@ public class MainGUI extends JFrame implements View {
                 }
             }
         });
-        miSave = new JMenuItem("Save");
-        miSaveAs = new JMenuItem("Save As");
+        JMenuItem miSave = new JMenuItem("Save");
+        JMenuItem miSaveAs = new JMenuItem("Save As");
         miSaveAs.addActionListener(new ActionListener() {
-            
             @Override
             public void actionPerformed(ActionEvent e) {
                 int returnVal = fc.showSaveDialog(MainGUI.this);
@@ -150,7 +147,7 @@ public class MainGUI extends JFrame implements View {
 
             }
         });
-        miExit = new JMenuItem("Exit");
+        JMenuItem miExit = new JMenuItem("Exit");
         miExit.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -167,14 +164,20 @@ public class MainGUI extends JFrame implements View {
         JMenu operations = new JMenu("Operations");
         JMenuItem miCreate = new JMenuItem("Create");
         miCreate.addActionListener(new ActionListener() {
-
             @Override
             public void actionPerformed(ActionEvent e) {
-                createNewReferences();
+                controller.createNewReference();
             }
         });
-        
-        
+
+        JMenuItem miEdit = new JMenuItem("Edit");
+        miEdit.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                controller.editSelectedReference();
+            }
+        });
+
         JMenuItem miDelete = new JMenuItem("Delete");
         miDelete.addActionListener(new ActionListener() {
             @Override
@@ -187,6 +190,7 @@ public class MainGUI extends JFrame implements View {
             }
         });
         operations.add(miCreate);
+        operations.add(miEdit);
         operations.add(miDelete);
         menubar.add(operations);
 
@@ -225,24 +229,19 @@ public class MainGUI extends JFrame implements View {
         setSize(800, 600);
         pack();
     }
-    
+
 //      Ideana oli, että oldList on repositoryList(tietokanta), koska pitää checkata isUnique()
 //      Se toinen on se joka muuttuu GUINewReference:ssa, 
 //      Se create metodi ottaa sun MainFrame:n parametrina koska sen pitää trigeroida joku MainFram:in metodi
 //      joka tekisi homman kun GUINewReference on valmis!(mä käytin makeCollectedReferencesBibtexString())
-    
 //      EN onnistunut tehdä siten, että create palauttaa listan ! Jos sulla on idea - sano tai korjaa itse!
 //     Mutta mä testasin vähän ja se toimi näin. Eli nyt on tillanne kun GUINewRef on valmis, se nayttää Referencit
 //      MainGui:lla ja collectedReferences.... lista saa uutta arvoa.
 //      Toinen vaihtoehto olisi, että vain käyttän get() and set() metodit mainGUI:sta, ja siten create() metodilla olisi vain MainGUI parametrina...
-
-    private void createNewReferences(){
-     ArrayList<Reference> oldList = new ArrayList<Reference>(); // which is database
-     GUINewReferences.create(oldList, (ArrayList<Reference>)collectedReferencesTablemodel.getReferences(), this);
-}
-
-
-
+//    private void createNewReferences(){
+//     ArrayList<Reference> oldList = new ArrayList<Reference>(); // which is database
+//     GUINewReferences.create(oldList, (ArrayList<Reference>)collectedReferencesTablemodel.getReferences(), this);
+//}
     public JToolBar makeToolbar() {
         JToolBar toolBar = new JToolBar("Still draggable");
         toolBar.setFloatable(false);
@@ -396,28 +395,27 @@ public class MainGUI extends JFrame implements View {
 
         @Override
         public int getColumnCount() {
-            return 1;
+            return 2;
         }
 
         @Override
         public String getColumnName(int col) {
-            return "ID";
+            if(col == 0) {
+                return "ID";
+            } else {
+                return "Description";
+            }
+            
         }
 
         @Override
         public Object getValueAt(int rowIndex, int columnIndex) {
-            return references.get(rowIndex).getId();
-        }
-
-        private int cols() {
-            int c = 0;
-            for (Reference r : references) {
-                int s = r.getFields().size();
-                if (s > c) {
-                    c = s;
-                }
+            if(columnIndex == 0) {
+                return references.get(rowIndex).getId();
+            } else {
+                return references.get(rowIndex).toString();
             }
-            return c;
+            
         }
 
         public List<Reference> getReferences() {
@@ -428,5 +426,61 @@ public class MainGUI extends JFrame implements View {
             this.references = references;
             fireTableStructureChanged();
         }
+    }
+
+    public MainGUIController getController() {
+        return controller;
+    }
+
+    public void setController(MainGUIController controller) {
+        this.controller = controller;
+    }
+
+    public JLabel getlStatus() {
+        return lStatus;
+    }
+
+    public void setlStatus(JLabel lStatus) {
+        this.lStatus = lStatus;
+    }
+
+    public ReferenceTablemodel getReferencesTablemodel() {
+        return referencesTablemodel;
+    }
+
+    public void setReferencesTablemodel(ReferenceTablemodel referencesTablemodel) {
+        this.referencesTablemodel = referencesTablemodel;
+    }
+
+    public UnifiedReferenceTablemodel getCollectedReferencesTablemodel() {
+        return collectedReferencesTablemodel;
+    }
+
+    public void setCollectedReferencesTablemodel(UnifiedReferenceTablemodel collectedReferencesTablemodel) {
+        this.collectedReferencesTablemodel = collectedReferencesTablemodel;
+    }
+
+    public JTable getTable() {
+        return table;
+    }
+
+    public void setTable(JTable table) {
+        this.table = table;
+    }
+
+    public JTextArea getBibTextArea() {
+        return bibTextArea;
+    }
+
+    public void setBibTextArea(JTextArea bibTextArea) {
+        this.bibTextArea = bibTextArea;
+    }
+
+    public Converter getConverter() {
+        return converter;
+    }
+
+    public void setConverter(Converter converter) {
+        this.converter = converter;
     }
 }

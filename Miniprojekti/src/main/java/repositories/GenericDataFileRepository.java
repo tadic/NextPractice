@@ -57,8 +57,6 @@ public class GenericDataFileRepository implements GenericRepository {
         }
         return classes;
     }
-    
-    
 
     /**
      * Loads data objects from file.
@@ -163,9 +161,10 @@ public class GenericDataFileRepository implements GenericRepository {
         }
         return list;
     }
-    
+
     /**
      * Finds all references in repository
+     *
      * @return List of references
      */
     @Override
@@ -173,7 +172,6 @@ public class GenericDataFileRepository implements GenericRepository {
         return new ArrayList(objects.values());
     }
 
-    
     /**
      * Finds all specified entities in repository having specified field value
      *
@@ -232,6 +230,15 @@ public class GenericDataFileRepository implements GenericRepository {
         entity.setId(id);
         objects.put(id, entity);
         return entity;
+    }
+
+    @Override
+    public List<Reference> create(List<Reference> entity) {
+        List<Reference> l = new ArrayList<Reference>();
+        for(Reference r: entity) {
+            l.add(create(r));
+        }
+        return l;
     }
 
     /**

@@ -21,6 +21,8 @@ public interface GenericRepository {
     <T extends Reference> int count(Class<T> type);
 
     <T extends Reference> T create(T entity);
+    
+    List<Reference> create(List<Reference> entity);
 
     <T extends Reference> void delete(int id) throws RepositoryException;
 

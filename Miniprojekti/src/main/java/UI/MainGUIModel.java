@@ -81,4 +81,6 @@ public class MainGUIModel extends AbstractModel {
         this.currentlySelectedReference = currentlySelected;
         firePropertyChange(MainGUIController.CURRENTLY_SELECTED_REFERENCE, old, currentlySelected);
     }
+    
+    
 }
