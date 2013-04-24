@@ -22,30 +22,30 @@ public class MainGUIModel extends AbstractModel {
     private List<Reference> references = new ArrayList<Reference>();
     private Set<Reference> collectedReferences = new HashSet<Reference>();
     private Reference currentlySelectedReference;
+    private Class currentlySelectedListsClass;
 
     public Map<String, Integer> getReferenceTypes() {
         return referenceTypes;
     }
 
-    
     public void addToCollectedReferences(Reference r) {
         Set<Reference> old = new HashSet<Reference>(this.collectedReferences);
         this.collectedReferences.add(r);
         firePropertyChange(MainGUIController.COLLECTED_REFERENCES, old, collectedReferences);
     }
-    
+
     public void removeFromReferences(Reference r) {
         List<Reference> old = new ArrayList<Reference>(this.references);
         references.remove(r);
         firePropertyChange(MainGUIController.REFERENCES, old, references);
     }
-    
+
     public void removeFromCollected(Reference r) {
         Set<Reference> old = new HashSet<Reference>(this.collectedReferences);
         this.collectedReferences.remove(r);
         firePropertyChange(MainGUIController.COLLECTED_REFERENCES, old, collectedReferences);
     }
-    
+
     public void setReferenceTypes(Map<String, Integer> referenceTypes) {
         Map<String, Integer> old = this.referenceTypes;
         this.referenceTypes = referenceTypes;
@@ -81,6 +81,20 @@ public class MainGUIModel extends AbstractModel {
         this.currentlySelectedReference = currentlySelected;
         firePropertyChange(MainGUIController.CURRENTLY_SELECTED_REFERENCE, old, currentlySelected);
     }
-    
-    
+
+    public Reference getCurrentlySelectedReference() {
+        return currentlySelectedReference;
+    }
+
+    public void setCurrentlySelectedReference(Reference currentlySelectedReference) {
+        this.currentlySelectedReference = currentlySelectedReference;
+    }
+
+    public Class getCurrentlySelectedListsClass() {
+        return currentlySelectedListsClass;
+    }
+
+    public void setCurrentlySelectedListsClass(Class currentlySelectedListsClass) {
+        this.currentlySelectedListsClass = currentlySelectedListsClass;
+    }
 }

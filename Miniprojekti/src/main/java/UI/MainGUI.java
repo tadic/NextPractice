@@ -341,7 +341,7 @@ public class MainGUI extends JFrame implements View {
         EventQueue.invokeLater(new Runnable() {
             public void run() {
                 g.setVisible(true);
-                c.populateReferencesWithTestData();
+                //c.populateReferencesWithTestData();
             }
         });
     }

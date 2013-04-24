@@ -96,6 +96,7 @@ public class MainGUIController extends AbstractController {
         GUIEditReference g = getGUIEditReference();
         try {
             repository.update(r.getId(), r);
+            updateAlreadySelectedReferences();
         } catch (RepositoryException e) {
             e.printStackTrace();
         }
@@ -104,10 +105,11 @@ public class MainGUIController extends AbstractController {
     }
 
     public void saveReferenceFromCreateNewReferenceDialog(List<Reference> r) {
-        GUINewReferences g = getNewReferencesGuiView();
+        GUINewReferences g = getNewReferencesGuiView();        
         repository.create(r);
         g.dispose();
         removeView(g);
+        updateAlreadySelectedReferences();
     }
 
     private MainGUIModel getMainGUIModel() {
@@ -170,8 +172,17 @@ public class MainGUIController extends AbstractController {
     public void updateReferences(Class referenceType) {
         MainGUIModel model = getMainGUIModel();
         model.setReferences(repository.findAll(referenceType));
+        model.setCurrentlySelectedListsClass(referenceType);
     }
 
+    public void updateAlreadySelectedReferences() {
+        MainGUIModel model = getMainGUIModel();
+        Class c = model.getCurrentlySelectedListsClass();
+        if(c != null) {
+            updateReferences(c);
+        }
+    }
+    
     public void addReferenceToCollectedReferences(Reference r) {
         MainGUIModel model = getMainGUIModel();
         model.addToCollectedReferences(r);
