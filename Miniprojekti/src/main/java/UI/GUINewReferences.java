@@ -360,12 +360,9 @@ public class  GUINewReferences extends javax.swing.JFrame implements View {
      */
     private void jAddReferenceActionPerformed(java.awt.event.ActionEvent evt) {  
         try {
-            if (logic.getCurrentRow() != -1){      // current reference is one from the list
-                logic.getRef().isRegular(logic.getOldList());
-            } else {                // current reference is new and refId is to be checked
                 logic.getRef().isRegular(logic.getListOfRef());
                 logic.getRef().isUnique(logic.getOldList());
-            }
+
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage(), "Field Checker",JOptionPane.WARNING_MESSAGE);
             return;
