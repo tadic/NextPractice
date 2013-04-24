@@ -217,7 +217,6 @@ public class GUIEditReference extends javax.swing.JFrame implements View {
     }// </editor-fold>                        
 
     private void setUpForm(Reference r) {
-        //logic.setCurrentRow(-1);
         SpringLayout layout = new SpringLayout();
         //logic.createNewRef(r.getReferenceType());
         setUpFields(jPanel1, layout, logic.getRequiredFields());
@@ -274,17 +273,14 @@ public class GUIEditReference extends javax.swing.JFrame implements View {
 
     private void jButtonSavePerformed(java.awt.event.ActionEvent evt) {
         try {
-            logic.setOldId(logic.getRef().getFieldValue(FType.referenceId));
-            logic.getRef().isUnique(logic.getOldList(), logic.getOldId());
             
+            logic.getRef().isUnique(logic.getOldList(), logic.getOldId());
+            logic.setOldId(logic.getRef().getFieldValue(FType.referenceId));
             logic.getRef().isRegular();
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage(), "Field Checker", JOptionPane.WARNING_MESSAGE);
             return;
         }
-//        System.out.print(logic.getConverter().toBibTex(logic.getRef()));
-//        // Plase to call mainGUI setReference method
-//        this.dispose();
        controller.SaveEditetReference(logic.getRef());
     }
 

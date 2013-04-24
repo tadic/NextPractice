@@ -102,7 +102,6 @@ public abstract class Reference implements Serializable {
         if (list == null) {
             return false;
         }
-        //System.out.println();
         for (Reference r : list) {
             if (id.equals(r.getFieldValue(FType.referenceId).trim())) {
                 return true;
@@ -123,8 +122,6 @@ public abstract class Reference implements Serializable {
      * already in the list.
      */
     public boolean isUnique(List<Reference> list, String oldId) {
-        System.out.println("id: " +getFieldValue(FType.referenceId));
-        System.out.println("oldId: " +oldId);
         if (oldId!=null && oldId.trim().length()!=0){
             if (this.getFieldValue(FType.referenceId).equals(oldId)){
                 return true;
@@ -137,7 +134,6 @@ public abstract class Reference implements Serializable {
                 newId =  generateNextValueForRefId(newId);
             }
             this.setFieldValue(FType.referenceId, newId);
-            System.err.println(getFieldValue(FType.referenceId));
             return true;
         } else if (!isInTheList(newId, list)) {
             return true;
