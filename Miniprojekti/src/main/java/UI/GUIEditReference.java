@@ -274,7 +274,9 @@ public class GUIEditReference extends javax.swing.JFrame implements View {
 
     private void jButtonSavePerformed(java.awt.event.ActionEvent evt) {
         try {
+            logic.setOldId(logic.getRef().getFieldValue(FType.referenceId));
             logic.getRef().isUnique(logic.getOldList(), logic.getOldId());
+            
             logic.getRef().isRegular();
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage(), "Field Checker", JOptionPane.WARNING_MESSAGE);

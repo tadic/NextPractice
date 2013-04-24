@@ -98,13 +98,13 @@ public abstract class Reference implements Serializable {
      * @param list
      * @return True if list contains, false if doesn't.
      */
-    private boolean isInTheList(List<Reference> list) {
+    private boolean isInTheList(String id, List<Reference> list) {
         if (list == null) {
             return false;
         }
         //System.out.println();
         for (Reference r : list) {
-            if (this.getFieldValue(FType.referenceId).trim().equals(r.getFieldValue(FType.referenceId).trim())) {
+            if (id.equals(r.getFieldValue(FType.referenceId).trim())) {
                 return true;
             }
         }
@@ -123,18 +123,23 @@ public abstract class Reference implements Serializable {
      * already in the list.
      */
     public boolean isUnique(List<Reference> list, String oldId) {
-        if (oldId!=null){
+        System.out.println("id: " +getFieldValue(FType.referenceId));
+        System.out.println("oldId: " +oldId);
+        if (oldId!=null && oldId.trim().length()!=0){
             if (this.getFieldValue(FType.referenceId).equals(oldId)){
                 return true;
             }
-        }
-        if (this.getFieldValue(FType.referenceId).trim().length() == 0) {
-            this.setFieldValue(FType.referenceId, this.getReferenceType().substring(0, 4) + "_" + "10");
-            while (isInTheList(list)) {
-                this.setFieldValue(FType.referenceId, generateNextValueForRefId(this.getFieldValue(FType.referenceId)));
+        } 
+        String newId = this.getFieldValue(FType.referenceId).trim();
+        if (newId.length() == 0) {
+            newId =this.getReferenceType().substring(0, 4) + "_" + "10";
+            while (isInTheList(newId, list)) {
+                newId =  generateNextValueForRefId(newId);
             }
+            this.setFieldValue(FType.referenceId, newId);
+            System.err.println(getFieldValue(FType.referenceId));
             return true;
-        } else if (!isInTheList(list)) {
+        } else if (!isInTheList(newId, list)) {
             return true;
         } else {
             throw new IllegalArgumentException("Reference with the same referenceId already exists!");
