@@ -102,6 +102,7 @@ public abstract class Reference implements Serializable {
         if (list == null) {
             return false;
         }
+        //System.out.println();
         for (Reference r : list) {
             if (this.getFieldValue(FType.referenceId).trim().equals(r.getFieldValue(FType.referenceId).trim())) {
                 return true;
@@ -121,7 +122,12 @@ public abstract class Reference implements Serializable {
      * @return boolean True, if doesn't repeat in the list. False if it is
      * already in the list.
      */
-    public boolean isUnique(List<Reference> list) {
+    public boolean isUnique(List<Reference> list, String oldId) {
+        if (oldId!=null){
+            if (this.getFieldValue(FType.referenceId).equals(oldId)){
+                return true;
+            }
+        }
         if (this.getFieldValue(FType.referenceId).trim().length() == 0) {
             this.setFieldValue(FType.referenceId, this.getReferenceType().substring(0, 4) + "_" + "10");
             while (isInTheList(list)) {
@@ -178,10 +184,10 @@ public abstract class Reference implements Serializable {
      * @param word is text which should be modified.
      * @return text with replaced special characters.
      */
-    public boolean isRegular(List<Reference> list) throws Exception {
+    public boolean isRegular() throws Exception {
         checkRefType();
         checkIfContainsAllRightFields();
-        isUnique(list);                     // if list is empty or null, it returns true.
+        //isUnique(list);                     // if list is empty or null, it returns true.
         checkFields();
         checkYear();
         return true;

@@ -26,15 +26,16 @@ public class GUIEditReference extends javax.swing.JFrame implements View {
     private MainGUIController controller;
    // private Reference ref;
 
-    public GUIEditReference(Reference ref, MainGUIController controller) {
-        //System.out.println(ref.getReferenceType());
-        //this.ref = ref;
-        this.logic = new Logic();
-        this.controller = controller;
-        //logic.setOldReference(ref);
+    public GUIEditReference(Reference ref, List<Reference> oldList, MainGUIController controller) {
+        logic = new Logic();
+        logic.setOldList(oldList);
         logic.setRef(ref);
-        
+        logic.setOldId(ref.getFieldValue(FType.referenceId));
+        logic.setOldReference(ref);
+        this.controller = controller;
+
     }
+    
 
     public void initAndShow() {
         initComponents();
@@ -273,7 +274,8 @@ public class GUIEditReference extends javax.swing.JFrame implements View {
 
     private void jButtonSavePerformed(java.awt.event.ActionEvent evt) {
         try {
-            logic.getRef().isRegular(null);
+            logic.getRef().isUnique(logic.getOldList(), logic.getOldId());
+            logic.getRef().isRegular();
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage(), "Field Checker", JOptionPane.WARNING_MESSAGE);
             return;
@@ -298,13 +300,11 @@ public class GUIEditReference extends javax.swing.JFrame implements View {
         setUpRequiredFileds(jPanel1, logic.getRef());
     }
 
-//    public static void edit(Reference r, List<Reference> list, MainGUI mainFrame){
-//          new GUIEditReference(r, list, mainFrame);
-//        }
+
     public static void main(String args[]) {
-        Reference r = new Book();
+         Reference r = new Book();
         r.setFieldValue(FType.referenceId, "rrrrr");
-        new GUIEditReference(r, null).initAndShow();
+        new GUIEditReference(r, null, null).initAndShow();
     }
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;    //private javax.swing.JButton jButtonOpen;

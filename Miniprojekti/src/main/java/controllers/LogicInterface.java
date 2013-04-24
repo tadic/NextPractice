@@ -15,6 +15,7 @@ public interface LogicInterface {
     String currentRefToBibTex();
     Converter getConverter();
     int getCurrentRow();
+    String getOldId();
     List<Field> getFields(String referenceType);
     List<Reference> getFilteredList();
     ArrayList<JTextField> getListOfFields();
@@ -36,5 +37,6 @@ public interface LogicInterface {
     void setOldReference(Reference oldReference);
     void setRFactory(ReferenceFactory RFactory);
     void setRef(Reference r);
+    void setOldId(String s);
     
 }

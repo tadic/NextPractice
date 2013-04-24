@@ -349,9 +349,9 @@ public class  GUINewReferences extends javax.swing.JFrame implements View {
             return;
         }
        logic.setCurrentRow(0);
-        String filterWord = jTextField1.getText().trim();
-        logic.setFilter(filterWord);
-        setDocumentArea(logic.getFilteredList());
+       String filterWord = jTextField1.getText().trim();
+       logic.setFilter(filterWord);
+       setDocumentArea(logic.getFilteredList());
        setGUIForCurrentRow(logic.getCurrentRow());
     }
     /**
@@ -360,8 +360,9 @@ public class  GUINewReferences extends javax.swing.JFrame implements View {
      */
     private void jAddReferenceActionPerformed(java.awt.event.ActionEvent evt) {  
         try {
-                logic.getRef().isRegular(logic.getListOfRef());
-                logic.getRef().isUnique(logic.getOldList());
+                //logic.getRef().isUnique(logic.getOldList(), null);
+                logic.getRef().isUnique(logic.getListOfRef(), logic.getOldId());
+                logic.getRef().isRegular();
 
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage(), "Field Checker",JOptionPane.WARNING_MESSAGE);
@@ -433,6 +434,7 @@ public class  GUINewReferences extends javax.swing.JFrame implements View {
         
         jComboBox1.setSelectedItem(logic.getRef().getReferenceType());
         logic.setRef(logic.getFilteredList().get(n));
+        logic.setOldId(logic.getRef().getFieldValue(FType.referenceId));
         logic.setCurrentRow(n);
         selectRow(n);
         referenceArea.setText(logic.currentRefToBibTex());

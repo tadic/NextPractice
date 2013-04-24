@@ -19,6 +19,8 @@ import repositories.GenericRepository;
 public class Logic implements LogicInterface {
 
     private ReferenceFactory RFactory;
+
+   
     private Converter converter;
     private Reference ref;        
     private Reference oldReference;// working reference
@@ -26,6 +28,7 @@ public class Logic implements LogicInterface {
     private List<Reference> filteredList;   
     private List<Reference> oldList;   // list for filtering
     private int currentRow;
+    private String oldID;
 
     ArrayList<JTextField> listOfFields;
 
@@ -53,7 +56,14 @@ public class Logic implements LogicInterface {
     public void setOldReference(Reference oldReference) {
         this.oldReference = oldReference;
     }
-
+    @Override
+    public String getOldId() {
+        return oldID;
+    }
+    @Override
+    public void setOldId(String oldID) {
+        this.oldID = oldID;
+    }
     @Override
     public List<Reference> getOldList() {
         return oldList;

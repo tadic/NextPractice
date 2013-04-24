@@ -86,7 +86,7 @@ public class MainGUIController extends AbstractController {
         MainGUIModel m = getMainGUIModel();
         Reference selected = m.getCurrentlySelected();
         if (selected != null) {
-            GUIEditReference g = new GUIEditReference(selected, this);
+            GUIEditReference g = new GUIEditReference(selected, new ArrayList<Reference>(repository.findAll()), this);
             addView(g);
             g.initAndShow();
         }
