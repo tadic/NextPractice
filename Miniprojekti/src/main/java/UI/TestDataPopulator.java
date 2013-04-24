@@ -22,6 +22,7 @@ public class TestDataPopulator {
     public static void populateTestdata(GenericRepository repository) {
         for (int i = 0; i < 50; i++) {
             List<Field> inf = new ArrayList<Field>();
+            inf.add(new Field(FType.referenceId, "referenceId" + i, true));
             inf.add(new Field(FType.author, "Author" + i, true));
             inf.add(new Field(FType.title, "Title" + i, true));
             inf.add(new Field(FType.booktitle, "Booktitle" + i, true));
