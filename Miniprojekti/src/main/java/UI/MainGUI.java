@@ -60,6 +60,8 @@ public class MainGUI extends JFrame implements View {
     private JTextArea bibTextArea;
     private Converter converter = new Converter();
     final JFileChooser fc = new JFileChooser();
+    private JMenuItem miSave;
+    private File location;
 
     public MainGUI() {
         initComponents();
@@ -107,13 +109,28 @@ public class MainGUI extends JFrame implements View {
                         controller.open(file);
                         setTitle(TITLE + " - " + file.getAbsolutePath());
                         statusMessage("Opened from " + file.getAbsolutePath());
+                        location = file;
+                        miSave.setEnabled(true);
                     } catch (RepositoryException ex) {
                         errorDialog(ex);
                     }
                 }
             }
         });
-        JMenuItem miSave = new JMenuItem("Save");
+        miSave = new JMenuItem("Save");
+        miSave.setEnabled(false);
+        miSave.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(location != null) {
+                    try {
+                        controller.save(location);
+                    } catch(RepositoryException ex) {
+                        errorDialog(ex);
+                    }                    
+                }
+            }
+        });
         JMenuItem miSaveAs = new JMenuItem("Save As");
         miSaveAs.addActionListener(new ActionListener() {
             @Override
@@ -124,6 +141,8 @@ public class MainGUI extends JFrame implements View {
                     try {
                         controller.save(file);
                         statusMessage("Saved to file " + file.getAbsolutePath());
+                        location = file;
+                        miSave.setEnabled(true);
                     } catch (RepositoryException ex) {
                         errorDialog(ex);
                     }
@@ -334,7 +353,7 @@ public class MainGUI extends JFrame implements View {
         EventQueue.invokeLater(new Runnable() {
             public void run() {
                 g.setVisible(true);
-                c.populateReferencesWithTestData();
+                //c.populateReferencesWithTestData();
             }
         });
     }

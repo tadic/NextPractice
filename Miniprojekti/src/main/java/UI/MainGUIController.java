@@ -61,7 +61,7 @@ public class MainGUIController extends AbstractController {
         availableReferenceSubClasses.put("Proceedings", Proceedings.class);
         availableReferenceSubClasses.put("Techreport", Techreport.class);
         availableReferenceSubClasses.put("Unpublished", Unpublished.class);
-        
+
     }
 
     public MainGUIController(MainGUI gui, MainGUIModel model) {
@@ -138,79 +138,45 @@ public class MainGUIController extends AbstractController {
     }
 
     public void save(File f) throws RepositoryException {
-        for (AbstractModel m : registeredModels) {
-            if (m instanceof MainGUIModel) {
-                MainGUIModel model = (MainGUIModel) m;
-                repository.saveDataToFile(f);
-                return;
-            }
-        }
+        repository.saveDataToFile(f);
     }
 
     public void open(File f) throws RepositoryException {
-        for (AbstractModel m : registeredModels) {
-            if (m instanceof MainGUIModel) {
-                MainGUIModel model = (MainGUIModel) m;
-                repository.loadDataFromFile(f);
-                return;
-            }
-        }
+        repository.loadDataFromFile(f);
     }
 
     public void export(File f) throws IOException {
-        for (AbstractModel m : registeredModels) {
-            if (m instanceof MainGUIModel) {
-                MainGUIModel model = (MainGUIModel) m;
-                FileSaver fs = new FileSaver(new Converter());
-                fs.saveToFile(f.getAbsolutePath(), new ArrayList<Reference>(model.getCollectedReferences()));
-                return;
-            }
-        }
+        MainGUIModel model = getMainGUIModel();
+        FileSaver fs = new FileSaver(new Converter());
+        fs.saveToFile(f.getAbsolutePath(), new ArrayList<Reference>(model.getCollectedReferences()));
     }
 
     public void deleteSelected() throws RepositoryException {
-        for (AbstractModel m : registeredModels) {
-            if (m instanceof MainGUIModel) {
-                MainGUIModel model = (MainGUIModel) m;
-                Reference selected = model.getCurrentlySelected();
-                if (selected != null) {
-                    model.setCurrentlySelected(null);
-                    model.removeFromCollected(selected);
-                    model.removeFromReferences(selected);
-                    repository.delete(selected.getId());
-                }
-                return;
-            }
+        MainGUIModel model = getMainGUIModel();
+        Reference selected = model.getCurrentlySelected();
+        if (selected != null) {
+            model.setCurrentlySelected(null);
+            model.removeFromCollected(selected);
+            model.removeFromReferences(selected);
+            repository.delete(selected.getId());
         }
     }
 
     public void updateCurrentlySelectedReference(Reference r) {
-        for (AbstractModel m : registeredModels) {
-            if (m instanceof MainGUIModel) {
-                ((MainGUIModel) m).setCurrentlySelected(r);
-                return;
-            }
-        }
+        MainGUIModel model = getMainGUIModel();
+        model.setCurrentlySelected(r);
     }
 
     public void updateReferences(Class referenceType) {
-        for (AbstractModel m : registeredModels) {
-            if (m instanceof MainGUIModel) {
-                ((MainGUIModel) m).setReferences(repository.findAll(referenceType));
-                return;
-            }
-        }
+        MainGUIModel model = getMainGUIModel();
+        model.setReferences(repository.findAll(referenceType));
     }
 
     public void addReferenceToCollectedReferences(Reference r) {
-        for (AbstractModel m : registeredModels) {
-            if (m instanceof MainGUIModel) {
-                ((MainGUIModel) m).addToCollectedReferences(r);
-                return;
-            }
-        }
+        MainGUIModel model = getMainGUIModel();
+        model.addToCollectedReferences(r);
     }
-    
+
     public Set<String> getReferenceClassNames() {
         MainGUIModel m = getMainGUIModel();
         return m.getReferenceTypes().keySet();
