@@ -77,7 +77,7 @@ public class MainGUIController extends AbstractController {
     }
 
     public void createNewReference() {
-        GUINewReferences ng = new GUINewReferences(this, new ArrayList<Reference>(), new ArrayList<Reference>());
+        GUINewReferences ng = new GUINewReferences(this, new ArrayList<Reference>(repository.findAll()), new ArrayList<Reference>());
         addView(ng);
         ng.initAndShow();
     }

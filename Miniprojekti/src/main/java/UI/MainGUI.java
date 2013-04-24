@@ -248,19 +248,7 @@ public class MainGUI extends JFrame implements View {
         setSize(800, 600);
         pack();
     }
-
-//      Ideana oli, että oldList on repositoryList(tietokanta), koska pitää checkata isUnique()
-//      Se toinen on se joka muuttuu GUINewReference:ssa, 
-//      Se create metodi ottaa sun MainFrame:n parametrina koska sen pitää trigeroida joku MainFram:in metodi
-//      joka tekisi homman kun GUINewReference on valmis!(mä käytin makeCollectedReferencesBibtexString())
-//      EN onnistunut tehdä siten, että create palauttaa listan ! Jos sulla on idea - sano tai korjaa itse!
-//     Mutta mä testasin vähän ja se toimi näin. Eli nyt on tillanne kun GUINewRef on valmis, se nayttää Referencit
-//      MainGui:lla ja collectedReferences.... lista saa uutta arvoa.
-//      Toinen vaihtoehto olisi, että vain käyttän get() and set() metodit mainGUI:sta, ja siten create() metodilla olisi vain MainGUI parametrina...
-//    private void createNewReferences(){
-//     ArrayList<Reference> oldList = new ArrayList<Reference>(); // which is database
-//     GUINewReferences.create(oldList, (ArrayList<Reference>)collectedReferencesTablemodel.getReferences(), this);
-//}
+    
     public JToolBar makeToolbar() {
         JToolBar toolBar = new JToolBar("Still draggable");
         toolBar.setFloatable(false);
@@ -353,7 +341,7 @@ public class MainGUI extends JFrame implements View {
         EventQueue.invokeLater(new Runnable() {
             public void run() {
                 g.setVisible(true);
-                //c.populateReferencesWithTestData();
+                c.populateReferencesWithTestData();
             }
         });
     }
