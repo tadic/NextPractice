@@ -25,7 +25,7 @@ public interface LogicInterface {
     List<Field> getOptionalFields();
     ReferenceFactory getRFactory();
     Reference getRef();
-    List<String> getReferenceTypes();
+    //List<String> getReferenceTypes();
     List<Field> getRequiredFields();
     void setConverter(Converter converter);
     void setCurrentRow(int currentRow);

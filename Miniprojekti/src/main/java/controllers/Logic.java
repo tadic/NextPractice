@@ -95,7 +95,7 @@ public class Logic implements LogicInterface {
     }
     @Override
     public String currentRefToBibTex(){
-     return converter.toBibTex(ref);
+        return converter.toBibTex(ref);
     }
     @Override
     public void setRef(Reference r){
@@ -153,15 +153,15 @@ public class Logic implements LogicInterface {
         return RFactory.getFields(referenceType);
     }
 
-    /**
-     * List of all reference types known by REferenceFactory
-     *
-     * @return Set<String> Reference type names
-     */
-    @Override
-    public List<String> getReferenceTypes() {
-        return RFactory.getReferenceTypes();
-    }
+//    /**
+//     * List of all reference types known by REferenceFactory
+//     *
+//     * @return Set<String> Reference type names
+//     */
+//    @Override
+//    public List<String> getReferenceTypes() {
+//        return RFactory.getReferenceTypes();
+//    }
 
 //    
 /**
@@ -208,7 +208,7 @@ public class Logic implements LogicInterface {
     * @return 
     */
       private boolean isContaintsWords(Reference r, ArrayList<String> words){
-        boolean contains = false;
+        boolean contains;
         for (String word: words){
             contains = false;
             if (r.getReferenceType().contains(word)){

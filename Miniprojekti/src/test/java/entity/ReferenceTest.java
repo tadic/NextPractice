@@ -92,7 +92,15 @@ public class ReferenceTest {
         assertEquals("book", book.getReferenceType());
         assertEquals(rf.getFields("book").size(), book.getFields().size());
     }
-
+    @Test
+    public void testInproceedingsConstructor() {
+        ReferenceFactory rf = new ReferenceFactory();
+        List<Field> inproceedings = rf.getFields("inproceedings");
+        Reference book = new Inproceedings(inproceedings);
+        assertNotNull(book);
+        assertEquals("inproceedings", book.getReferenceType());
+        assertEquals(rf.getFields("inproceedings").size(), book.getFields().size());
+    }
     @Test
     public void testBookletConstructor() {
         ReferenceFactory rf = new ReferenceFactory();
@@ -204,7 +212,9 @@ public class ReferenceTest {
 
     @Test
     public void testIsRegularListContainsSameDefaultID() throws Exception {
-        Reference r = new Inproceedings();
+        ReferenceFactory rf = new ReferenceFactory();
+        List<Field> fields = rf.getFields("inproceedings");
+        Reference r = rf.createReference("inproceedings", fields);
         r.setFieldValue(FType.referenceId, "inpr_10");
         r.setFieldValue(FType.author, "Roumani, Hamzeh");
         r.setFieldValue(FType.title, "Design guidelines for the lab component of objects-first CS1");
@@ -253,6 +263,12 @@ public class ReferenceTest {
         }
     }
 
+    @Test
+    public void testGetFieldsFromRefFactory(){
+        ReferenceFactory rf = new ReferenceFactory();
+        assertEquals(1, rf.getFields("misc", true).size());
+        assertEquals(FType.referenceId, rf.getFields("misc", true).get(0).getKey());
+    }
     @Test
     public void testisRequiredIfRefNotHaveFieldListOfRightSize() throws Exception {
         Reference book = new Book(new ArrayList<Field>());

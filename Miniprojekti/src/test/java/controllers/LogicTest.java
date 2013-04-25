@@ -4,12 +4,16 @@
  */
 package controllers;
 
+import entity.Book;
 import entity.FType;
 import entity.Field;
+import entity.Inbook;
+import entity.Reference;
 import entity.ReferenceFactory;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import javax.swing.JTextField;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -24,76 +28,92 @@ import static org.junit.Assert.*;
 public class LogicTest {
 
     Logic logic;
-    ReferenceFactory factory;
-
-    public LogicTest() {
-    }
-
-    @BeforeClass
-    public static void setUpClass() {
-    }
-
-    @AfterClass
-    public static void tearDownClass() {
-    }
 
     @Before
     public void setUp() {
         logic = new Logic();
-        factory = new ReferenceFactory();
+        logic.createNewRef("book");
+        logic.getRef().setFieldValue(FType.referenceId, "yksi");
+        logic.getRef().setFieldValue(FType.author, "kaksi");
+        logic.getRef().setFieldValue(FType.title, "kolme");
+        logic.getRef().setFieldValue(FType.address, "nelja");
+        logic.setFilteredList(new ArrayList<Reference>());
+        logic.setListOfRef(new ArrayList<Reference>());
+        logic.getListOfRef().add(logic.getRef());
+        
     }
-
-    @After
-    public void tearDown() {
-    }
-
-    /**
-     * Test of getFields method, of class Logic___Vanha.
-     */
+    
     @Test
-    public void getFieldsForInproceedings() {
-        List expResult = inproceedingsFields();
-        List result = logic.getFields("inproceedings");
-        assertEquals("Field list size not as expected", result.size(), expResult.size());
+    public void testSetFilter(){
+        logic.setFilter("book yksi kaksi");
+        assertEquals(logic.getFilteredList().get(0), logic.getRef());
+    }
+    @Test
+    public void testSetFilterForEmptyList(){
+        logic.setListOfRef(null);
+        logic.setFilter("book yksi kaksi");
+        assertNull(logic.getFilteredList());
+    }
+    @Test
+    public void testSetFilterWordNotExsist(){
+        logic.setFilter("boook yksi");
+        assertEquals(0, logic.getFilteredList().size());
+    }
+    @Test
+    public void testGetSetCurrentRow(){
+        logic.setCurrentRow(7);
+        assertEquals(7, logic.getCurrentRow());
+    }
+    @Test
+    public void testGetSetOldReference(){
+        Reference r = new Book();
+        logic.setOldReference(r);
+        assertEquals(r, logic.getOldReference());
+    }
+    @Test
+    public void testGetSetOldId(){
+        String id = "string";
+        logic.setOldId(id);
+        assertEquals(id, logic.getOldId());
+    }
+    @Test
+    public void testGetSetOldList(){
+        List<Reference> list = new ArrayList<Reference>();
+        list.add(new Book());
+        logic.setOldList(list);
+        assertEquals(list, logic.getOldList());
+    }
+    @Test
+    public void testGetSetRFact(){
+        ReferenceFactory rf = new ReferenceFactory();
+        logic.setRFactory(rf);
+        assertEquals(rf, logic.getRFactory());
+    }
+    @Test
+    public void testGetSetListFields(){
+        ArrayList<JTextField> list = new ArrayList<JTextField>();
+        list.add(new JTextField());
+        logic.setListOfFields(list);
+        assertEquals(list, logic.getListOfFields());
+    }
+    @Test
+    public void testGetSetConverter(){
+        Converter rf = new Converter();
+        logic.setConverter(rf);
+        assertEquals(rf, logic.getConverter());
+    }
+    @Test
+    public void testGetFields(){
+        logic.setRef(new Inbook());
+        List<Field> list1 = logic.getRequiredFields();
+        List<Field> list2 = logic.getOptionalFields();
+        list1.addAll(list2);
+        assertEquals(logic.getFields(logic.getRef().getReferenceType()), list1);
+    }
+    @Test
+    public void testCurrentRefToBibTex(){
+        assertEquals(logic.getConverter().toBibTex(logic.getRef()), logic.currentRefToBibTex());
     }
 
 
-//    @Test
-//    public void testGetReferenceTypes() {
-//        List<String> expTypes = new ArrayList<String>();
-//        expTypes.add("article");
-//        expTypes.add("book");
-//        expTypes.add("inproceedings");
-//        List<String> result = new ArrayList<String>(logic.getReferenceTypes());
-//        assertEquals(expTypes, result);
-//    }
-
-    private List<Field> inproceedingsFields() {
-        List<Field> fields = new ArrayList<Field>();
-        fields.add(new Field(FType.referenceId, "ReferenceId", true));
-        fields.add(new Field(FType.author, "Author", true));
-        fields.add(new Field(FType.title, "Title", true));
-        fields.add(new Field(FType.booktitle, "Booktitle", true));
-        fields.add(new Field(FType.year, "Year", true));
-
-        fields.add(new Field(FType.editor, "Editor", false));
-        fields.add(new Field(FType.volume, "VolumeNumber", false));
-        fields.add(new Field(FType.series, "Series", false));
-        fields.add(new Field(FType.pages, "Pages", false));
-        fields.add(new Field(FType.address, "Address", false));
-        fields.add(new Field(FType.month, "Month", false));
-        fields.add(new Field(FType.organization, "Organization", false));
-        fields.add(new Field(FType.publisher, "Publisher", false));
-        fields.add(new Field(FType.note, "Note", false));
-        fields.add(new Field(FType.key, "Key", false));
-
-        return fields;
-    }
-
-    private List<Field> populate(List<Field> fields, int number) {
-        for (Field field : fields) {
-            field.setValue(field.getValue() + " " + number);
-        }
-        return fields;
-    }
 }
