@@ -1,7 +1,4 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package repositories;
 
 import entity.FType;
@@ -10,10 +7,6 @@ import exception.RepositoryException;
 import java.io.File;
 import java.util.List;
 
-/**
- *
- * @author jarno
- */
 public interface GenericRepository {
     
     List<Class<?>> findAllClassess();

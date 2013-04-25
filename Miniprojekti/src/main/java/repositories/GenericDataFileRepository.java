@@ -20,8 +20,6 @@ import java.util.Map;
  * Data file implementation of GenericRepository. This class hold's a map of all
  * entities, provides a common search and CRUD methods for them and serializes
  * them to and from file.
- *
- * @author jarno
  */
 public class GenericDataFileRepository implements GenericRepository {
 

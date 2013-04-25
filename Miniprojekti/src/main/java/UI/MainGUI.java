@@ -1,7 +1,4 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package UI;
 
 import controllers.Converter;
@@ -45,10 +42,6 @@ import javax.swing.table.AbstractTableModel;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeSelectionModel;
 
-/**
- *
- * @author jarno
- */
 public class MainGUI extends JFrame implements View {
 
     private static final String TITLE = "Miniproject";

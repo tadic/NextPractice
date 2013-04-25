@@ -1,7 +1,4 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package UI;
 
 import java.beans.PropertyChangeEvent;
@@ -9,10 +6,6 @@ import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- *
- * @author jarno
- */
 public class AbstractController implements PropertyChangeListener {
 
     protected List<AbstractModel> registeredModels = new ArrayList<AbstractModel>();

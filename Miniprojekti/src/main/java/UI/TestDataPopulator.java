@@ -1,7 +1,4 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package UI;
 
 import entity.Article;
@@ -13,10 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 import repositories.GenericRepository;
 
-/**
- *
- * @author jarno
- */
 public class TestDataPopulator {
 
     public static void populateTestdata(GenericRepository repository) {

@@ -1,7 +1,4 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package controllers;
 
 import entity.Reference;
@@ -10,10 +7,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
 
-/**
- *
- * @author mikahutt
- */
 public class FileSaver {
     private Converter converter;
     

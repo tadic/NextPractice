@@ -1,17 +1,10 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package entity;
 
 import java.io.Serializable;
 import java.util.Calendar;
 import java.util.List;
 
-/**
- *
- * @author jarno
- */
 public abstract class Reference implements Serializable {
 
     private int id;

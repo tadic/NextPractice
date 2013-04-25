@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package UI;
 
 import controllers.Converter;
@@ -32,10 +28,6 @@ import java.util.Set;
 import repositories.GenericDataFileRepository;
 import repositories.GenericRepository;
 
-/**
- *
- * @author jarno
- */
 public class MainGUIController extends AbstractController {
 
     public static final String REFERENCE_TYPES = "ReferenceTypes";

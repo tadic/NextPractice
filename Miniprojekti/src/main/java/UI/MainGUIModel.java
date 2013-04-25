@@ -1,7 +1,4 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package UI;
 
 import entity.Reference;
@@ -12,10 +9,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-/**
- *
- * @author jarno
- */
 public class MainGUIModel extends AbstractModel {
 
     private Map<String, Integer> referenceTypes = new HashMap<String, Integer>();

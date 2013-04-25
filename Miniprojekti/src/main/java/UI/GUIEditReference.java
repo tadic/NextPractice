@@ -16,10 +16,6 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import org.uncommons.swing.SpringUtilities;
 
-/**
- *
- * @author ivantadic
- */
 public class GUIEditReference extends javax.swing.JFrame implements View {
 
     private LogicInterface logic;
