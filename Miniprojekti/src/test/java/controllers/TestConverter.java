@@ -78,6 +78,20 @@ public class TestConverter {
         //System.out.println(convert.toBibTex(article));
         assertEquals(expValue, convert.toBibTex(book));
     }
+    
+    @Test
+    public void testToBibTexForNullRef(){
+        assertNull(convert.toBibTex(null));
+    }
+    @Test
+    public void testToBibTexForReferenceIdNULL(){
+        String exp = "@book{,\n}";
+        Reference book = new Book();
+        book.setFieldValue(FType.referenceId, null);
+        assertNull(convert.toBibTex(null));
+    }
+    
+    
     @Test
     public void testToBibTexForSpecSharsArticle(){
         Reference article = new Article();

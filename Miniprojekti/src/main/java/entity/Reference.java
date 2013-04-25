@@ -159,14 +159,17 @@ public abstract class Reference implements Serializable {
         }
         return true;
     }
-
+    /**
+     * Checks if required fields are filled and if length of non empty fields is greater than 1.
+     * @return 
+     */
     private boolean checkFields() {
         for (Field field : this.getFields()) {
             if (field.isRequired() && field.getValue().trim().length() == 0) {
                 throw new IllegalArgumentException("Must fill all required fields!");
             }
             if (field.isRequired() && field.getValue().length() < 2) {
-                throw new IllegalArgumentException("Fields lenght must be greather then 1");
+                throw new IllegalArgumentException("Fields lenght must be greater then 1");
             }
         }
         return true;
@@ -194,9 +197,6 @@ public abstract class Reference implements Serializable {
      * @return boolean parameter true if year is correct, else false.
      */
     private boolean checkYear() {
-        if (this.getFieldValue(FType.year) == null) {  // if reference doesn't contain year field at all.
-            return true;
-        }
         String year = "";
         for (Field f : this.getFields()) {
             if (f.getKey() == FType.year) {

@@ -94,6 +94,105 @@ public class ReferenceTest {
     }
 
     @Test
+    public void testBookletConstructor() {
+        ReferenceFactory rf = new ReferenceFactory();
+        List<Field> list = rf.getFields("booklet");
+        Reference booklet = new Booklet(list);
+        assertNotNull(booklet);
+        assertEquals("booklet", booklet.getReferenceType());
+        assertEquals(rf.getFields("booklet").size(), booklet.getFields().size());
+    }
+    @Test
+    public void testConferenceConstructor() {
+        ReferenceFactory rf = new ReferenceFactory();
+        List<Field> list = rf.getFields("conference");
+        Reference conference =  new Conference(list);
+        assertNotNull(conference);
+        assertEquals("conference", conference.getReferenceType());
+        assertEquals(rf.getFields("conference").size(), conference.getFields().size());
+    }
+    @Test
+    public void testInbookConstructor() {
+        ReferenceFactory rf = new ReferenceFactory();
+        List<Field> list = rf.getFields("inbook");
+        Reference inbook =  new Inbook(list);
+        assertNotNull(inbook);
+        assertEquals("inbook", inbook.getReferenceType());
+        assertEquals(rf.getFields("inbook").size(), inbook.getFields().size());
+    }
+    @Test
+    public void testIncolectionConstructor() {
+        ReferenceFactory rf = new ReferenceFactory();
+        List<Field> list = rf.getFields("incollection");
+        Reference incollection =  new Incollection(list);
+        assertNotNull(incollection);
+        assertEquals("incollection", incollection.getReferenceType());
+        assertEquals(rf.getFields("incollection").size(), incollection.getFields().size());
+    }
+    @Test
+    public void testManualConstructor() {
+        ReferenceFactory rf = new ReferenceFactory();
+        List<Field> list = rf.getFields("manual");
+        Reference manual =  new Manual(list);
+        assertNotNull(manual);
+        assertEquals("manual", manual.getReferenceType());
+        assertEquals(rf.getFields("manual").size(), manual.getFields().size());
+    }
+    @Test
+    public void testMastersthesisConstructor() {
+        ReferenceFactory rf = new ReferenceFactory();
+        List<Field> list = rf.getFields("mastersthesis");
+        Reference mastersthesis =  new Mastersthesis(list);
+        assertNotNull(mastersthesis);
+        assertEquals("mastersthesis", mastersthesis.getReferenceType());
+        assertEquals(rf.getFields("mastersthesis").size(), mastersthesis.getFields().size());
+    }
+    @Test
+    public void testMiscConstructor() {
+        ReferenceFactory rf = new ReferenceFactory();
+        List<Field> list = rf.getFields("misc");
+        Reference misc =  new Misc(list);
+        assertNotNull(misc);
+        assertEquals("misc", misc.getReferenceType());
+        assertEquals(rf.getFields("misc").size(), misc.getFields().size());
+    }
+    @Test
+    public void testPhdthesisConstructor() {
+        ReferenceFactory rf = new ReferenceFactory();
+        List<Field> list = rf.getFields("phdthesis");
+        Reference phdthesis =  new Phdthesis(list);
+        assertNotNull(phdthesis);
+        assertEquals("phdthesis", phdthesis.getReferenceType());
+        assertEquals(rf.getFields("phdthesis").size(), phdthesis.getFields().size());
+    }
+    @Test
+    public void testProceedingsConstructor() {
+        ReferenceFactory rf = new ReferenceFactory();
+        List<Field> list = rf.getFields("proceedings");
+        Reference proceedings =  new Proceedings(list);
+        assertNotNull(proceedings);
+        assertEquals("proceedings", proceedings.getReferenceType());
+        assertEquals(rf.getFields("proceedings").size(), proceedings.getFields().size());
+    }
+    @Test
+    public void testTechreportConstructor() {
+        ReferenceFactory rf = new ReferenceFactory();
+        List<Field> list = rf.getFields("techreport");
+        Reference techreport =  new Techreport(list);
+        assertNotNull(techreport);
+        assertEquals("techreport", techreport.getReferenceType());
+        assertEquals(rf.getFields("techreport").size(), techreport.getFields().size());
+    }
+    @Test
+    public void testUnpublishedConstructor() {
+        ReferenceFactory rf = new ReferenceFactory();
+        List<Field> list = rf.getFields("unpublished");
+        Reference unpublished =  new Unpublished(list);
+        assertNotNull(unpublished);
+        assertEquals("unpublished", unpublished.getReferenceType());
+        assertEquals(rf.getFields("unpublished").size(), unpublished.getFields().size());
+    }
+    @Test
     public void testArticleConstructor() {
         ReferenceFactory rf = new ReferenceFactory();
         List<Field> list = rf.getFields("article");
@@ -218,12 +317,12 @@ public class ReferenceTest {
             article.isUnique(null, null);
             article.isRegular();
         } catch (IllegalArgumentException e) {
-            assertEquals("Fields lenght must be greather then 1", e.getMessage());
+            assertEquals("Fields lenght must be greater then 1", e.getMessage());
         }
     }
 
     @Test
-    public void testIsRegularForArticleReferenceNormal() throws Exception {
+    public void testIsUniqueForArticleReferenceNormal() throws Exception {
         Reference article = new Article();
         article.setFieldValue(FType.author, "Author");
         article.setFieldValue(FType.title, "Title");
@@ -232,7 +331,53 @@ public class ReferenceTest {
 
         assertTrue(article.isUnique(null, null));
     }
+    @Test
+    public void testIsUniqueForSameOldId() throws Exception {
+        String oldId = "referenceID";
+        ref.setFieldValue(FType.referenceId, oldId);
+        assertTrue(ref.isUnique(null, oldId));
+    }
+    @Test
+    public void testIsUniqueIfNotInTheList() throws Exception {
+        assertTrue(ref.isUnique(null, null));
+    }
 
+    @Test
+    public void testIsUniqueIfExists() throws Exception {
+        ArrayList<Reference> list = new ArrayList<Reference>();
+        list.add(ref);
+         try {
+            ref.isUnique(list, null);
+            assertFalse(true);
+        } catch (IllegalArgumentException e) {
+            assertEquals("Reference with the same referenceId already exists!", e.getMessage());
+        }
+    }
+    @Test
+    public void testIsRegularReferenceNotHaveYearField() throws Exception {
+        Reference r1 = new ReferenceFactory().createReference("manual");
+        r1.setFieldValue(FType.referenceId, "CS1");
+        r1.setFieldValue(FType.title, "ects-first CS1");
+        assertTrue(r1.isRegular());
+    }
+    @Test
+    public void testToString() throws Exception {
+        String expected = "inproceedings---, Ro:2002, Roumani, Hamzeh, Design guidelines for the lab compo";
+        assertEquals(expected, ref.toString());
+    }
+    @Test
+    public void testToStringWithShorterRef() throws Exception {
+        ref.setFieldValue(FType.title, "");
+        ref.setFieldValue(FType.booktitle, "");
+        String expected = "inproceedings---, Ro:2002, Roumani, Hamzeh, , , 2002                           ";
+        assertEquals(expected, ref.toString());
+    }
+    @Test
+    public void testHasMethod() throws Exception {
+        ref.setId(49); 
+        int exp = 350;
+        assertEquals(exp, ref.hashCode());
+    }
     @Test
     public void testIsRegularForExceptionReferenceHaveSameIdAsInList() throws Exception {
         Reference r1 = new ReferenceFactory().createReference("inproceedings");
@@ -245,7 +390,8 @@ public class ReferenceTest {
         list.add(r1);
         ref.setFieldValue(FType.referenceId, "reference");
         try {
-            ref.isRegular();
+            ref.isUnique(list, null);
+            assertFalse(true);
         } catch (IllegalArgumentException e) {
             assertEquals("Reference with the same referenceId already exists!", e.getMessage());
         }
@@ -293,7 +439,7 @@ public class ReferenceTest {
             assertEquals("Reference_type must be NON-NULL!", e.getMessage());
         }
     }
-
+    
     @Test
     public void testIsRegularForExceptionWrongRefType() throws Exception {
         ref.setReferenceType("rrr");
@@ -302,5 +448,14 @@ public class ReferenceTest {
         } catch (IllegalArgumentException e) {
             assertEquals("Reference_type value is illegal!", e.getMessage());
         }
+    }
+    @Test
+    public void testEqualsForNULL(){
+        assertFalse(ref.equals(null));
+    }
+    
+    @Test
+    public void testEqualsForWrongClass(){
+        assertFalse(ref.equals(new Book()));
     }
 }
