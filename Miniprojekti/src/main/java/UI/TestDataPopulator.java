@@ -13,13 +13,15 @@ import repositories.GenericRepository;
 public class TestDataPopulator {
 
     public static void populateTestdata(GenericRepository repository) {
+        int y = 1950;
+        
         for (int i = 0; i < 50; i++) {
             List<Field> inf = new ArrayList<Field>();
             inf.add(new Field(FType.referenceId, "referenceId" + i, true));
             inf.add(new Field(FType.author, "Author" + i, true));
             inf.add(new Field(FType.title, "Title" + i, true));
             inf.add(new Field(FType.booktitle, "Booktitle" + i, true));
-            inf.add(new Field(FType.year, "1988" + i, true));
+            inf.add(new Field(FType.year, String.valueOf(y + i), true));
             inf.add(new Field(FType.editor, "Editor" + i, false));
             inf.add(new Field(FType.volume, "VolumeNumber" + i, false));
             inf.add(new Field(FType.series, "Series" + i, false));
@@ -38,7 +40,7 @@ public class TestDataPopulator {
             bf.add(new Field(FType.author, "author" + i, true));
             bf.add(new Field(FType.title, "title" + i, true));
             bf.add(new Field(FType.publisher, "publisher" + i, true));
-            bf.add(new Field(FType.year, "year" + i, true));
+            bf.add(new Field(FType.year, String.valueOf(y + i), true));
             bf.add(new Field(FType.volume, "volume" + i, false));
             bf.add(new Field(FType.series, "series" + i, false));
             bf.add(new Field(FType.address, "address" + i, false));
@@ -54,7 +56,7 @@ public class TestDataPopulator {
             af.add(new Field(FType.author, "author" + i, true));
             af.add(new Field(FType.title, "title" + i, true));
             af.add(new Field(FType.journal, "journal" + i, true));
-            af.add(new Field(FType.year, "year" + i, true));
+            af.add(new Field(FType.year, String.valueOf(y + i), true));
 
             af.add(new Field(FType.volume, "volume" + i, false));
             af.add(new Field(FType.number, "number" + i, false));
